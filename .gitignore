@@ -1,0 +1,31 @@
+# Ignore dependencies
+/node_modules
+.pnpm
+.pnp
+.pnpm-workspace-state.yaml
+.modules.yaml
+
+# Ignore build artifacts
+/dist
+/.svelte-kit
+/output
+/build
+/.turbo
+/vercel
+/netlify
+/wrangler
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.*
+!.env.example
+!.env.test
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.log

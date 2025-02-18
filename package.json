@@ -1,0 +1,23 @@
+{
+  "name": "arniva-core",
+  "version": "1.0.0",
+  "description": "The all-in-one library powering Arniva projects",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "repository": "https://github.com/ruzgardogu/arniva-core",
+  "scripts": {
+    "dev:ui": "pnpm --filter @ruzgardogu/ui dev",
+    "dev:api": "pnpm --filter @ruzgardogu/api dev",
+    "dev:utils": "pnpm --filter @ruzgardogu/utils dev",
+    "dev:tools": "pnpm --filter @ruzgardogu/tools dev",
+    "dev:docs": "pnpm --filter @ruzgardogu/docs exec npx storybook dev -p 6006",
+    "dev": "pnpm --parallel run dev:*"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}
