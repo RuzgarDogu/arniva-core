@@ -1,12 +1,12 @@
 <script module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
   import { expect, userEvent, waitFor, within } from '@storybook/test';
-  import Page from './Page.svelte';
+  import { Page } from '@ui/general';
   import { fn } from '@storybook/test';
 
   // More on how to set up stories at: https://storybook.js.org/docs/writing-stories
   const { Story } = defineMeta({
-    title: 'Example/Page',
+    title: 'UI/General/Page',
     component: Page,
     parameters: {
       // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout

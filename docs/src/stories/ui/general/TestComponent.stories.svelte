@@ -4,7 +4,7 @@
   
     // More on how to set up stories at: https://storybook.js.org/docs/writing-stories
     const { Story } = defineMeta({
-      title: 'UI/General',
+      title: 'UI/General/TestComponent',
       component: TestComponent,
       tags: ['autodocs'],
       argTypes: {
@@ -14,8 +14,7 @@
     });
   </script>
   
-  <!-- More on writing stories with args: https://storybook.js.org/docs/writing-stories/args -->
-  <Story name="ASD" args={
+  <Story name="Example" args={
     { value: 3 }
   } />
   

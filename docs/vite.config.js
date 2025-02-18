@@ -18,6 +18,7 @@ export default ({ mode }) => {
 		resolve: {
 			alias: {
 				'@ui': fileURLToPath(new URL('../packages/ui/src/lib', import.meta.url)),
+				'@utils': fileURLToPath(new URL('../packages/utils/src/lib', import.meta.url))
 			}
 		}
 	});
