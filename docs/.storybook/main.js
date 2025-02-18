@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { fileURLToPath } from 'url';
 
 /** @type { import('@storybook/sveltekit').StorybookConfig } */
 const config = {
@@ -8,8 +8,6 @@ const config = {
   },
   "stories": [
     "../src/**/*.mdx",
-    "../DocsTest/**/*.mdx",
-    "../NewDocs/**/*.mdx",
     "../src/**/*.stories.@(js|jsx|ts|tsx|svelte)"
   ],
   "addons": [
@@ -18,35 +16,10 @@ const config = {
     "@storybook/addon-svelte-csf"
   ],
   "viteFinal": async (config) => {
-    config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@docs': '../DocsTest',
-      '@newdocs': '../NewDocs'
+      '@ui': fileURLToPath(new URL('../../packages/ui/src/lib', import.meta.url))
     };
-
-    config.optimizeDeps = config.optimizeDeps || {};
-    config.optimizeDeps.include = [
-      ...(config.optimizeDeps.include || []),
-      '@docs/**/*.mdx',
-    ];
-
-    config.plugins = config.plugins || [];
-    config.plugins.push({
-      name: 'external-mdx',
-      enforce: 'pre',
-      resolveId(source) {
-        if (source.startsWith('../DocsTest/') || source.startsWith('../NewDocs/')) {
-          return source;
-        }
-      },
-      load(id) {
-        if (id.includes('/DocsTest/') || id.includes('/NewDocs/')) {
-          return fs.readFileSync(id, 'utf-8');
-        }
-      }
-    });
-
     return config;
   }
 };
