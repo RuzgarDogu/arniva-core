@@ -17,8 +17,7 @@ const config = {
   "addons": [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@storybook/addon-svelte-csf",
-    "@storybook/addon-styling"
+    "@storybook/addon-svelte-csf"
   ],
   "viteFinal": async (config) => {
     config.resolve.alias = {
@@ -26,16 +25,6 @@ const config = {
       '@ui': fileURLToPath(new URL('../../packages/ui/src/lib', import.meta.url)),
       '@utils': fileURLToPath(new URL('../../packages/utils/src/lib', import.meta.url))
     };
-    
-    // Add SCSS preprocessing
-    config.css = {
-      preprocessorOptions: {
-        scss: {
-          additionalData: '@import "@ui/styles/app.scss";'
-        }
-      }
-    };
-
     return config;
   }
 };
