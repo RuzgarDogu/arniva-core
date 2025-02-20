@@ -14,5 +14,5 @@
 </div>
 
 <style lang="scss">
-    @import '../styles/_card.scss';
+    @import '@/styles/_card.scss';
 </style>
