@@ -22,7 +22,3 @@
 >
   {label}
 </button>
-
-<style lang="scss">
-  @import '@/styles/_button.scss';
-</style>

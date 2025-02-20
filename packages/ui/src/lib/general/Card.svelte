@@ -12,7 +12,3 @@
 <div class="card" class:cls>
     {@render children?.()}
 </div>
-
-<style lang="scss">
-    @import '@/styles/_card.scss';
-</style>
