@@ -4,6 +4,6 @@ export default create({
   base: 'light',
   brandTitle: 'Arniva Docs',
   brandUrl: 'https://arniva.com.tr',
-  brandImage: 'https://arniva.tr/wp-content/uploads/arnivalogo_small_new.webp',
+  brandImage: '../src/stories/assets/arniva_docs_logo_test_01.png',
   brandTarget: '_self',
 });
