@@ -8,7 +8,7 @@ document.head.appendChild(link);
 
 // Add global styles for Storybook
 const customFontStyles = `
-  .storybook-root, .sb-story {
+  #storybook-root, #storybook-root > *, .sb-story {
     font-family: "Nunito Sans",-apple-system,".SFNSText-Regular","San Francisco",BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
   }
 `;
