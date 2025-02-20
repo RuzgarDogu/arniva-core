@@ -1,7 +1,4 @@
-$border-radius: 3em;
-$primary-color: #555ab9;
-$text-color: #333;
-
+@import 'config';
 .storybook-button {
   display: inline-block;
   cursor: pointer;
