@@ -1,11 +1,9 @@
 import { sveltePreprocess } from 'svelte-preprocess'
 import adapter from '@sveltejs/adapter-auto';
-import { vitePreprocess } from '@sveltejs/kit/vite';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	preprocess: [
-		vitePreprocess(),
 		sveltePreprocess({
 		scss: {
 			prependData: `@import 'src/lib/styles/app.scss';`
