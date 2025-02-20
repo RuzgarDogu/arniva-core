@@ -1,6 +1,6 @@
 {
 	"name": "@ruzgardogu/ui",
-	"version": "0.0.9",
+	"version": "0.0.9.1",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run prepack",
@@ -17,6 +17,8 @@
 		"!dist/**/*.spec.*"
 	],
 	"sideEffects": [
+		"dist/**/*.css",
+		"src/lib/styles/**/*.scss",
 		"**/*.css"
 	],
 	"svelte": "./dist/index.js",
