@@ -18,6 +18,7 @@ Designed for modularity, arniverse allows individual packages to be installed an
 npm login --scope=@arniverse --registry=https://npm.pkg.github.com
 
 # publish spesific package
+pnpm --filter @ruzgardogu/ui publish --access restricted
 pnpm --filter @ruzgardogu/utils publish --access restricted
 
 # Package Registery
