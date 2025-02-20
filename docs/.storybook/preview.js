@@ -1,3 +1,5 @@
+import '../../packages/ui/src/lib/styles/app.scss'
+
 /** @type { import('@storybook/svelte').Preview } */
 const preview = {
   parameters: {

@@ -17,7 +17,8 @@ const config = {
   "addons": [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@storybook/addon-svelte-csf"
+    "@storybook/addon-svelte-csf",
+    '@storybook/addon-styling',
   ],
   "viteFinal": async (config) => {
     config.resolve.alias = {
