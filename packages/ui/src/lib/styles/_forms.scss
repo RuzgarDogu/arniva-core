@@ -1,0 +1,74 @@
+@import 'config';
+
+[class^="form-"]:focus {
+    outline: 1px solid $outline-color;
+    border: 1px solid transparent;
+}
+
+.form-input-group:focus-within {
+    outline: 1px solid $outline-color;
+    border: 1px solid transparent;
+    .form-input {
+        border: none;
+        outline: none;
+    }
+}
+
+.form-input {
+    font-family: inherit;
+    width: 100%;
+    border: solid 1px $border-color;
+    border-radius: $border-radius-sm;
+    padding: 0.5em;
+    box-sizing: border-box;
+    background-color: transparent;
+    &::placeholder {
+        font-family: inherit; // Inherit the font-family from the body
+    }
+}
+
+.form-input-group {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    border: solid 1px $border-color;
+    border-radius: $border-radius-sm;
+    box-sizing: border-box;
+    padding: 0 0.5em;
+    
+    &.icon {
+      position: relative;
+      padding-left: 30px; // Make room for the icon
+      
+      &::before {
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: 45%;
+        transform: translateY(-50%);
+        width: 10px;
+        height: 10px;
+        border: 2px solid #888;
+        border-radius: 50%;
+        box-sizing: border-box;
+      }
+      
+      &::after {
+        content: '';
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        width: 6px;
+        height: 2px;
+        background: #888;
+        transform: translateY(-50%) rotate(45deg);
+        transform-origin: 0 50%;
+      }
+    }
+    
+    .form-input {
+      flex: 1;
+      border: none;
+    }
+  }

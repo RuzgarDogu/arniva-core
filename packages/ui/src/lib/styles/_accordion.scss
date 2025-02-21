@@ -1,0 +1,91 @@
+$leftPadding: 1.5rem; // Set the padding for the left side of the accordion header
+
+.accordion {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+    .accordion-item {
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 5px; // Add margin between items
+        .accordion-header {
+            -webkit-box-align: center;
+            align-items: center;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
+            font-weight: 700;
+            line-height: 16px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgb(92, 104, 112);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px; // Add gap between header items
+            align-items: center;
+            padding: 0.3rem 0.2rem 0.3rem 2rem; // Add padding to header, with extra space on the left
+            position: relative; // Required for the ::before pseudo-element
+            padding-left: $leftPadding; // Add padding to create space for the chevron
+            &::before {
+                content: "";
+                border: solid #000;
+                border-width: 0 1px 1px 0;
+                display: inline-block;
+                padding: 2px;
+                transform: rotate(45deg);
+                transition: transform 0.3s;
+                position: absolute;
+                left: 10px; // Move chevron to the left
+                top: 50%;
+                transform: translateY(-50%) rotate(-45deg); // Right-pointing chevron
+            }
+            &:hover {
+                color: $accent-color;
+            }
+        }
+        .accordion-content {
+            display: none;
+            padding: 0.5rem 0; // Add padding to content
+            margin-left: $leftPadding; // Add margin to content to align with header
+            &.list {
+                margin-top: 0;
+                margin-bottom: 0;
+                margin-right: 0;
+                margin-left: calc(#{$leftPadding} - 1rem);
+                padding: 0;
+                li {
+                    padding: 0.3rem;
+                    padding-left: 1rem;
+                    list-style-type: none;
+                    font-size: 0.9rem;
+                    a {
+                        text-decoration: none;
+                        display: flex;
+                        gap: 0.4rem;
+                        align-items: center;
+                        color: inherit;
+                    }
+                    &:hover {
+                        background-color: lighten($accent-color, 45%);
+                    }
+                }
+            }
+        }
+        &.active {
+            .accordion-header {
+                color: $accent-color;
+            }
+            .accordion-header::before {
+                transform: translateY(-50%) rotate(45deg); // Down-pointing chevron
+            }
+            .accordion-content {
+                display: block;
+            }
+        }
+    }
+}

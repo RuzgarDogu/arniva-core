@@ -21,6 +21,11 @@ document.head.appendChild(style);
 /** @type { import('@storybook/svelte').Preview } */
 const preview = {
   parameters: {
+    options: {
+      storySort: {
+        order: ['Welcome', 'UI', ['Layout', 'Nav', 'General', 'Forms'], 'Utils'],
+      },
+    },
     controls: {
       matchers: {
        color: /(background|color)$/i,

@@ -1,0 +1,14 @@
+@import 'config';
+
+.side-nav {
+    padding: 24px 12px;
+    .brand {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 6px;
+        box-sizing: border-box;
+        margin-bottom: 1.5rem;
+    }
+}

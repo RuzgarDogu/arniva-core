@@ -4,11 +4,6 @@ import { fileURLToPath } from 'url';
 const config = {
   "framework": {
     name: "@storybook/sveltekit",
-    options: {
-      storySort: {
-        order: ['Welcome', 'UI', 'Utils']
-      }
-    }
   },
   "stories": [
     "../src/**/*.mdx",
