@@ -6,15 +6,14 @@
      * @property {any} rest
      * @property {any} children
      */
-    let id = Date.now().toString(36) + Math.random().toString(36).substring(2);
-    let { children, class:cls='', multiple=false, ...rest } = $props();
+    let random_id = Date.now().toString(36) + Math.random().toString(36).substring(2);
+    let { children, class:cls='', flush=false, multiple=false, id=random_id, ...rest } = $props();
 
 
     /**
      * @param {HTMLElement} node
      */
     function handleAccordion(node) {
-        console.log("node", node);
         let items = node.querySelectorAll('.accordion-item');
         items.forEach(item => {
             let header = item.querySelector('.accordion-header');
@@ -30,6 +29,7 @@
     }
 
 </script>
-<div class="accordion {cls}" {...rest} id={id} use:handleAccordion>
+<div class="accordion {cls}" {...rest} id={id} use:handleAccordion
+    class:flush={flush}>
     {@render children()}
 </div>

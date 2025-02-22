@@ -9,6 +9,10 @@ importers:
   .: {}
 
   docs:
+    dependencies:
+      '@storybook/addon-links':
+        specifier: ^8.5.8
+        version: 8.5.8(react@19.0.0)(storybook@8.5.6(prettier@3.5.1))
     devDependencies:
       '@chromatic-com/storybook':
         specifier: ^3.2.4
@@ -1350,6 +1354,15 @@ packages:
     resolution: {integrity: sha512-0Ub4YksQImspx6NeiCDIQkDe3f7EgwiO5qYPRRgkUsSYFjn7c8cRElJn8bwyikC2YJGrWNe7rPdW9xBEvJm4uA==}
     peerDependencies:
       storybook: ^8.5.6
+
+  '@storybook/addon-links@8.5.8':
+    resolution: {integrity: sha512-nLfcWhqDCTaEB/zPjzdN+FtsJ3WnvrRE7Uq+UZHF/HDqt7EXicUYCnbzHIF6ReyNBFklr48O/RhotDu9cyUDlw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
+      storybook: ^8.5.8
+    peerDependenciesMeta:
+      react:
+        optional: true
 
   '@storybook/addon-measure@8.5.6':
     resolution: {integrity: sha512-Q83k/75/vcFcXz3YAvwfWpHQubJyOzpNT/jTLdeK27uXatVH6eq0+dRt/fW1plri9GA52HJmiZ7SvJ6MAHFQzQ==}
@@ -4764,6 +4777,15 @@ snapshots:
       polished: 4.3.1
       storybook: 8.5.6(prettier@3.5.1)
       ts-dedent: 2.2.0
+
+  '@storybook/addon-links@8.5.8(react@19.0.0)(storybook@8.5.6(prettier@3.5.1))':
+    dependencies:
+      '@storybook/csf': 0.1.12
+      '@storybook/global': 5.0.0
+      storybook: 8.5.6(prettier@3.5.1)
+      ts-dedent: 2.2.0
+    optionalDependencies:
+      react: 19.0.0
 
   '@storybook/addon-measure@8.5.6(storybook@8.5.6(prettier@3.5.1))':
     dependencies:

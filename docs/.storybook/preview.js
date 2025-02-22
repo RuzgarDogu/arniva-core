@@ -23,7 +23,7 @@ const preview = {
   parameters: {
     options: {
       storySort: {
-        order: ['Welcome', 'UI', ['Layout', 'Nav', 'General', 'Forms'], 'Utils'],
+        order: ['Welcome', 'UI', ['Layout',['Layout', 'Aside', 'Main', 'Content'], 'Nav', 'General', 'Forms'], 'Utils'],
       },
     },
     controls: {

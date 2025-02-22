@@ -14,6 +14,14 @@
         control: { type: 'select' },
         options: ['small', 'medium', 'large'],
       },
+      color: {
+        control: { type: 'select' },
+        options: ['primary', 'secondary', 'transparent'],
+      },
+      type: {
+        control: { type: 'select' },
+        options: ['button', 'submit', 'reset'],
+      },
     },
     args: {
       onClick: fn(),
@@ -21,10 +29,9 @@
   });
 </script>
 
-<!-- More on writing stories with args: https://storybook.js.org/docs/writing-stories/args -->
-<Story name="Primary" args={{ primary: true, label: 'Button' }} />
+<Story name="Primary" args={{ color: 'primary', label: 'Button' }} />
 
-<Story name="Secondary" args={{ label: 'Button' }} />
+<Story name="Secondary" args={{ color: 'secondary', label: 'Button' }} />
 
 <Story name="Large" args={{ size: 'large', label: 'Button' }} />
 

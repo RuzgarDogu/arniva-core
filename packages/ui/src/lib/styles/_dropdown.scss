@@ -1,0 +1,23 @@
+@import 'config';
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    .dropdown-content {
+        display: none;
+    }
+    &.open {
+        .dropdown-content {
+            flex-direction: column;
+            position: absolute;
+            display: inline-block;
+            z-index: 2147483647;
+            padding: 0.7rem;
+            background: rgba(255, 255, 255, 0.95);
+            filter: drop-shadow(rgba(0, 0, 0, 0.05) 0px 5px 5px) drop-shadow(rgba(0, 0, 0, 0.1) 0px 1px 3px);
+            border-radius: 6px;
+            font-size: 12px;
+            min-width: 100px;
+        }
+    }
+}

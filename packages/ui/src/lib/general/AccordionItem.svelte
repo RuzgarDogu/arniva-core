@@ -6,8 +6,8 @@
      * @property {boolean} list
      * @property {any} rest
      */
-    let id = Date.now().toString(36) + Math.random().toString(36).substring(2);
-    let { children, class:cls='', title='', list=false, ...rest } = $props();
+    let random_id = Date.now().toString(36) + Math.random().toString(36).substring(2);
+    let { children, class:cls='', title='', list=false, id=random_id, ...rest } = $props();
 </script>
 
 <div class="accordion-item {cls}" {...rest} id={id}>

@@ -25,7 +25,6 @@
      function handleInput (e) {
         const target = /** @type {HTMLInputElement} */ (e.target);
         if (target) {
-            console.log(target.value);
             items = items.filter(item => item.name.includes(target.value));
         }
     }
@@ -46,7 +45,7 @@
         </InputGroup>
     </div>
     {/if}
-    <Accordion>
+    <Accordion flush>
             <AccordionItem title="Accordion Item 1" list>
                 <li>
                     <a href="/">

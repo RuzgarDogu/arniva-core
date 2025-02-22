@@ -1,3 +1,4 @@
+@import 'config';
 $leftPadding: 1.5rem; // Set the padding for the left side of the accordion header
 
 .accordion {
@@ -11,8 +12,12 @@ $leftPadding: 1.5rem; // Set the padding for the left side of the accordion head
         flex-direction: column;
         width: 100%;
         box-sizing: border-box;
-        margin-bottom: 5px; // Add margin between items
+        border-bottom: 1px solid $border-color;
+        &:last-child {
+            border-bottom: none;
+        }
         .accordion-header {
+            background-color: $light-color;
             -webkit-box-align: center;
             align-items: center;
             -webkit-box-pack: justify;
@@ -22,13 +27,13 @@ $leftPadding: 1.5rem; // Set the padding for the left side of the accordion head
             letter-spacing: 0.16em;
             text-transform: uppercase;
             color: rgb(92, 104, 112);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             display: flex;
             justify-content: space-between;
             gap: 10px; // Add gap between header items
             align-items: center;
-            padding: 0.3rem 0.2rem 0.3rem 2rem; // Add padding to header, with extra space on the left
+            padding: 0.7rem 0.2rem 0.7rem 2rem; // Add padding to header, with extra space on the left
             position: relative; // Required for the ::before pseudo-element
             padding-left: $leftPadding; // Add padding to create space for the chevron
             &::before {
@@ -85,6 +90,15 @@ $leftPadding: 1.5rem; // Set the padding for the left side of the accordion head
             }
             .accordion-content {
                 display: block;
+            }
+        }
+    }
+    &.flush {
+        .accordion-item {
+            border-bottom: none;
+            .accordion-header {
+                padding: 0.6rem 0.2rem 0.6rem 2rem;
+                background-color: transparent;
             }
         }
     }

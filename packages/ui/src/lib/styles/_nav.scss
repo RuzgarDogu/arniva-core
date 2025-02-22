@@ -7,8 +7,39 @@
         width: 100%;
         align-items: center;
         justify-content: space-between;
-        padding: 0 6px;
+        padding: 0;
         box-sizing: border-box;
         margin-bottom: 1.5rem;
+    }
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    gap: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    .button {
+        -webkit-box-align: center;
+        align-items: center;
+        -webkit-box-pack: justify;
+        justify-content: space-between;
+        font-weight: 700;
+        line-height: 16px;
+        font-size: 0.85rem;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        color: rgb(92, 104, 112);
+        &:not(.button--square):hover {
+            background-color: $light-color;
+            color: $accent-color;
+        }
+        &--square:hover {
+            background-color: lighten($accent-color, 45%);
+            color: $accent-color;
+        }
     }
 }
