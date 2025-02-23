@@ -27,6 +27,16 @@
     }
 }
 
+.form-select {
+    font-family: inherit;
+    width: 100%;
+    border: solid 1px $border-color;
+    border-radius: $border-radius-sm;
+    padding: 0.5em;
+    box-sizing: border-box;
+    background-color: transparent;
+}
+
 .form-input-group {
     display: flex;
     width: 100%;

@@ -10,3 +10,7 @@ export { default as Dropdown } from './Dropdown.svelte';
 export { default as DropdownContent } from './DropdownContent.svelte';
 export { default as Tab } from './Tab.svelte';
 export { default as TabItem } from './TabItem.svelte';
+export { default as Badge } from './Badge.svelte';
+export { default as Alert } from './Alert.svelte';
+export { default as ListGroup } from './ListGroup.svelte';
+export { default as ListGroupItem } from './ListGroupItem.svelte';

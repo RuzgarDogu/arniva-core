@@ -1,11 +1,28 @@
 $border-radius: 3em;
+
+
+// Colors
 $primary-color: #555ab9;
 $accent-color: #009cfd;
-$success-color: #4caf50;
+// $success-color: #4caf50;
+$success-color: #abf877;
 $light-color: rgb(246, 249, 252);
+$secondary-color: #7e7e7e;
+$dark-color: #333;
+$danger-color: #f44336;
+$warning-color: #ff9800;
+
+
 $text-color: #333;
 $border-radius-sm: 0.25rem;
 $border-color: hsla(203, 50%, 30%, 0.15);
 $shadow-sm: rgba(0, 0, 0, 0.10) 0 1px 3px 0;
 // $lightColor: rgb(246, 249, 252);
 $outline-color: #90caf9;
+
+
+@mixin label-styles {
+    font-weight: bold;
+    color: $text-color;
+    font-size: 0.85rem;
+  }
