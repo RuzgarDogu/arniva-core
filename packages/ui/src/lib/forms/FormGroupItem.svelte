@@ -1,4 +1,12 @@
 <script>
+    /** 
+     * @typedef {Object<string, any>} Props
+     * @property {any} children 
+     * @property {string} label 
+     * @property {boolean} required 
+     */
+
+     /** @type {Props} */
     let { children, label='', required=false } = $props();
 </script>
 <tr class="form-group-item">

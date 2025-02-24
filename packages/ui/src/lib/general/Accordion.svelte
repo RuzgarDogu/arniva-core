@@ -1,12 +1,16 @@
 <script>
     /**
-     * @typedef {Object} Props
+     * @typedef {Object<string, any>} Props
      * @property {string} class
      * @property {boolean} multiple
      * @property {any} rest
      * @property {any} children
+     * @property {boolean} flush
+     * @property {string} id
      */
     let random_id = Date.now().toString(36) + Math.random().toString(36).substring(2);
+    
+    /** @type {Props} */
     let { children, class:cls='', flush=false, multiple=false, id=random_id, ...rest } = $props();
 
 

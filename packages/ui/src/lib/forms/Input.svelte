@@ -1,13 +1,12 @@
 <script>
     /**
-     * @typedef {Object} Props
-     * @property {string} class
-     * @property {any} rest
+     * @typedef {Object<string, any>} Props
+     * @property {string} [class]
      */
-
-    /**
-     * @param {Props} props
-     */
-    let {class:cls = '', ...rest} = $props();
-</script>
-<input class="form-input {cls}" {...rest}/>
+  
+    /** @type {Props} */
+    let { class: cls = '', ...rest } = $props();
+  </script>
+  
+  <input class="form-input {cls}" {...rest}/>
+  

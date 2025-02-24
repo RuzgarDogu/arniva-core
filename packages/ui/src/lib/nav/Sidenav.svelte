@@ -12,11 +12,16 @@
      * @property {Function} dropdown
      * @property {string} class
      * @property {boolean} search
+     * @property {any} children
      * @property {any} rest
     */
    
     import { Input, InputGroup, Accordion, AccordionItem } from '$lib';
+
+    /** @type {Props} */
     let { logo='https://i.imgur.com/ixkDWCe.png', items=[], dropdown, class:cls='', search=true } = $props();
+
+
 
 
     /**

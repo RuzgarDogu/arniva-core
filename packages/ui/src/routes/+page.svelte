@@ -10,6 +10,10 @@
     }
 </script>
     <h1>Introduction</h1>
+
+    <Input placeholder="Fill in your name" type="text" style="margin-bottom: 30px;"/>
+
+
     <div style="margin-bottom: 20px;">
         <Button label="Button" color="primary" />
     </div>

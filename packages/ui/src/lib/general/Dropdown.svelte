@@ -1,6 +1,16 @@
 <script>
+    /**
+     * @typedef {Object<string, any>} Props
+     * @property {any} [children] The dropdown contents
+     * @property {string} [id] The dropdown id
+     * @property {any} [rest] The rest of the props
+     */
+
     let random_id = Date.now().toString(36) + Math.random().toString(36).substring(2);
+    
+    /** @type {Props} */
     let { children, id=random_id, ...rest } = $props();
+    
     /** @type {HTMLElement | null} */
     let currentOpenDropdown = null;
 

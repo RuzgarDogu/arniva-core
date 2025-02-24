@@ -1,10 +1,13 @@
 <script>
     /**
-     * @typedef {Object} Props
+     * @typedef {Object<string, any>} Props
      * @property {string} title
      * @property {'primary' | 'secondary' | 'default' | 'accent' | 'success' | 'danger' | 'warning'} color
+     * @property {any} children
      * @property {any} rest
      */
+    
+    /** @type {Props} */
     let { children, title='', color='default', ...rest } = $props();
 </script>
 

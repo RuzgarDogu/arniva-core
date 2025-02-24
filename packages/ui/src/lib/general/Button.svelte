@@ -14,11 +14,12 @@
    * @property {boolean} [square] Should the button be square?
    * @property {boolean} [thin] Should the button be thin?
    * @property {any} [children] The button contents
+   * @property {string} [class] The class to add to the button
    * @property {() => void} [onClick] The onclick event handler
    */
 
   /** @type {Props} */
-  let { children, link = false, thin=false, url='#', color='transparent', backgroundColor, size = 'medium', label='', onClick, type="button", dropdown=false, list=false, noPadding=false, square=false } = $props();
+  let { children, class:cls='', link = false, thin=false, url='#', color='transparent', backgroundColor, size = 'medium', label='', onClick, type="button", dropdown=false, list=false, noPadding=false, square=false } = $props();
 </script>
 {#if link}
   <a
@@ -26,7 +27,7 @@
       url
     }
     class:button--link={link}
-    class={['button', `button--${size}`].join(' ')}
+    class={['button', `${cls}`, `button--${size}`].join(' ')}
     class:button--primary={color === 'primary'}
     class:button--secondary={color === 'secondary'}
     class:button--transparent={color === 'transparent'}
@@ -46,7 +47,7 @@
 {:else}
 <button
   type={type}
-  class={['button', `button--${size}`].join(' ')}
+  class={['button', `${cls}`, `button--${size}`].join(' ')}
   class:button--primary={color === 'primary'}
   class:button--secondary={color === 'secondary'}
   class:button--transparent={color === 'transparent'}

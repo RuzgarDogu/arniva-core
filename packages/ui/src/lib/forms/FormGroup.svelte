@@ -1,4 +1,11 @@
 <script>
+    
+    /**
+     * @typedef {Object<string, any>} Props
+     * @property {any} children
+     */
+    
+     /** @type {Props} */
     let { children, ...rest } = $props();
 </script>
 

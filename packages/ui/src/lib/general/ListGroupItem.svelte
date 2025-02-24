@@ -1,9 +1,11 @@
 <script>
         /**
-     * @typedef {Object} Props
+     * @typedef {Object<string, any>} Props
      * @property {any} [children] ListGroupItem content
      * @property {any} rest ListGroupItem props
      */
+
+    /** @type {Props} */
     let { children, ...rest } = $props();
 </script>
 

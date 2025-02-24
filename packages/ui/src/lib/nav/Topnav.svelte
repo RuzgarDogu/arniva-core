@@ -1,9 +1,11 @@
 <script>
     /**
-     * @typedef {Object} Props
+     * @typedef {Object<string, any>} Props
      * @property {any} left
      * @property {any} right
      */
+
+    /** @type {Props} */
     let { left, right, ...rest } = $props();
 </script>
 <div class="top-nav" {...rest}>

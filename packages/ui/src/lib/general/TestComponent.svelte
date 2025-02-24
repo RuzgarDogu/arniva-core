@@ -3,6 +3,8 @@
      * @typedef {Object} Props
      * @property {number} [value] Value to display
      */
+
+    /** @type {Props} */
     const { value = 0 } = $props();
 </script>
 
