@@ -101,7 +101,7 @@
         input:checked ~ label {
             background: $success-color;
             span:first-of-type {
-                color: lighten($success-color, 20%);
+                color: darken($success-color, 30%);
             }
         }
     }
