@@ -5,6 +5,7 @@
     flex-direction: row;
     gap: 0.5rem;
     position: relative;
+    align-items: center;
     &--reverse {
         flex-direction: row-reverse;
     }
