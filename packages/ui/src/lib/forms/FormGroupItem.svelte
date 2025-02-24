@@ -1,9 +1,9 @@
 <script>
     /** 
      * @typedef {Object<string, any>} Props
-     * @property {any} children 
-     * @property {string} label 
-     * @property {boolean} required 
+     * @property {any} children Slot for component
+     * @property {string} [label] Label for the group item
+     * @property {boolean} [required] Is the group item required?
      */
 
      /** @type {Props} */
