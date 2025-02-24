@@ -25,6 +25,16 @@
     &::placeholder {
         font-family: inherit; // Inherit the font-family from the body
     }
+    &--small {
+        padding: 0.25em;
+    }
+    &--large {
+        padding: 0.85em;
+    }
+    &--disabled {
+        background-color: $light-color;
+        color: $secondary-color;
+    }
 }
 
 .form-select {
@@ -35,6 +45,16 @@
     padding: 0.5em;
     box-sizing: border-box;
     background-color: transparent;
+    &--small {
+        padding: 0.25em;
+    }
+    &--large {
+        padding: 0.85em;
+    }
+    &--disabled {
+        background-color: $light-color;
+        color: $secondary-color;
+    }
 }
 
 .form-input-group {
