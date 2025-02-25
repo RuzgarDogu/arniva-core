@@ -6,133 +6,135 @@ $compact-line-height: 12px;
 $sticky-negative-margin: -32px;
 
 @mixin table {
-    font-family: inherit;
-    width: 100%;
-    border-collapse: collapse;
-    
-    &--head {
-        background-color: $light-color;
-        &--flush {
-            background-color: transparent;
-        }
-        th, td {
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: $text-color;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            padding: $table-padding;
-            text-align: left;
-        }
-    }
-    &--body {
-        td {
-            padding: $table-padding;
-            text-align: left;
-            color: lighten($text-color, 20%);
-        }
-    }
-    &--border {
-        &--inline {
-            tr {
-                border-bottom: 1px solid $border-color;
-            }
-        }
-        &--full {
-            border: 1px solid $border-color;
-            tr {
-                border-bottom: 1px solid $border-color;
-            }
-        }
-        &--none {
-            border: none;
-            tr {
-                border-bottom: none;
-            }
-        }
-    }
-    &--stripe {
-        tr:nth-child(even) {
-            background-color: $light-color;
-        }
-    }
-    &--header-type-static {
-        thead {
-          position: sticky;
-          top: 0;
-          z-index: 1; // Ensures header stays above body content
-          background-color: $light-color;
-          &.table--head--flush {
-              background-color: #fff;
-          }
-        }
-        tbody {
-          // No need for display: block or overflow here
-        }
-        tr {
-          // Remove display: table and table-layout: fixed; let the table handle it naturally
-        }
-      }
-      &--header-type-sticky {
-        thead {
-            position: sticky;
-            top: $sticky-negative-margin;
-            z-index: 2;
-            background-color: $light-color;
-            &.table--head--flush {
-                background-color: #fff;
-            }
-        }
-        .table {
-            overflow: hidden;
-            margin-top: 0;
-            padding-top: 0;
-            table-layout: fixed; // Ensure consistent table layout
-            width: 100%;
-            display: table; // Use table display to maintain table structure
-        }
-        tbody {
-            display: block;
-            overflow-y: auto;
-            width: 100%;
-            display: table-row-group; // Use table-row-group to maintain table structure
-        }
-        th, td {
-            padding: $table-padding;
-            overflow: hidden; // Prevent content from breaking alignment
-            text-overflow: ellipsis; // Handle overflow with ellipsis if needed
-            white-space: nowrap; // Keeps text on one line (remove if you want wrapping)
-            display: table-cell; // Use table-cell to maintain table structure
-            min-width: 0; // Allow columns to adjust based on content
-        }
-        tr {
-            display: table-row; // Use table-row to maintain table structure
-            width: 100%;
-        }
-    }
-    &--size--normal {
-        font-size: 0.85rem;
-        line-height: $normal-line-height;
-    }
-    &--size--small {
-        font-size: 0.75rem;
-        line-height: $small-line-height;
-    }
-    &--size--large {
-        font-size: 1rem;
-        line-height: $large-line-height;
-    }
-    &--size--compact {
-        font-size: 0.75rem;
-        line-height: $compact-line-height;
-    }
+	font-family: inherit;
+	width: 100%;
+	border-collapse: collapse;
+
+	&--head {
+		background-color: $light-color;
+		&--flush {
+			background-color: transparent;
+		}
+		th,
+		td {
+			font-weight: 700;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: $text-color;
+			font-size: 0.7rem;
+			text-transform: uppercase;
+			padding: $table-padding;
+			text-align: left;
+		}
+	}
+	&--body {
+		td {
+			padding: $table-padding;
+			text-align: left;
+			color: lighten($text-color, 20%);
+		}
+	}
+	&--border {
+		&--inline {
+			tr {
+				border-bottom: 1px solid $border-color;
+			}
+		}
+		&--full {
+			border: 1px solid $border-color;
+			tr {
+				border-bottom: 1px solid $border-color;
+			}
+		}
+		&--none {
+			border: none;
+			tr {
+				border-bottom: none;
+			}
+		}
+	}
+	&--stripe {
+		tr:nth-child(even) {
+			background-color: $light-color;
+		}
+	}
+	&--header-type-static {
+		thead {
+			position: sticky;
+			top: 0;
+			z-index: 1; // Ensures header stays above body content
+			background-color: $light-color;
+			&.table--head--flush {
+				background-color: #fff;
+			}
+		}
+		tbody {
+			// No need for display: block or overflow here
+		}
+		tr {
+			// Remove display: table and table-layout: fixed; let the table handle it naturally
+		}
+	}
+	&--header-type-sticky {
+		thead {
+			position: sticky;
+			top: $sticky-negative-margin;
+			z-index: 2;
+			background-color: $light-color;
+			&.table--head--flush {
+				background-color: #fff;
+			}
+		}
+		.table {
+			overflow: hidden;
+			margin-top: 0;
+			padding-top: 0;
+			table-layout: fixed; // Ensure consistent table layout
+			width: 100%;
+			display: table; // Use table display to maintain table structure
+		}
+		tbody {
+			display: block;
+			overflow-y: auto;
+			width: 100%;
+			display: table-row-group; // Use table-row-group to maintain table structure
+		}
+		th,
+		td {
+			padding: $table-padding;
+			overflow: hidden; // Prevent content from breaking alignment
+			text-overflow: ellipsis; // Handle overflow with ellipsis if needed
+			white-space: nowrap; // Keeps text on one line (remove if you want wrapping)
+			display: table-cell; // Use table-cell to maintain table structure
+			min-width: 0; // Allow columns to adjust based on content
+		}
+		tr {
+			display: table-row; // Use table-row to maintain table structure
+			width: 100%;
+		}
+	}
+	&--size--normal {
+		font-size: 0.85rem;
+		line-height: $normal-line-height;
+	}
+	&--size--small {
+		font-size: 0.75rem;
+		line-height: $small-line-height;
+	}
+	&--size--large {
+		font-size: 1rem;
+		line-height: $large-line-height;
+	}
+	&--size--compact {
+		font-size: 0.75rem;
+		line-height: $compact-line-height;
+	}
 }
 
-    .table {
-        @include table;
-    }
+.table {
+	@include table;
+}
 
-    .table-container {
-        @include table;
-    }
+.table-container {
+	@include table;
+}

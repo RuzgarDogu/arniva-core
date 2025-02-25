@@ -1,14 +1,14 @@
 <script>
-        /**
-     * @typedef {Object<string, any>} Props
-     * @property {any} [children] ListGroupItem content
-     * @property {any} rest ListGroupItem props
-     */
+	/**
+	 * @typedef {Object<string, any>} Props
+	 * @property {any} [children] ListGroupItem content
+	 * @property {any} rest ListGroupItem props
+	 */
 
-    /** @type {Props} */
-    let { children, ...rest } = $props();
+	/** @type {Props} */
+	let { children, ...rest } = $props();
 </script>
 
 <div class="list-group-item" {...rest}>
-    {@render children?.()}
+	{@render children?.()}
 </div>

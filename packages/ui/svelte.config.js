@@ -10,9 +10,9 @@ const config = {
 	},
 	preprocess: preprocess({
 		scss: {
-		  includePaths: ['src/lib/styles'], // Adjusted path
-		},
-	  }),
+			includePaths: ['src/lib/styles'] // Adjusted path
+		}
+	})
 };
 
 export default config;

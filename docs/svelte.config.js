@@ -11,7 +11,7 @@ const config = {
 			'@ui': '../packages/ui/src/lib',
 			'@utils': '../packages/utils/src/lib'
 			// add other aliases as needed
-		  }
+		}
 	}
 };
 

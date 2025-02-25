@@ -1,37 +1,37 @@
 @import 'config';
 
 .layout {
-    display: flex;
-    height: 100vh;
-    overflow: hidden; // Prevents body scrolling
-    
-    &__sidebar {
-      width: 300px;
-      height: 100%; 
-      background-color: $light-color;
-      flex-shrink: 0;
-      overflow: hidden;
-      border-right: 1px solid $border-color;
-    }
-  
-    &__main {
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
+	display: flex;
+	height: 100vh;
+	overflow: hidden; // Prevents body scrolling
 
-    &__nav {
-      position: static;
-      height: auto;
-      background-color: #fff;
-      border-bottom: 1px solid $border-color;
-      z-index: 10;
-    }
-      
-    &__content {
-      flex-grow: 1; // Grow to take remaining space
-      overflow-y: auto; // Scrollable main content area
-      padding: 2rem;
-      background-color: #fff;
-    }
+	&__sidebar {
+		width: 300px;
+		height: 100%;
+		background-color: $light-color;
+		flex-shrink: 0;
+		overflow: hidden;
+		border-right: 1px solid $border-color;
+	}
+
+	&__main {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+	}
+
+	&__nav {
+		position: static;
+		height: auto;
+		background-color: #fff;
+		border-bottom: 1px solid $border-color;
+		z-index: 10;
+	}
+
+	&__content {
+		flex-grow: 1; // Grow to take remaining space
+		overflow-y: auto; // Scrollable main content area
+		padding: 2rem;
+		background-color: #fff;
+	}
 }

@@ -1,137 +1,136 @@
 @import 'config';
 
 .switch {
-    display: inline-flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    position: relative;
-    align-items: center;
-    &--reverse {
-        flex-direction: row-reverse;
-    }
+	display: inline-flex;
+	flex-direction: row;
+	gap: 0.5rem;
+	position: relative;
+	align-items: center;
+	&--reverse {
+		flex-direction: row-reverse;
+	}
 
-    &--label {
-        @include label-styles;
-    }
-    
-    &--input-label {
-        line-height: 18px;
-        -webkit-box-align: center;
-        align-items: center;
-        display: inline-block;
-        position: relative;
-        white-space: nowrap;
-        background: rgb(236, 244, 249);
-        border-radius: 3em;
-        padding: 1px;
-    }
-    
-    span {
-        text-align: center;
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 1;
-        cursor: pointer;
-        display: inline-block;
-        padding: 7px 15px;
-        transition: 100msease-out;
-        user-select: none;
-        border-radius: 3em;
-        color: rgba(46, 52, 56, 0.5);
-        background: transparent;
-        min-height: -webkit-fill-available;
-    }
+	&--label {
+		@include label-styles;
+	}
 
-    input:not(:checked) ~ label span:first-of-type {
-        background: rgb(255, 255, 255);
-        box-shadow: rgba(38, 85, 115, 0.25) 0px 0px 2px;
-        color: rgb(46, 52, 56);
-        padding: 7px 15px;
-    }
+	&--input-label {
+		line-height: 18px;
+		-webkit-box-align: center;
+		align-items: center;
+		display: inline-block;
+		position: relative;
+		white-space: nowrap;
+		background: rgb(236, 244, 249);
+		border-radius: 3em;
+		padding: 1px;
+	}
 
-    input:checked ~ label span:last-of-type, input:not(:checked) ~ label span:first-of-type {
-        background: rgb(255, 255, 255);
-        box-shadow: rgba(38, 85, 115, 0.25) 0px 0px 2px;
-        color: rgb(46, 52, 56);
-        padding: 7px 15px;
-    }
-    
-    span:first-of-type {
-        padding-right: 8px;
-    }
+	span {
+		text-align: center;
+		font-size: 12px;
+		font-weight: 700;
+		line-height: 1;
+		cursor: pointer;
+		display: inline-block;
+		padding: 7px 15px;
+		transition: 100msease-out;
+		user-select: none;
+		border-radius: 3em;
+		color: rgba(46, 52, 56, 0.5);
+		background: transparent;
+		min-height: -webkit-fill-available;
+	}
 
-    span:last-of-type {
-        padding-left: 8px;
-    }
+	input:not(:checked) ~ label span:first-of-type {
+		background: rgb(255, 255, 255);
+		box-shadow: rgba(38, 85, 115, 0.25) 0px 0px 2px;
+		color: rgb(46, 52, 56);
+		padding: 7px 15px;
+	}
 
-    &--input {
-        appearance: none;
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        margin: 0px;
-        padding: 0px;
-        border: none;
-        background: transparent;
-        cursor: pointer;
-        border-radius: 3em;
-    }
+	input:checked ~ label span:last-of-type,
+	input:not(:checked) ~ label span:first-of-type {
+		background: rgb(255, 255, 255);
+		box-shadow: rgba(38, 85, 115, 0.25) 0px 0px 2px;
+		color: rgb(46, 52, 56);
+		padding: 7px 15px;
+	}
 
-    &--primary {
-        input:checked ~ label {
-            background: $primary-color;
-            span:first-of-type {
-                color: lighten($primary-color, 20%);
-            }
-        }
-    }
+	span:first-of-type {
+		padding-right: 8px;
+	}
 
-    &--secondary {
-        input:checked ~ label {
-            background: $secondary-color;
-            span:first-of-type {
-                color: lighten($secondary-color, 20%);
-            }
-        }
-    }
+	span:last-of-type {
+		padding-left: 8px;
+	}
 
-    &--success {
-        input:checked ~ label {
-            background: $success-color;
-            span:first-of-type {
-                color: darken($success-color, 30%);
-            }
-        }
-    }
+	&--input {
+		appearance: none;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		margin: 0px;
+		padding: 0px;
+		border: none;
+		background: transparent;
+		cursor: pointer;
+		border-radius: 3em;
+	}
 
-    &--danger {
-        input:checked ~ label {
-            background: $danger-color;
-            span:first-of-type {
-                color: lighten($danger-color, 20%);
-            }
-        }
-    }
+	&--primary {
+		input:checked ~ label {
+			background: $primary-color;
+			span:first-of-type {
+				color: lighten($primary-color, 20%);
+			}
+		}
+	}
 
-    &--warning {
-        input:checked ~ label {
-            background: $warning-color;
-            span:first-of-type {
-                color: lighten($warning-color, 20%);
-            }
-        }
-    }
+	&--secondary {
+		input:checked ~ label {
+			background: $secondary-color;
+			span:first-of-type {
+				color: lighten($secondary-color, 20%);
+			}
+		}
+	}
 
-    &--accent {
-        input:checked ~ label {
-            background: $accent-color;
-            span:first-of-type {
-                color: lighten($accent-color, 20%);
-            }
-        }
-    }
+	&--success {
+		input:checked ~ label {
+			background: $success-color;
+			span:first-of-type {
+				color: darken($success-color, 30%);
+			}
+		}
+	}
 
+	&--danger {
+		input:checked ~ label {
+			background: $danger-color;
+			span:first-of-type {
+				color: lighten($danger-color, 20%);
+			}
+		}
+	}
+
+	&--warning {
+		input:checked ~ label {
+			background: $warning-color;
+			span:first-of-type {
+				color: lighten($warning-color, 20%);
+			}
+		}
+	}
+
+	&--accent {
+		input:checked ~ label {
+			background: $accent-color;
+			span:first-of-type {
+				color: lighten($accent-color, 20%);
+			}
+		}
+	}
 }
-

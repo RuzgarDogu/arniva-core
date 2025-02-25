@@ -1,68 +1,78 @@
 @import 'config';
 .badge {
-    display: inline-block;
-    vertical-align: top;
-    border-radius: $border-radius-sm;
-    padding: 4px 12px;
-    font-weight: 700;
-    font-size: 11px;
-    line-height: 12px;
-    font-family: "Nunito Sans",-apple-system,".SFNSText-Regular","San Francisco",BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
-    
-    &--default {
-        background-color: $light-color;
-        color: $text-color;
-        border: none;
-        border-radius: 0;
-    }
-    
-    &--primary {
-        background-color: $primary-color;
-        color: white;
-    }
-    
-    &--accent {
-        background-color: $accent-color;
-        color: white;
-    }
+	display: inline-block;
+	vertical-align: top;
+	border-radius: $border-radius-sm;
+	padding: 4px 12px;
+	font-weight: 700;
+	font-size: 11px;
+	line-height: 12px;
+	font-family:
+		'Nunito Sans',
+		-apple-system,
+		'.SFNSText-Regular',
+		'San Francisco',
+		BlinkMacSystemFont,
+		'Segoe UI',
+		'Helvetica Neue',
+		Helvetica,
+		Arial,
+		sans-serif;
 
-    &--secondary {
-        box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
-        background-color: transparent;
-        color: $text-color;
-    }
-    
-    &--success {
-        background-color: lighten($success-color, 20%);
-        color: darken($success-color, 50%);
-    }
-    
-    &--warning {
-        background-color: lighten($warning-color, 20%);
-        color: darken($warning-color, 50%);
-    }
+	&--default {
+		background-color: $light-color;
+		color: $text-color;
+		border: none;
+		border-radius: 0;
+	}
 
-    &--danger {
-        background-color: lighten($danger-color, 20%);
-        color: darken($danger-color, 50%);
-    }
+	&--primary {
+		background-color: $primary-color;
+		color: white;
+	}
 
-    &--small {
-        padding: 4px 8px;
-        font-size: 12px;
-    }
-    
-    &--medium {
-        padding: 7px 14px;
-        font-size: 14px;
-    }
-    
-    &--large {
-        padding: 10px 20px;
-        font-size: 16px;
-    }
+	&--accent {
+		background-color: $accent-color;
+		color: white;
+	}
 
-    &--rounded {
-        border-radius: 1rem;
-    }
+	&--secondary {
+		box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
+		background-color: transparent;
+		color: $text-color;
+	}
+
+	&--success {
+		background-color: lighten($success-color, 20%);
+		color: darken($success-color, 50%);
+	}
+
+	&--warning {
+		background-color: lighten($warning-color, 20%);
+		color: darken($warning-color, 50%);
+	}
+
+	&--danger {
+		background-color: lighten($danger-color, 20%);
+		color: darken($danger-color, 50%);
+	}
+
+	&--small {
+		padding: 4px 8px;
+		font-size: 12px;
+	}
+
+	&--medium {
+		padding: 7px 14px;
+		font-size: 14px;
+	}
+
+	&--large {
+		padding: 10px 20px;
+		font-size: 16px;
+	}
+
+	&--rounded {
+		border-radius: 1rem;
+	}
 }

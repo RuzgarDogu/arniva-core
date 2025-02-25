@@ -1,4 +1,4 @@
-import '../../packages/ui/src/lib/styles/app.scss'
+import '../../packages/ui/src/lib/styles/app.scss';
 
 // Add Google Font link
 const link = document.createElement('link');
@@ -17,22 +17,26 @@ const style = document.createElement('style');
 style.innerHTML = customFontStyles;
 document.head.appendChild(style);
 
-
 /** @type { import('@storybook/svelte').Preview } */
 const preview = {
-  parameters: {
-    options: {
-      storySort: {
-        order: ['Welcome', 'UI', ['Layout',['Layout', 'Aside', 'Main', 'Content'], 'Nav', 'General', 'Forms'], 'Utils'],
-      },
-    },
-    controls: {
-      matchers: {
-       color: /(background|color)$/i,
-       date: /Date$/i,
-      },
-    },
-  },
+	parameters: {
+		options: {
+			storySort: {
+				order: [
+					'Welcome',
+					'UI',
+					['Layout', ['Layout', 'Aside', 'Main', 'Content'], 'Nav', 'General', 'Forms'],
+					'Utils'
+				]
+			}
+		},
+		controls: {
+			matchers: {
+				color: /(background|color)$/i,
+				date: /Date$/i
+			}
+		}
+	}
 };
 
 export default preview;

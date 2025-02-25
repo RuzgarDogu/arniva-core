@@ -1,18 +1,18 @@
 @import 'config';
 
 .form-group {
-  width: 100%;
-  .form-group-item {
-    td {
-        border-bottom: 1px solid $border-color;
-        padding: 10px;
-    }
-    &--label {
-      @include label-styles;
-      padding: 10px;
-      .required {
-        color: $danger-color;
-      }
-    }
-  }
+	width: 100%;
+	.form-group-item {
+		td {
+			border-bottom: 1px solid $border-color;
+			padding: 10px;
+		}
+		&--label {
+			@include label-styles;
+			padding: 10px;
+			.required {
+				color: $danger-color;
+			}
+		}
+	}
 }

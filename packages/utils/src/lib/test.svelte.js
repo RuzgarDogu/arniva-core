@@ -3,9 +3,8 @@
  * @returns {void}
  * */
 
-
-export function hello(name = "world") {
-    let str = `Hello ${name}`;
-    console.log(str);
-    alert(str);
+export function hello(name = 'world') {
+	let str = `Hello ${name}`;
+	console.log(str);
+	alert(str);
 }
