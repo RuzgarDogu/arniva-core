@@ -1,6 +1,6 @@
 <script>
     /** @type {{ data: import('./$types').PageData }} */
-    import { Button, Switch, InputGroup, Dropdown, DropdownContent, Accordion, AccordionItem, Input, Tab, TabItem, Badge, Alert, ListGroup, ListGroupItem, FormGroup, FormGroupItem, Select } from '$lib'
+    import { Button, Switch, Table, Thead, Tbody, Trow, InputGroup, Dropdown, DropdownContent, Accordion, AccordionItem, Input, Tab, TabItem, Badge, Alert, ListGroup, ListGroupItem, FormGroup, FormGroupItem, Select } from '$lib'
     let switchValue = false;
 
     function handleSwitchChange(value) {
@@ -8,10 +8,163 @@
         let result = value ? 'ON' : 'OFF';
         // alert(`Switch value changed to: ${result}`);
     }
+
+    
+    let dummyData = [
+    {
+        id: 1,
+        name: 'John Doe',
+        email: 'john@dummy.com',
+        phone: '1234567890',
+        age: 25
+    },
+    {
+        id: 2,
+        name: 'Jane Doe',
+        email: 'jane@dummy.com',
+        phone: '0987654321',
+        age: 30
+    },
+    {
+        id: 3,
+        name: 'Alice Smith',
+        email: 'alice@dummy.com',
+        phone: '1122334455',
+        age: 28
+    },
+    {
+        id: 4,
+        name: 'Bob Johnson',
+        email: 'bob@dummy.com',
+        phone: '2233445566',
+        age: 35
+    },
+    {
+        id: 5,
+        name: 'Charlie Brown',
+        email: 'charlie@dummy.com',
+        phone: '3344556677',
+        age: 40
+    },
+    {
+        id: 6,
+        name: 'Diana Prince',
+        email: 'diana@dummy.com',
+        phone: '4455667788',
+        age: 22
+    },
+    {
+        id: 7,
+        name: 'Evan Wright',
+        email: 'evan@dummy.com',
+        phone: '5566778899',
+        age: 27
+    },
+    {
+        id: 8,
+        name: 'Fiona Gallagher',
+        email: 'fiona@dummy.com',
+        phone: '6677889900',
+        age: 33
+    },
+    {
+        id: 9,
+        name: 'George King',
+        email: 'george@dummy.com',
+        phone: '7788990011',
+        age: 29
+    },
+    {
+        id: 10,
+        name: 'Hannah Montana',
+        email: 'hannah@dummy.com',
+        phone: '8899001122',
+        age: 24
+    }
+];
+
+
+
 </script>
     <h1>Introduction</h1>
 
     <Input placeholder="Fill in your name" type="text" style="margin-bottom: 30px;"/>
+
+
+    <div style="margin-bottom: 40px; margin-top:40px;">
+        <Table headerType='static' height="200px">
+            <Thead flush>
+                <Trow>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Age</th>
+                </Trow>
+            </Thead>
+            <Tbody>
+                {#each dummyData as item}
+                    <Trow>
+                        <td>{item.id}</td>
+                        <td>{item.name}-{item.name}-{item.name}</td>
+                        <td>{item.email}</td>
+                        <td>{item.phone}</td>
+                        <td>{item.age}</td>
+                    </Trow>
+                {/each}
+            </Tbody>
+        </Table>
+    </div>
+
+    <div style="margin-bottom: 40px; margin-top:40px;">
+        <Table headerType='sticky' type="stripe">
+            <Thead>
+                <Trow>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Age</th>
+                </Trow>
+            </Thead>
+            <Tbody>
+                {#each dummyData as item}
+                    <Trow>
+                        <td>{item.id}</td>
+                        <td>{item.name}</td>
+                        <td>{item.email}</td>
+                        <td>{item.phone}</td>
+                        <td>{item.age}</td>
+                    </Trow>
+                {/each}
+            </Tbody>
+        </Table>
+    </div>
+
+    <div style="margin-bottom: 40px; margin-top:40px;">
+        <Table headerType='normal'>
+            <Thead>
+                <Trow>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Age</th>
+                </Trow>
+            </Thead>
+            <Tbody>
+                {#each dummyData as item}
+                    <Trow>
+                        <td>{item.id}</td>
+                        <td>{item.name}</td>
+                        <td>{item.email}</td>
+                        <td>{item.phone}</td>
+                        <td>{item.age}</td>
+                    </Trow>
+                {/each}
+            </Tbody>
+        </Table>
+    </div>
 
     <InputGroup icon style="margin-bottom: 30px;">
         <Input type="text" placeholder="Arayın" class="asdasf"/>
