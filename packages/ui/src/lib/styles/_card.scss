@@ -37,7 +37,8 @@ $card-padding: 0.6rem 1.5rem;
 	overflow: hidden;
 	font-size: 0.95rem;
 	color: lighten($text-color, 10%);
-	&:has(.card--header), &:has(.card--footer) {
+	&:has(.card--header),
+	&:has(.card--footer) {
 		padding: 0;
 		.card--header {
 			padding: $card-padding;

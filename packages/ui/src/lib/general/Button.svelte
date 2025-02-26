@@ -25,7 +25,7 @@
 	/** @type {Props} */
 	let {
 		children,
-		style='',
+		style = '',
 		class: cls = '',
 		link = false,
 		thin = false,
@@ -41,8 +41,8 @@
 		noPadding = false,
 		square = false,
 		modal = '',
-		modalEnlarge=false,
-		modalDismiss=false
+		modalEnlarge = false,
+		modalDismiss = false
 	} = $props();
 </script>
 
@@ -57,7 +57,7 @@
 		class:button--square={square}
 		class:button--thin={thin}
 		style:background-color={backgroundColor}
-		style={style}
+		{style}
 	>
 		{#if children}
 			{@render children()}
@@ -75,7 +75,7 @@
 		class:button--square={square}
 		class:button--thin={thin}
 		style:background-color={backgroundColor}
-		style={style}
+		{style}
 		onclick={onClick}
 		data-ar-toggle={modal ? 'modal' : null}
 		data-ar-target={modal ? modal : null}

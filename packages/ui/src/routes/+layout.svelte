@@ -54,9 +54,9 @@
 						>
 					</Button>
 					<DropdownContent>
-						<Button list label="Option A" color="transparent"/>
-						<Button list label="Option B" color="transparent"/>
-						<Button list label="Option C" color="transparent"/>
+						<Button list label="Option A" color="transparent" />
+						<Button list label="Option B" color="transparent" />
+						<Button list label="Option C" color="transparent" />
 					</DropdownContent>
 				</Dropdown>
 			{/snippet}

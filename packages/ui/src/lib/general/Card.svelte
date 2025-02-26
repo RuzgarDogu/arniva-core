@@ -9,8 +9,6 @@
 	let { children, class: cls = '' } = $props();
 </script>
 
-<div 
-class={['card', `${cls}`].join(' ')}
->
+<div class={['card', `${cls}`].join(' ')}>
 	{@render children?.()}
 </div>

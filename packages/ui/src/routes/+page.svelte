@@ -22,10 +22,10 @@
 		FormGroup,
 		FormGroupItem,
 		Select,
-        Card,
-        CardHeader,
-        CardFooter,
-        CardBody,
+		Card,
+		CardHeader,
+		CardFooter,
+		CardBody,
 		Modal
 	} from '$lib';
 	let switchValue = false;
@@ -118,27 +118,27 @@
 	Modal 1
 </button> -->
 
-<Button modal="testModal" color="primary" style="margin-bottom: 20px;">
-	Modal 1
-</Button>
+<Button modal="testModal" color="primary" style="margin-bottom: 20px;">Modal 1</Button>
 
 <Button onClick={() => modal3.show()} color="primary" style="margin-bottom: 20px;">
 	Open Modal 3
 </Button>
 
-
-<Modal id="testModal" title="Test Modal" size="lg" name="Test_Modal" onclose={() => console.log('Modal Closed')}>
-	<h1>ok</h1>
-	<Button modal="testModal2" color="danger" style="margin-bottom: 20px;">
-		Modal 2
-	</Button>
+<Modal
+	id="testModal"
+	devMode
+	title="Test Modal"
+	size="lg"
+	name="Test_Modal"
+	onclose={() => console.log('Modal Closed')}
+>
+	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores sequi atque officiis earum nemo, consectetur reprehenderit illo sit provident nisi tempora voluptatem obcaecati hic voluptatum reiciendis a. Veritatis dignissimos, voluptas deserunt eaque nulla vitae? Error, repellat! Atque obcaecati, dolorum quis autem voluptatem totam dolorem magni cumque ad, quam laboriosam illo!</p>
+	<Button modal="testModal2" color="danger" style="margin-bottom: 20px;">Modal 2</Button>
 </Modal>
 
 <Modal id="testModal2" title="Test Modal2" size="lg" name="Test_Modal2">
 	<h1>ok3</h1>
-	<Button modal="testModal3" color="danger" style="margin-bottom: 20px;">
-		Modal 3
-	</Button>
+	<Button modal="testModal3" color="danger" style="margin-bottom: 20px;">Modal 3</Button>
 </Modal>
 
 <Modal id="testModal3" title="Test Modal3" size="lg" name="Test_Modal3" bind:this={modal3}>
@@ -148,22 +148,28 @@
 <Input placeholder="Fill in your name" type="text" style="margin-bottom: 30px;" />
 
 <div style="margin-bottom: 40px; margin-top:40px;">
-<Card>
-    <CardHeader title="Card Title" />
-        <CardBody>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, veritatis iusto cumque sapiente porro ad animi itaque, impedit voluptates numquam sunt autem fugit corporis laborum vero eaque, quo temporibus dolores sequi commodi hic accusamus ducimus perferendis? Unde minima repellat voluptates vitae. Tempora quasi minima est, perspiciatis dicta sit nihil quaerat.</p>
-            <p><a style="color:blue; text-decoration: none;" href="#">Have Questions?</a></p>
-        </CardBody>
-        <CardFooter border>
-            <div style="display: flex; justify-content: space-between;">
-                <div>
-                    <Button label="Submit" color="primary" size="small" />
-                    <Button label="Cancel" color="secondary" size="small" />
-                </div>
-                <Button label="Learn More" size="small" />
-            </div>
-        </CardFooter>
-</Card>
+	<Card>
+		<CardHeader title="Card Title" />
+		<CardBody>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, veritatis iusto cumque
+				sapiente porro ad animi itaque, impedit voluptates numquam sunt autem fugit corporis laborum
+				vero eaque, quo temporibus dolores sequi commodi hic accusamus ducimus perferendis? Unde
+				minima repellat voluptates vitae. Tempora quasi minima est, perspiciatis dicta sit nihil
+				quaerat.
+			</p>
+			<p><a style="color:blue; text-decoration: none;" href="#">Have Questions?</a></p>
+		</CardBody>
+		<CardFooter border>
+			<div style="display: flex; justify-content: space-between;">
+				<div>
+					<Button label="Submit" color="primary" size="small" />
+					<Button label="Cancel" color="secondary" size="small" />
+				</div>
+				<Button label="Learn More" size="small" />
+			</div>
+		</CardFooter>
+	</Card>
 </div>
 
 <div style="margin-bottom: 40px; margin-top:40px;">

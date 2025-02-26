@@ -28,18 +28,24 @@
 <Story name="With Header & Footer" args={{}}>
 	<Card>
 		<CardHeader title="Card Title" />
-			<CardBody>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, veritatis iusto cumque sapiente porro ad animi itaque, impedit voluptates numquam sunt autem fugit corporis laborum vero eaque, quo temporibus dolores sequi commodi hic accusamus ducimus perferendis? Unde minima repellat voluptates vitae. Tempora quasi minima est, perspiciatis dicta sit nihil quaerat.</p>
-				<p><a style="color:blue; text-decoration: none;" href="/">Have Questions?</a></p>
-			</CardBody>
-			<CardFooter border>
-				<div style="display: flex; justify-content: space-between;">
-					<div>
-						<Button label="Submit" color="primary" size="small" />
-						<Button label="Cancel" color="secondary" size="small" />
-					</div>
-					<Button label="Learn More" size="small" />
+		<CardBody>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, veritatis iusto cumque
+				sapiente porro ad animi itaque, impedit voluptates numquam sunt autem fugit corporis laborum
+				vero eaque, quo temporibus dolores sequi commodi hic accusamus ducimus perferendis? Unde
+				minima repellat voluptates vitae. Tempora quasi minima est, perspiciatis dicta sit nihil
+				quaerat.
+			</p>
+			<p><a style="color:blue; text-decoration: none;" href="/">Have Questions?</a></p>
+		</CardBody>
+		<CardFooter border>
+			<div style="display: flex; justify-content: space-between;">
+				<div>
+					<Button label="Submit" color="primary" size="small" />
+					<Button label="Cancel" color="secondary" size="small" />
 				</div>
-			</CardFooter>
+				<Button label="Learn More" size="small" />
+			</div>
+		</CardFooter>
 	</Card>
 </Story>
