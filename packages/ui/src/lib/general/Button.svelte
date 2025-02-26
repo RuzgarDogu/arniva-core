@@ -15,12 +15,17 @@
 	 * @property {boolean} [thin] Should the button be thin?
 	 * @property {any} [children] The button contents
 	 * @property {string} [class] The class to add to the button
+	 * @property {string} [style] The style to add to the button
+	 * @property {string} [modal] The modal to open
+	 * @property {boolean} [modalEnlarge] Should the modal be enlarged?
+	 * @property {boolean} [modalDismiss] Should the modal be dismissed?
 	 * @property {() => void} [onClick] The onclick event handler
 	 */
 
 	/** @type {Props} */
 	let {
 		children,
+		style='',
 		class: cls = '',
 		link = false,
 		thin = false,
@@ -34,7 +39,10 @@
 		dropdown = false,
 		list = false,
 		noPadding = false,
-		square = false
+		square = false,
+		modal = '',
+		modalEnlarge=false,
+		modalDismiss=false
 	} = $props();
 </script>
 
@@ -49,6 +57,7 @@
 		class:button--square={square}
 		class:button--thin={thin}
 		style:background-color={backgroundColor}
+		style={style}
 	>
 		{#if children}
 			{@render children()}
@@ -66,7 +75,12 @@
 		class:button--square={square}
 		class:button--thin={thin}
 		style:background-color={backgroundColor}
+		style={style}
 		onclick={onClick}
+		data-ar-toggle={modal ? 'modal' : null}
+		data-ar-target={modal ? modal : null}
+		data-ar-enlarge={modalEnlarge ? 'modal' : null}
+		data-ar-dismiss={modalDismiss ? 'modal' : null}
 	>
 		{#if children}
 			{@render children()}

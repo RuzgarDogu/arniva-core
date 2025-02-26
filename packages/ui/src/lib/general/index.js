@@ -17,3 +17,4 @@ export { default as Badge } from './Badge.svelte';
 export { default as Alert } from './Alert.svelte';
 export { default as ListGroup } from './ListGroup.svelte';
 export { default as ListGroupItem } from './ListGroupItem.svelte';
+export { default as Modal } from './Modal.svelte';

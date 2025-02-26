@@ -6,7 +6,7 @@
 	overflow: hidden; // Prevents body scrolling
 
 	&__sidebar {
-		width: 300px;
+		width: $sidebar-width;
 		height: 100%;
 		background-color: $light-color;
 		flex-shrink: 0;

@@ -25,7 +25,8 @@
         Card,
         CardHeader,
         CardFooter,
-        CardBody
+        CardBody,
+		Modal
 	} from '$lib';
 	let switchValue = false;
 
@@ -107,9 +108,42 @@
 			age: 24
 		}
 	];
+
+	let modal3;
 </script>
 
 <h1>Introduction</h1>
+
+<!-- <button data-ar-toggle="modal" data-ar-target="testModal" class="input-group-text bg-lightgray border-0 border-end-0 p-1">
+	Modal 1
+</button> -->
+
+<Button modal="testModal" color="primary" style="margin-bottom: 20px;">
+	Modal 1
+</Button>
+
+<Button onClick={() => modal3.show()} color="primary" style="margin-bottom: 20px;">
+	Open Modal 3
+</Button>
+
+
+<Modal id="testModal" title="Test Modal" size="lg" name="Test_Modal" onclose={() => console.log('Modal Closed')}>
+	<h1>ok</h1>
+	<Button modal="testModal2" color="danger" style="margin-bottom: 20px;">
+		Modal 2
+	</Button>
+</Modal>
+
+<Modal id="testModal2" title="Test Modal2" size="lg" name="Test_Modal2">
+	<h1>ok3</h1>
+	<Button modal="testModal3" color="danger" style="margin-bottom: 20px;">
+		Modal 3
+	</Button>
+</Modal>
+
+<Modal id="testModal3" title="Test Modal3" size="lg" name="Test_Modal3" bind:this={modal3}>
+	<h1>ok4</h1>
+</Modal>
 
 <Input placeholder="Fill in your name" type="text" style="margin-bottom: 30px;" />
 

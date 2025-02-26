@@ -23,7 +23,7 @@
 		<Sidenav>
 			{#snippet dropdown()}
 				<Dropdown>
-					<Button dropdown size="small" square>
+					<Button dropdown size="small" square color="transparent">
 						<svg
 							width="18px"
 							height="18px"
@@ -54,9 +54,9 @@
 						>
 					</Button>
 					<DropdownContent>
-						<Button list label="Option A" />
-						<Button list label="Option B" />
-						<Button list label="Option C" />
+						<Button list label="Option A" color="transparent"/>
+						<Button list label="Option B" color="transparent"/>
+						<Button list label="Option C" color="transparent"/>
 					</DropdownContent>
 				</Dropdown>
 			{/snippet}
@@ -66,7 +66,7 @@
 		<Navbar>
 			<Topnav>
 				{#snippet left()}
-					<Button thin size="small">
+					<Button thin size="small" color="transparent">
 						<svg
 							width="16px"
 							height="16px"
@@ -98,7 +98,7 @@
 						>
 						Hızlı Erişim
 					</Button>
-					<Button thin size="small">
+					<Button thin size="small" color="transparent">
 						<svg
 							width="16px"
 							height="16px"
@@ -139,7 +139,7 @@
 					</Button>
 				{/snippet}
 				{#snippet right()}
-					<Button square>
+					<Button square color="transparent">
 						<svg
 							width="16px"
 							height="16px"
@@ -171,7 +171,7 @@
 							</g></svg
 						>
 					</Button>
-					<Button square>
+					<Button square color="transparent">
 						<svg
 							width="16px"
 							height="16px"
@@ -213,7 +213,7 @@
 							</g></svg
 						>
 					</Button>
-					<Button square>
+					<Button square color="transparent">
 						<svg
 							width="16px"
 							height="16px"
@@ -255,7 +255,7 @@
 							</g></svg
 						>
 					</Button>
-					<Button square>
+					<Button square color="transparent">
 						<svg
 							width="16px"
 							height="16px"
@@ -290,7 +290,7 @@
 							</g></svg
 						>
 					</Button>
-					<Button square>
+					<Button square color="transparent">
 						<svg
 							width="16px"
 							height="16px"
