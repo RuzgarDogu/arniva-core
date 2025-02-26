@@ -18,7 +18,29 @@ Designed for modularity, arniverse allows individual packages to be installed an
 
 npm login --scope=@arniverse --registry=https://npm.pkg.github.com
 
-# publish spesific package
+# Publish spesific package
+## BEFORE PUBLISH
+DO NOT FORGET to set a new version inside package's ```package.json```.
+
+### Publishing UI
+First compile scss to css by running this script:
+
+```bash
+pnpm prepare:ui
+```
+
+Then change ``ìndex.js``` inside ```lib```folder from **scss** to **css**:
+```javascript
+import './styles/app.css'
+```
+
+then publish it by:
+```bash
+pnpm build:ui
+```
+
+### IMPORTANT
+DO NOT FORGET TO CHANGE ```css```to ```scss```BACK AGAIN.
 
 pnpm --filter @ruzgardogu/ui publish --access restricted
 pnpm --filter @ruzgardogu/utils publish --access restricted

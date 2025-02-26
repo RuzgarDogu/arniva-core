@@ -13,7 +13,8 @@
     "dev:utils": "pnpm --filter @ruzgardogu/utils dev",
     "dev:tools": "pnpm --filter @ruzgardogu/tools dev",
     "dev:docs": "pnpm --filter @ruzgardogu/docs exec npx storybook dev -p 6006",
-    "build:ui": "pnpm --filter @ruzgardogu/ui run build:styles && pnpm --filter @ruzgardogu/ui publish --access restricted",
+    "prepare:ui": "pnpm --filter @ruzgardogu/ui run build:styles",
+    "build:ui": "pnpm --filter @ruzgardogu/ui publish --access restricted",
     "dev": "pnpm --parallel run dev:*",
     "build:storybook": "pnpm --filter @ruzgardogu/docs run build-storybook",
     "format": "prettier --write ."
