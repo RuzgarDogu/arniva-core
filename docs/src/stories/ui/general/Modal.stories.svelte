@@ -32,7 +32,7 @@
     }}>
 	{#snippet children(args)}
     <div style="height: 500px;">
-        <Button modal="testModal" color="primary" style="margin-bottom: 20px;">Modal 1</Button>
+        <Button modal="testModal" color="primary" style="margin-bottom: 20px;">Open Modal</Button>
 		<Modal {...args}>
             <h3>Test Title</h3>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, beatae ipsa alias repellendus impedit distinctio laboriosam, voluptatem reiciendis repellat perferendis sed quo unde ratione quam consequuntur corporis molestiae. Magni veritatis, iusto harum nostrum quasi aut minima quidem dolor placeat nulla saepe consequuntur quibusdam qui blanditiis labore deleniti! Blanditiis, obcaecati. Nulla!</p>

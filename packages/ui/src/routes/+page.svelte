@@ -26,9 +26,12 @@
 		CardHeader,
 		CardFooter,
 		CardBody,
-		Modal
+		Modal,
+		DatePicker
 	} from '$lib';
 	let switchValue = false;
+
+	import { clickOutside } from '$lib/functions';
 
 	function handleSwitchChange(value) {
 		console.log('Switch value changed to:', value);
@@ -110,13 +113,139 @@
 	];
 
 	let modal3;
+
+  // For single date selection:
+  let singleDate = null;
+  
+  // For date range selection:
+  let dateRange = { start: null, end: null };
+
 </script>
 
-<h1>Introduction</h1>
+<h1 style="margin-bottom: 20px;">Introduction</h1>
 
 <!-- <button data-ar-toggle="modal" data-ar-target="testModal" class="input-group-text bg-lightgray border-0 border-end-0 p-1">
 	Modal 1
 </button> -->
+<div style="margin-bottom: 20px;">
+	<DatePicker 
+  isRange={false} 
+  quickSelect
+  manualInput
+  bind:selectedDate={singleDate} 
+/>
+</div>
+<div style="margin-bottom: 20px;">
+
+<!-- Date range picker -->
+<DatePicker 
+  isRange={true}
+  quickSelect
+  manualInput
+  bind:dateRange={dateRange} 
+/>
+</div>
+
+<div style="margin-bottom: 20px;">
+	<Select search data={dummyData} onSelect={(e) => console.log("e", e)} placeholder="Start typing..."/>
+</div>
+<div style="margin-bottom: 20px;">
+	<Select placeholder="Select an option">
+		<option value="1">Test 1</option>
+		<option value="2">Test 2</option>
+		<option value="3">Test 3</option>
+	</Select>
+</div>
+
+<div>
+	<InputGroup icon style="margin-bottom: 30px;">
+		<Select search data={dummyData} onSelect={(e) => console.log("e", e)} />
+		<Dropdown>
+			<Button dropdown size="small" square color="transparent">
+				<svg
+					width="18px"
+					height="18px"
+					viewBox="0 0 32 32"
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
+						id="SVGRepo_tracerCarrier"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					></g><g id="SVGRepo_iconCarrier">
+						<path
+							stroke="currentColor"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M13.905 3.379A.5.5 0 0114.39 3h3.22a.5.5 0 01.485.379l.689 2.757a.515.515 0 00.341.362c.383.126.755.274 1.115.443a.515.515 0 00.449-.003l2.767-1.383a.5.5 0 01.577.093l2.319 2.319a.5.5 0 01.093.577l-1.383 2.767a.515.515 0 00-.003.449c.127.271.243.549.346.833.053.148.17.265.319.315l2.934.978a.5.5 0 01.342.474v3.28a.5.5 0 01-.342.474l-2.934.978a.515.515 0 00-.32.315 9.937 9.937 0 01-.345.833.515.515 0 00.003.449l1.383 2.767a.5.5 0 01-.093.577l-2.319 2.319a.5.5 0 01-.577.093l-2.767-1.383a.515.515 0 00-.449-.003c-.271.127-.549.243-.833.346a.515.515 0 00-.315.319l-.978 2.934a.5.5 0 01-.474.342h-3.28a.5.5 0 01-.474-.342l-.978-2.934a.515.515 0 00-.315-.32 9.95 9.95 0 01-1.101-.475.515.515 0 00-.498.014l-2.437 1.463a.5.5 0 01-.611-.075l-2.277-2.277a.5.5 0 01-.075-.61l1.463-2.438a.515.515 0 00.014-.498 9.938 9.938 0 01-.573-1.383.515.515 0 00-.362-.341l-2.757-.69A.5.5 0 013 17.61v-3.22a.5.5 0 01.379-.485l2.757-.689a.515.515 0 00.362-.341c.157-.478.35-.94.573-1.383a.515.515 0 00-.014-.498L5.594 8.557a.5.5 0 01.075-.611l2.277-2.277a.5.5 0 01.61-.075l2.438 1.463c.152.091.34.094.498.014a9.938 9.938 0 011.382-.573.515.515 0 00.342-.362l.69-2.757z"
+						></path>
+						<circle
+							cx="16"
+							cy="16"
+							r="5"
+							stroke="currentColor"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+						></circle>
+					</g></svg
+				>
+			</Button>
+			<DropdownContent>
+				<Button list color="transparent" label="Option A" />
+				<Button list color="transparent" label="Option B" />
+				<Button list color="transparent" label="Option C" />
+			</DropdownContent>
+		</Dropdown>
+	</InputGroup>
+</div>
+
+<div>
+	<InputGroup icon style="margin-bottom: 30px;">
+		<Select>
+			<option value="1">Test 1</option>
+			<option value="2">Test 2</option>
+			<option value="3">Test 3</option>
+		</Select>
+		<Dropdown>
+			<Button dropdown size="small" square color="transparent">
+				<svg
+					width="18px"
+					height="18px"
+					viewBox="0 0 32 32"
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
+						id="SVGRepo_tracerCarrier"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					></g><g id="SVGRepo_iconCarrier">
+						<path
+							stroke="currentColor"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M13.905 3.379A.5.5 0 0114.39 3h3.22a.5.5 0 01.485.379l.689 2.757a.515.515 0 00.341.362c.383.126.755.274 1.115.443a.515.515 0 00.449-.003l2.767-1.383a.5.5 0 01.577.093l2.319 2.319a.5.5 0 01.093.577l-1.383 2.767a.515.515 0 00-.003.449c.127.271.243.549.346.833.053.148.17.265.319.315l2.934.978a.5.5 0 01.342.474v3.28a.5.5 0 01-.342.474l-2.934.978a.515.515 0 00-.32.315 9.937 9.937 0 01-.345.833.515.515 0 00.003.449l1.383 2.767a.5.5 0 01-.093.577l-2.319 2.319a.5.5 0 01-.577.093l-2.767-1.383a.515.515 0 00-.449-.003c-.271.127-.549.243-.833.346a.515.515 0 00-.315.319l-.978 2.934a.5.5 0 01-.474.342h-3.28a.5.5 0 01-.474-.342l-.978-2.934a.515.515 0 00-.315-.32 9.95 9.95 0 01-1.101-.475.515.515 0 00-.498.014l-2.437 1.463a.5.5 0 01-.611-.075l-2.277-2.277a.5.5 0 01-.075-.61l1.463-2.438a.515.515 0 00.014-.498 9.938 9.938 0 01-.573-1.383.515.515 0 00-.362-.341l-2.757-.69A.5.5 0 013 17.61v-3.22a.5.5 0 01.379-.485l2.757-.689a.515.515 0 00.362-.341c.157-.478.35-.94.573-1.383a.515.515 0 00-.014-.498L5.594 8.557a.5.5 0 01.075-.611l2.277-2.277a.5.5 0 01.61-.075l2.438 1.463c.152.091.34.094.498.014a9.938 9.938 0 011.382-.573.515.515 0 00.342-.362l.69-2.757z"
+						></path>
+						<circle
+							cx="16"
+							cy="16"
+							r="5"
+							stroke="currentColor"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+						></circle>
+					</g></svg
+				>
+			</Button>
+			<DropdownContent>
+				<Button list label="Option A" />
+				<Button list label="Option B" />
+				<Button list label="Option C" />
+			</DropdownContent>
+		</Dropdown>
+	</InputGroup>
+</div>
 
 <Button modal="testModal" color="primary" style="margin-bottom: 20px;">Modal 1</Button>
 
@@ -247,46 +376,7 @@
 	</Table>
 </div>
 
-<InputGroup icon style="margin-bottom: 30px;">
-	<Input type="text" placeholder="Arayın" class="asdasf" />
-	<Dropdown>
-		<Button dropdown size="small" square>
-			<svg
-				width="18px"
-				height="18px"
-				viewBox="0 0 32 32"
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
-					id="SVGRepo_tracerCarrier"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				></g><g id="SVGRepo_iconCarrier">
-					<path
-						stroke="currentColor"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M13.905 3.379A.5.5 0 0114.39 3h3.22a.5.5 0 01.485.379l.689 2.757a.515.515 0 00.341.362c.383.126.755.274 1.115.443a.515.515 0 00.449-.003l2.767-1.383a.5.5 0 01.577.093l2.319 2.319a.5.5 0 01.093.577l-1.383 2.767a.515.515 0 00-.003.449c.127.271.243.549.346.833.053.148.17.265.319.315l2.934.978a.5.5 0 01.342.474v3.28a.5.5 0 01-.342.474l-2.934.978a.515.515 0 00-.32.315 9.937 9.937 0 01-.345.833.515.515 0 00.003.449l1.383 2.767a.5.5 0 01-.093.577l-2.319 2.319a.5.5 0 01-.577.093l-2.767-1.383a.515.515 0 00-.449-.003c-.271.127-.549.243-.833.346a.515.515 0 00-.315.319l-.978 2.934a.5.5 0 01-.474.342h-3.28a.5.5 0 01-.474-.342l-.978-2.934a.515.515 0 00-.315-.32 9.95 9.95 0 01-1.101-.475.515.515 0 00-.498.014l-2.437 1.463a.5.5 0 01-.611-.075l-2.277-2.277a.5.5 0 01-.075-.61l1.463-2.438a.515.515 0 00.014-.498 9.938 9.938 0 01-.573-1.383.515.515 0 00-.362-.341l-2.757-.69A.5.5 0 013 17.61v-3.22a.5.5 0 01.379-.485l2.757-.689a.515.515 0 00.362-.341c.157-.478.35-.94.573-1.383a.515.515 0 00-.014-.498L5.594 8.557a.5.5 0 01.075-.611l2.277-2.277a.5.5 0 01.61-.075l2.438 1.463c.152.091.34.094.498.014a9.938 9.938 0 011.382-.573.515.515 0 00.342-.362l.69-2.757z"
-					></path>
-					<circle
-						cx="16"
-						cy="16"
-						r="5"
-						stroke="currentColor"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-					></circle>
-				</g></svg
-			>
-		</Button>
-		<DropdownContent>
-			<Button list label="Option A" />
-			<Button list label="Option B" />
-			<Button list label="Option C" />
-		</DropdownContent>
-	</Dropdown>
-</InputGroup>
+
 
 <div style="margin-bottom: 20px;">
 	<Button label="Button" color="primary" />

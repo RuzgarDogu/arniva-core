@@ -20,6 +20,7 @@ $shadow-sm: rgba(0, 0, 0, 0.1) 0 1px 3px 0;
 $outline-color: #90caf9;
 
 $sidebar-width: 300px;
+$formElementPadding: 0.5em;
 
 @mixin label-styles {
 	font-weight: bold;
@@ -29,4 +30,14 @@ $sidebar-width: 300px;
 
 @mixin shadow {
 	filter: drop-shadow(rgba(0, 0, 0, 0.05) 0px 5px 5px) drop-shadow(rgba(0, 0, 0, 0.1) 0px 1px 3px);
+}
+
+@mixin formElement {
+	font-family: inherit;
+	width: 100%;
+	border: solid 1px $border-color;
+	border-radius: $border-radius-sm;
+	box-sizing: border-box;
+	background-color: transparent;
+	min-height: 35px;
 }

@@ -18,6 +18,7 @@
 			font-size: 12px;
 			min-width: 100px;
 			@include shadow;
+			box-sizing: border-box;
 		}
 	}
 }

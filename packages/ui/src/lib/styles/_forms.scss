@@ -1,4 +1,5 @@
 @import 'config';
+@import 'datepicker';
 
 [class^='form-']:focus {
 	outline: 1px solid $outline-color;
@@ -14,14 +15,11 @@
 	}
 }
 
+
+
 .form-input {
-	font-family: inherit;
-	width: 100%;
-	border: solid 1px $border-color;
-	border-radius: $border-radius-sm;
-	padding: 0.5em;
-	box-sizing: border-box;
-	background-color: transparent;
+	@include formElement;
+	padding: $formElementPadding;
 	&::placeholder {
 		font-family: inherit; // Inherit the font-family from the body
 	}
@@ -38,13 +36,8 @@
 }
 
 .form-select {
-	font-family: inherit;
-	width: 100%;
-	border: solid 1px $border-color;
-	border-radius: $border-radius-sm;
-	padding: 0.5em;
-	box-sizing: border-box;
-	background-color: transparent;
+	@include formElement;
+	padding: $formElementPadding;
 	&--small {
 		padding: 0.25em;
 	}
@@ -55,7 +48,33 @@
 		background-color: $light-color;
 		color: $secondary-color;
 	}
+	&--search {
+		position: relative;
+		width: 100%;
+		&--dropdown {
+			.dropdown-content {
+				max-height: 30vh;
+				overflow-y: auto;
+			}
+			width: 100%;
+			& button {
+				width: 100%;
+				border: none;
+				box-shadow: none;
+				padding: 0.5em;
+				border-radius: 0;
+				font-weight: normal;
+				&.focused {
+					background-color: lighten($accent-color, 45%);
+				}
+				&:hover {
+					background-color: lighten($accent-color, 45%);
+				}
+			}
+		}
+	}
 }
+
 
 .form-input-group {
 	display: flex;
@@ -97,8 +116,9 @@
 		}
 	}
 
-	.form-input {
+	.form-input, .form-select {
 		flex: 1;
 		border: none;
+		outline: none;
 	}
 }
