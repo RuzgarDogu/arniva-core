@@ -9,7 +9,7 @@
 	 */
 
 	/** @type {Props} */
-	let { class: cls = '', disabled = false, size = 'medium', dropdown=false, ...rest } = $props();
+	let { class: cls = '', disabled = false, size = 'medium', dropdown = false, ...rest } = $props();
 </script>
 
 <input

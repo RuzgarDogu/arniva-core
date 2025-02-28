@@ -114,12 +114,11 @@
 
 	let modal3;
 
-  // For single date selection:
-  let singleDate = null;
-  
-  // For date range selection:
-  let dateRange = { start: null, end: null };
+	// For single date selection:
+	let singleDate = null;
 
+	// For date range selection:
+	let dateRange = { start: null, end: null };
 </script>
 
 <h1 style="margin-bottom: 20px;">Introduction</h1>
@@ -128,26 +127,20 @@
 	Modal 1
 </button> -->
 <div style="margin-bottom: 20px;">
-	<DatePicker 
-  isRange={false} 
-  quickSelect
-  manualInput
-  bind:selectedDate={singleDate} 
-/>
+	<DatePicker isRange={false} quickSelect manualInput bind:selectedDate={singleDate} />
 </div>
 <div style="margin-bottom: 20px;">
-
-<!-- Date range picker -->
-<DatePicker 
-  isRange={true}
-  quickSelect
-  manualInput
-  bind:dateRange={dateRange} 
-/>
+	<!-- Date range picker -->
+	<DatePicker isRange={true} quickSelect manualInput bind:dateRange />
 </div>
 
 <div style="margin-bottom: 20px;">
-	<Select search data={dummyData} onSelect={(e) => console.log("e", e)} placeholder="Start typing..."/>
+	<Select
+		search
+		data={dummyData}
+		onSelect={(e) => console.log('e', e)}
+		placeholder="Start typing..."
+	/>
 </div>
 <div style="margin-bottom: 20px;">
 	<Select placeholder="Select an option">
@@ -159,7 +152,7 @@
 
 <div>
 	<InputGroup icon style="margin-bottom: 30px;">
-		<Select search data={dummyData} onSelect={(e) => console.log("e", e)} />
+		<Select search data={dummyData} onSelect={(e) => console.log('e', e)} />
 		<Dropdown>
 			<Button dropdown size="small" square color="transparent">
 				<svg
@@ -261,7 +254,13 @@
 	name="Test_Modal"
 	onclose={() => console.log('Modal Closed')}
 >
-	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores sequi atque officiis earum nemo, consectetur reprehenderit illo sit provident nisi tempora voluptatem obcaecati hic voluptatum reiciendis a. Veritatis dignissimos, voluptas deserunt eaque nulla vitae? Error, repellat! Atque obcaecati, dolorum quis autem voluptatem totam dolorem magni cumque ad, quam laboriosam illo!</p>
+	<p>
+		Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores sequi atque officiis earum
+		nemo, consectetur reprehenderit illo sit provident nisi tempora voluptatem obcaecati hic
+		voluptatum reiciendis a. Veritatis dignissimos, voluptas deserunt eaque nulla vitae? Error,
+		repellat! Atque obcaecati, dolorum quis autem voluptatem totam dolorem magni cumque ad, quam
+		laboriosam illo!
+	</p>
 	<Button modal="testModal2" color="danger" style="margin-bottom: 20px;">Modal 2</Button>
 </Modal>
 
@@ -375,8 +374,6 @@
 		</Tbody>
 	</Table>
 </div>
-
-
 
 <div style="margin-bottom: 20px;">
 	<Button label="Button" color="primary" />

@@ -38,10 +38,10 @@ class Modal {
 	}
 
 	toggleEnlarge() {
-		let mainContentSection = document.querySelector('.layout__content')
+		let mainContentSection = document.querySelector('.layout__content');
 		if (!mainContentSection) {
 			mainContentSection = this.element;
-			console.log("mainContentSection", mainContentSection)
+			console.log('mainContentSection', mainContentSection);
 			// If there's no parent element either, return
 			if (!mainContentSection) return;
 		}

@@ -15,8 +15,6 @@
 	}
 }
 
-
-
 .form-input {
 	@include formElement;
 	padding: $formElementPadding;
@@ -72,9 +70,25 @@
 				}
 			}
 		}
+		&--container {
+			position: relative;
+			.clear-button {
+				display: none;
+				&.active {
+					display: flex;
+					position: absolute;
+					right: 2px;
+					top: 2px;
+					padding: 0.5em;
+					cursor: pointer;
+					width: auto;
+					height: 30px;
+					border-radius: 5px;
+				}
+			}
+		}
 	}
 }
-
 
 .form-input-group {
 	display: flex;
@@ -116,7 +130,8 @@
 		}
 	}
 
-	.form-input, .form-select {
+	.form-input,
+	.form-select {
 		flex: 1;
 		border: none;
 		outline: none;
