@@ -1,0 +1,29 @@
+.icon {
+    color: var(--icon-color);
+    display: inline-flex;
+    &--fit {
+        width: 100%;
+        height: 100%;
+    }
+    & :global(svg) {
+        color: currentColor;
+    }
+    &.icon--fit :global(svg) {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        margin: auto;
+    }
+    & :global(svg *[fill]:not([fill="none"])) {
+        fill: currentColor;
+    }
+    & :global(svg *[fill="none"]) {
+        fill: none;
+    }
+    & :global(svg *[stroke]) {
+        stroke: currentColor;
+    }
+    & :global(svg path:not([fill]):not([stroke])) {
+        fill: currentColor;
+    }
+}
