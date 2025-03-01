@@ -10,7 +10,7 @@
 	});
 </script>
 
-<Story name="Default List Group" args={{}}>
+<Story name="Default Tab" args={{}}>
 	{#snippet children(args)}
 		<Tab {...args}>
 			<TabItem title="Tab Item 1">
