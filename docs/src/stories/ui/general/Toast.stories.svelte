@@ -32,7 +32,7 @@
 <Story name="Default Toast" exportName="Default" args={{
     position: 'top-right',
     timeout: 5000,
-    message: 'This is a success message'
+    message: 'This is a default message'
 }}>
     {#snippet children(args)}
         <Button onClick={() => toast.show({...args})}>Show Toast</Button>
