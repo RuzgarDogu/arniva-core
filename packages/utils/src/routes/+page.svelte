@@ -1,6 +1,8 @@
 <script>
 	import { hello } from '$lib';
-	hello('emre');
+	// hello('emre');
+
+	
 </script>
 
 <h1>Welcome to your library project</h1>

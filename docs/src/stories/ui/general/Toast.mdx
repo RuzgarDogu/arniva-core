@@ -1,0 +1,152 @@
+import { Canvas, Meta, Controls } from '@storybook/blocks';
+
+import * as ToastStories from './Toast.stories.svelte';
+
+<Meta of={ToastStories} />
+
+# Toast
+This component is used to show a message to the user. It is usually used to show a message that is not critical to the user.
+
+<div style={{
+    display: 'flex',
+    gap: '0.2rem'
+}}>
+
+<div class="toast-container story" style={{ width: '30%' }}>
+  <div class="toast toast--default toast--transition-slide show">
+    <div class="toast--header">
+      <div class="toast--title">Toast Title</div>
+      <button class="toast--close-button">
+        <svg width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+          <g id="SVGRepo_iconCarrier">
+            <path d="M4 4L20 20M20 4L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </g>
+        </svg>
+      </button>
+    </div>
+    <div class="toast--body">
+      <div class="toast--message">This is a test message</div>
+    </div>
+  </div>
+</div>
+<div class="toast-container story"  style={{ width: '30%' }}>
+  <div class="toast toast--success toast--transition-slide show">
+    <div class="toast--header">
+      <div class="toast--title">Toast Title</div>
+      <button class="toast--close-button">
+        <svg width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+          <g id="SVGRepo_iconCarrier">
+            <path d="M4 4L20 20M20 4L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </g>
+        </svg>
+      </button>
+    </div>
+    <div class="toast--body">
+      <div class="toast--message">This is a test message</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container story"  style={{ width: '30%' }}>
+  <div class="toast toast--info toast--transition-slide show">
+    <div class="toast--header">
+      <div class="toast--title">Toast Title</div>
+      <button class="toast--close-button">
+        <svg width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+          <g id="SVGRepo_iconCarrier">
+            <path d="M4 4L20 20M20 4L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </g>
+        </svg>
+      </button>
+    </div>
+    <div class="toast--body">
+      <div class="toast--message">This is a test message</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+## How to import
+> ⚠️ Use lowercase `toast` when importing the component.
+
+```js
+import { toast } from '@ruzgardogu/ui';
+```
+
+## How to use
+There are 6 types of toasts: `default`, `success`, `info`, `warning`, and `danger`.
+> ⚠️ **IMPORTANT**: You need to call the `show` method to show the `default` toast.
+
+
+```js
+toast.show('This is a test message');
+toast.success('This is a test message');
+toast.info('This is a test message');
+toast.warning('This is a test message');
+toast.danger('This is a test message', 'custom-class');
+```
+
+### Setting Message
+You can set the message of the toast by passing a string to the first parameter of the method. Or you can pass a configuration object to the second parameter.
+
+```js
+// Setting message as a string parameter
+toast.show('This is a test message', config);
+// Setting message as a configuration object
+toast.show({
+  message: 'This is a test message'
+});
+```
+
+## Examples & Parameters
+Toast component has multiple parameters:
+
+```js
+/** @type {ConfigProps} */
+const defaultConfig = {
+    type: 'info',
+    timeout: 3000,
+    position: 'top-right',
+    showCloseButton: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    showProgressBar: true,
+    transition: 'slide',
+    transitionDuration: 300,
+    message: '',
+    title: ''
+}
+```
+
+### Parameters List
+- `type`: Type of the toast. It can be `default`, `success`, `info`, `warning`, or `danger`.
+- `timeout`: Time to close the toast in milliseconds.
+- `position`: Position of the toast. It can be `top-right`, `top-left`, `bottom-right`, or `bottom-left`.
+- `showCloseButton`: Show close button on the toast.
+- `closeOnClick`: Close the toast when clicked.
+- `pauseOnHover`: Pause the timeout when hovered.
+- `showProgressBar`: Show progress bar on the toast.
+- `transition`: Transition type of the toast. It can be `slide`, `fade`, or `bounce`.
+- `transitionDuration`: Duration of the transition in milliseconds.
+- `message`: Message of the toast.
+- `title`: Title of the toast.
+
+### Default Toast
+This is an example of a success toast with a title.
+<Canvas of={ToastStories.Default} />
+<Controls of={ToastStories.Default} />
+
+### Success Toast with Title
+This is an example of a success toast with a title.
+<Canvas of={ToastStories.SuccessToastWithTitle} />
+
+### Danger Toast with Buncing Transition
+This is an example of a danger toast with a bouncing transition.
+<Canvas of={ToastStories.BouncingDangerToast} />

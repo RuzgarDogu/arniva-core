@@ -173,14 +173,14 @@
 		focusedItemId = null;
 		// Give focus back to the input
 		/** @type {HTMLInputElement|null} */
-		const inputElement = document.querySelector('.form-select--searh input');
+		const inputElement = document.querySelector('.form-select--search input');
 		if (inputElement) {
 			inputElement.focus();
 		}
 	}
 </script>
 
-<div class={['form-select--searh', cls].join(' ')} use:keyboardNav {...rest}>
+<div class={['form-select--search', cls].join(' ')} use:keyboardNav {...rest}>
 	<Dropdown
 		class="form-select--search--dropdown"
 		fullWidth

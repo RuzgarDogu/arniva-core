@@ -27,7 +27,8 @@
 		CardFooter,
 		CardBody,
 		Modal,
-		DatePicker
+		DatePicker,
+		toast
 	} from '$lib';
 	let switchValue = false;
 
@@ -122,10 +123,17 @@
 </script>
 
 <h1 style="margin-bottom: 20px;">Introduction</h1>
-
 <!-- <button data-ar-toggle="modal" data-ar-target="testModal" class="input-group-text bg-lightgray border-0 border-end-0 p-1">
 	Modal 1
 </button> -->
+<div style="margin-bottom: 20px;">
+	<Button onClick={() => toast.show({ duration: 3000, position: 'top-right'})}>Toast Test</Button>
+	<Button color="success" onClick={() => toast.success('This is success toast', { duration: 3000, title:"This is title" })}>Toast - Title</Button>
+	<Button color="danger" onClick={() => toast.danger('This is danger toast with bounce', { duration: 3000, transition:'bounce' })}>Danger - Bounce</Button>
+	<Button color="warning" onClick={() => toast.warning('This is warning toast with fade', { duration: 3000, transition: 'fade' })}>Warning - Fade</Button>
+	<Button color="primary" onClick={() => toast.info('Hello info toast with no progress bar', { duration: 3000, transition: 'asd', showProgressBar:false })}>Info - No Progress Bar</Button>
+
+</div>
 <div style="margin-bottom: 20px;">
 	<DatePicker isRange={false} quickSelect manualInput bind:selectedDate={singleDate} />
 </div>

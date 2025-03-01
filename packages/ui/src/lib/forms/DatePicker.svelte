@@ -350,8 +350,6 @@
 	const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 	function handleClickOutside() {
-		console.log('clicked outside');
-
 		// If in range mode and only one date is selected (incomplete range),
 		// reset all the selections
 		if (isRange && ((startDate && !endDate) || (!startDate && endDate))) {

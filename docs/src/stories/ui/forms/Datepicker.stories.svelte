@@ -18,7 +18,7 @@
 	args={{}}
 >
     {#snippet children(args)}
-    <div style="height: 300px">
+    <div style="height: 350px">
         <DatePicker {...args} />
     </div>
     {/snippet}
@@ -31,7 +31,7 @@
     }}
 >
     {#snippet children(args)}
-    <div style="height: 300px">
+    <div style="height: 350px">
         <DatePicker {...args} />
     </div>
     {/snippet}
@@ -45,7 +45,7 @@
     }}
 >
     {#snippet children(args)}
-    <div style="height: 300px">
+    <div style="height: 350px">
         <DatePicker {...args} />
     </div>
     {/snippet}

@@ -6,7 +6,7 @@
 	 * @property {'small' | 'medium' | 'large'} [size] How large should the button be?
 	 * @property {string} [label] Button contents
 	 * @property {'button' | 'submit' | 'reset'} [type] The type of button
-	 * @property {'primary' | 'secondary' | 'transparent' | 'accent' | 'danger' | 'success' | 'default'} [color] The color of the button
+	 * @property {'primary' | 'secondary' | 'transparent' | 'accent' | 'danger' | 'success' | 'default' | 'warning'} [color] The color of the button
 	 * @property {string} [url] The URL the button should link to
 	 * @property {boolean} [dropdown] Is this a dropdown button?
 	 * @property {boolean} [list] Is this a list button?
