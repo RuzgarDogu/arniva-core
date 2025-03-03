@@ -1,5 +1,6 @@
 <script>
 	import { clickOutside } from '../functions';
+	import { Icon } from '../icons';
 	let { isRange = false, quickSelect = false, isEuropean = true, manualInput = false } = $props();
 
 	// State management with Svelte 5 runes
@@ -596,123 +597,44 @@
 			readonly={!manualInput}
 		/>
 		{#if isRange}
-			<svg
-				width="16px"
-				height="16px"
-				viewBox="0 0 24 24"
-				fill="none"
-				xmlns="http://www.w3.org/2000/svg"
-				><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
-					id="SVGRepo_tracurrentColorerCarrier"
-					stroke-linejoin="round"
-				></g><g id="SVGRepo_icurrentColoronCarrier">
-					<path
-						d="M20 10L4 10L9.5 4"
-						stroke="currentColor"
-						stroke-width="1.5"
-						stroke-linejoin="round"
-					></path>
-					<path
-						d="M4 14L20 14L14.5 20"
-						stroke="currentColor"
-						stroke-width="1.5"
-						stroke-linejoin="round"
-					></path>
-				</g></svg
-			>
-			<input
-				bind:this={endInputRef}
-				type="text"
-				value={endInputValue}
-				placeholder="Select end date"
-				onfocus={() => (showEndPicker = true)}
-				oninput={handleEndInputChange}
-				onblur={() => handleInputBlur('end')}
-				onkeydown={(e) => handleKeyDown(e, 'end')}
-				readonly={!manualInput}
-			/>
+		<Icon name="switch-horizontal-arrow" size="16px"/>
+		<input
+		bind:this={endInputRef}
+		type="text"
+		value={endInputValue}
+		placeholder="Select end date"
+		onfocus={() => (showEndPicker = true)}
+		oninput={handleEndInputChange}
+		onblur={() => handleInputBlur('end')}
+		onkeydown={(e) => handleKeyDown(e, 'end')}
+		readonly={!manualInput}
+		/>
 		{/if}
-		<svg
-			width="16px"
-			height="16px"
-			viewBox="0 0 24 24"
-			fill="none"
-			xmlns="http://www.w3.org/2000/svg"
-			><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
-				id="SVGRepo_tracurrentColorerCarrier"
-				stroke-linejoin="round"
-			></g><g id="SVGRepo_icurrentColoronCarrier">
-				<path
-					d="M2 12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C22 6.34315 22 8.22876 22 12V14C22 17.7712 22 19.6569 20.8284 20.8284C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14V12Z"
-					stroke="currentColor"
-					stroke-width="1.5"
-				></path> <path d="M7 4V2.5" stroke="currentColor" stroke-width="1.5"></path>
-				<path d="M17 4V2.5" stroke="currentColor" stroke-width="1.5"></path>
-				<path d="M2.5 9H21.5" stroke="currentColor" stroke-width="1.5"></path>
-			</g></svg
-		>
+		<Icon name="calendar-minimalistic" size="16px"/>
 	</div>
-
+	
 	<!-- Calendar Display -->
 	{#if showStartPicker || (isRange && showEndPicker)}
-		<div class="datepicker--picker-container">
-			<!-- Quick Selection Panel -->
-			{#if quickSelect}
-				<div class="datepicker--quick-select">
-					<ul>
-						{#if !isRange}
-							{#each singleDateOptions as option}
-								<li>
-									<button onclick={option.action}
-										>{option.label}
-										<svg
-											width="13px"
-											height="13px"
-											viewBox="0 0 24 24"
-											fill="none"
-											xmlns="http://www.w3.org/2000/svg"
-											><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
-												id="SVGRepo_tracerCarrier"
-												stroke-linecap="round"
-												stroke-linejoin="round"
-											></g><g id="SVGRepo_iconCarrier">
-												<path
-													d="M9 5L15 12L9 19"
-													stroke="currentColor"
-													stroke-width="1.5"
-													stroke-linecap="round"
-													stroke-linejoin="round"
-												></path>
-											</g></svg
-										>
-									</button>
-								</li>
-							{/each}
-						{:else}
-							{#each rangeDateOptions as option}
-								<li>
-									<button onclick={option.action}
-										>{option.label}
-										<svg
-											width="13px"
-											height="13px"
-											viewBox="0 0 24 24"
-											fill="none"
-											xmlns="http://www.w3.org/2000/svg"
-											><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
-												id="SVGRepo_tracerCarrier"
-												stroke-linecap="round"
-												stroke-linejoin="round"
-											></g><g id="SVGRepo_iconCarrier">
-												<path
-													d="M9 5L15 12L9 19"
-													stroke="currentColor"
-													stroke-width="1.5"
-													stroke-linecap="round"
-													stroke-linejoin="round"
-												></path>
-											</g></svg
-										>
+	<div class="datepicker--picker-container">
+		<!-- Quick Selection Panel -->
+		{#if quickSelect}
+		<div class="datepicker--quick-select">
+			<ul>
+				{#if !isRange}
+				{#each singleDateOptions as option}
+				<li>
+					<button onclick={option.action}
+					>{option.label}
+					<Icon name="alt-arrow-right" size="13px"/>
+				</button>
+			</li>
+			{/each}
+			{:else}
+			{#each rangeDateOptions as option}
+			<li>
+				<button onclick={option.action}
+				>{option.label}
+						<Icon name="alt-arrow-right" size="13px"/>
 									</button>
 								</li>
 							{/each}
@@ -725,39 +647,11 @@
 				<!-- Month navigation -->
 				<div class="datepicker--calendar-header">
 					<button aria-label="prev" class="datepicker--month-nav" onclick={prevMonth}>
-						<svg
-							width="14px"
-							height="14px"
-							viewBox="0 0 24 24"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-							><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
-								id="SVGRepo_tracurrentColorerCarrier"
-								stroke-linejoin="round"
-							></g><g id="SVGRepo_icurrentColoronCarrier">
-								<recurrentct width="24" height="24" fill="white"></recurrentct>
-								<path d="M14.5 17L9.5 12L14.5 7" stroke="currentColor" stroke-linejoin="round"
-								></path>
-							</g></svg
-						>
+						<Icon name="alt-arrow-left" size="14px"/>
 					</button>
 					<div class="datepicker--month-title">{formatMonth(currentMonth)}</div>
 					<button aria-label="next" class="datepicker--month-nav" onclick={nextMonth}>
-						<svg
-							width="14px"
-							height="14px"
-							viewBox="0 0 24 24"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-							><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
-								id="SVGRepo_tracurrentColorerCarrier"
-								stroke-linejoin="round"
-							></g><g id="SVGRepo_icurrentColoronCarrier">
-								<recurrentct width="24" height="24" fill="white"></recurrentct>
-								<path d="M9.5 7L14.5 12L9.5 17" stroke="currentColor" stroke-linejoin="round"
-								></path>
-							</g></svg
-						>
+						<Icon name="alt-arrow-right" size="14px"/>
 					</button>
 				</div>
 

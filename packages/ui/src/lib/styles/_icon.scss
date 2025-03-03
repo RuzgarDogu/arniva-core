@@ -1,28 +1,60 @@
 .icon {
     color: var(--icon-color);
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden; // Prevent SVG from overflowing
+    
     &--fit {
         width: 100%;
         height: 100%;
     }
+    
+    // Add these new rules to handle custom sizing
+    &--size {
+        width: var(--icon-size);
+        height: var(--icon-size);
+    }
+    
+    &--width {
+        width: var(--icon-width);
+    }
+    
+    &--height {
+        height: var(--icon-height);
+    }
+    
     & :global(svg) {
         color: currentColor;
+        // Make SVG respect the container dimensions
+        width: 100%;
+        height: 100%;
+        max-width: 100%; // Prevent overflow
+        max-height: 100%; // Prevent overflow
+        flex: none; // Prevent stretching
+        display: block; // Remove extra space
     }
+    
     &.icon--fit :global(svg) {
         width: 100%;
         height: 100%;
         object-fit: contain;
         margin: auto;
     }
+    
     & :global(svg *[fill]:not([fill="none"])) {
         fill: currentColor;
     }
+    
     & :global(svg *[fill="none"]) {
         fill: none;
     }
+    
     & :global(svg *[stroke]) {
         stroke: currentColor;
     }
+    
     & :global(svg path:not([fill]):not([stroke])) {
         fill: currentColor;
     }

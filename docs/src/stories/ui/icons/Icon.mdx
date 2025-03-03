@@ -1,0 +1,30 @@
+import { Canvas, Meta, Controls } from '@storybook/blocks';
+
+import * as IconStories from './Icon.stories.svelte';
+
+<Meta of={IconStories} />
+
+# Icons
+There is a set of icons that can be used in the application. These icons are used to represent actions or objects in the application.
+
+<Controls of={IconStories.SingleIcon} />
+<Canvas of={IconStories.SingleIcon} />
+
+## How to import
+To use the icons in your application, you need to import the `Icon` component from the `@svelte-material-design/core` package.
+
+```html
+<script>
+  import { Icon } from '@ruzgardogu/ui';
+</script>
+```
+
+## How to use
+To use the icons in your application, you need to use the `Icon` component and pass the icon name as a prop.
+
+```svelte
+<Icon name="home" />
+```
+
+<Controls of={IconStories.Icons} />
+<Canvas of={IconStories.Icons} />
