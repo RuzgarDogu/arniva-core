@@ -137,3 +137,92 @@
 		outline: none;
 	}
 }
+
+// Custom Form Element Variables
+$form-element-size: 20px;
+$form-element-border-color: $border-color;
+$form-element-bg-color: #fff;
+$form-element-active-color: $accent-color; // Blue color
+$form-element-label-padding: 30px;
+$form-element-inner-padding: 2px;
+
+// Mixin for shared styles between checkbox and radio
+@mixin custom-form-element {
+  position: relative;
+  
+  input {
+    opacity: 0;
+    position: absolute;
+    z-index: 1; // Ensure the input is above and clickable
+    width: $form-element-size;
+    height: $form-element-size;
+    margin: 0;
+    cursor: pointer;
+  }
+  
+  label {
+    position: relative;
+    padding-left: $form-element-label-padding;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+// Mixin for the outer container (common to both)
+@mixin form-element-outer {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: $form-element-size;
+  height: $form-element-size;
+  border: 1px solid $form-element-border-color;
+  background: $form-element-bg-color;
+  box-sizing: border-box;
+}
+
+// Checkbox specific styles
+.custom-checkbox {
+  @include custom-form-element;
+  
+  label::before {
+    @include form-element-outer;
+    border-radius: 3px; // Slight rounding for checkboxes
+  }
+  
+  input:checked + label::before {
+    content: '✓'; // Checkmark
+    font-size: $form-element-size - 4px;
+    color: $form-element-bg-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $form-element-active-color;
+  }
+}
+
+// Radio specific styles
+.custom-radio {
+  @include custom-form-element;
+  
+  label::before {
+    @include form-element-outer;
+    border-radius: 50%; // Circle for radio buttons
+  }
+  
+  input:checked + label::before {
+    background: $form-element-bg-color;
+  }
+  
+  input:checked + label::after {
+    content: "";
+    position: absolute;
+    left: $form-element-inner-padding;
+    top: $form-element-inner-padding;
+    width: $form-element-size - ($form-element-inner-padding * 2); // Account for border
+    height: $form-element-size - ($form-element-inner-padding * 2);
+    background: $form-element-active-color;
+    border-radius: 50%;
+  }
+}

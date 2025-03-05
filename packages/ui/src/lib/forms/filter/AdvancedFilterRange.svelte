@@ -1,0 +1,107 @@
+<script>
+    import Range from "../Range.svelte";
+    import { onMount } from "svelte";
+
+    /**
+     * @typedef {import('./types').Field} Field
+     * @typedef {import('./types').RangeValue} RangeValue
+     */
+
+    /**
+     * @typedef {Object} Props
+     * @property {Field} field - The name of the filter
+     * @property {Function} onChange - Callback function triggered when filter values change
+     */
+    
+    
+    /** @type {Props} */
+    let { field, onChange } = $props();
+
+    let _field = $state(JSON.parse(JSON.stringify(field)));
+
+    let _rangeValues = {
+        min: _field?.ranges?.min || 0,
+        max: _field?.ranges?.max || 100
+    }
+
+    /** @type {HTMLDivElement} */
+    let container;
+    let isInitialized = $state(false);
+    
+    onMount(() => {
+        // Delay initialization slightly to ensure dropdown positioning is complete
+        setTimeout(() => {
+            isInitialized = true;
+        }, 50);
+        
+        // Create a mutation observer to detect when the dropdown becomes visible
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                if (mutation.type === 'attributes' && 
+                    (mutation.attributeName === 'style' || mutation.attributeName === 'class')) {
+                    // Check if we're now visible
+                    const isVisible = container && 
+                        window.getComputedStyle(container).display !== 'none' &&
+                        window.getComputedStyle(container).visibility !== 'hidden';
+                    
+                    if (isVisible && !isInitialized) {
+                        isInitialized = true;
+                    }
+                }
+            }
+        });
+        
+        // Look for the closest dropdown-content parent
+        const dropdownContent = container?.closest('.dropdown-content');
+        if (dropdownContent) {
+            observer.observe(dropdownContent, { attributes: true });
+        }
+        
+        return () => observer.disconnect();
+    });
+    
+
+    /**
+     * Handle range change from the Range component
+     * @param {number | { start: number, end: number }} value
+     */
+     function handleRangeChange(value) {
+        if(!value || !onChange) return;
+        
+        // Convert incoming value to the format expected by the field
+        let rangeValue;
+        
+        if (typeof value === 'number') {
+            // For single range types (though this won't happen in this case)
+            rangeValue = {
+                min: value,
+                max: value
+            };
+        } else {
+            // For range types with start/end properties
+            rangeValue = {
+                min: value.start,
+                max: value.end
+            };
+        }
+        
+        let _field = {
+            ...JSON.parse(JSON.stringify(field)),
+            value: rangeValue
+        };
+        
+        onChange(_field);
+    }
+</script>
+
+<div class="advanced-filter--range" bind:this={container}>
+    {#if isInitialized}
+        <Range 
+            type="range" 
+            color="primary"
+            min={_rangeValues?.min}
+            max={_rangeValues?.max}
+            onChange={handleRangeChange}
+        />
+    {/if}
+</div>
