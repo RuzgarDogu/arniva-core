@@ -19,9 +19,10 @@
 
     let _field = $state(JSON.parse(JSON.stringify(field)));
 
+
     let _rangeValues = {
-        min: _field?.ranges?.min || 0,
-        max: _field?.ranges?.max || 100
+        min: _field?.range?.min || 0,
+        max: _field?.range?.max || 100
     }
 
     /** @type {HTMLDivElement} */
