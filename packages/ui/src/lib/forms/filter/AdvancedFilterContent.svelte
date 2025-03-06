@@ -7,6 +7,11 @@
      */
 
     /**
+     * @typedef {Object} RangeComponentInstance
+     * @property {() => void} reset - Method to reset the range
+     */
+
+    /**
      * @typedef {Object} Props
      * @property {Field} field - The field configuration object
      * @property {Function} onChange - Function to call when the field value changes
@@ -14,17 +19,27 @@
 
     /** @type {Props} */
     let { field, onChange } = $props();
-    
+    let _field = $state(JSON.parse(JSON.stringify(field)));
 
+    /**
+     * Reference to the AdvancedFilterRange component instance
+     * @type {RangeComponentInstance | null}
+     */
+    let filterRangeContainer = $state(null);
+    
     function clearSelections() {
-        field.value = null;
-        field && onChange && onChange({name: field.name, value: field.value});
+        _field.value = null;
+        _field && onChange && onChange({name: field.name, value: null, isOpen: true});
+        
+        // Reset range component if it exists
+        filterRangeContainer?.reset();
     }
 
     function deleteField() {
-        field.value = [];
-        field.isOpen = false;
-        field && onChange && onChange({name: field.name, value: field.value});
+        _field.value = [];
+        _field.isOpen = false;
+        _field && onChange && onChange({name: field.name, value: [], isOpen: false});
+        filterRangeContainer?.reset();
     }
 
     /**
@@ -43,7 +58,6 @@
         }
         return null;
     }
-
 </script>
 
 {#if !field}
@@ -51,9 +65,9 @@
 {:else}
 <div class="advanced-filter--content">
     <div class="advanced-filter--content-header">
-        {field.text}
-        {#if field.type === 'range' && field.value && typeof field.value === 'object'}
-            {@const rangeValue = getRangeValue(field)}
+        {_field.text}
+        {#if _field.type === 'range' && _field.value && typeof _field.value === 'object'}
+            {@const rangeValue = getRangeValue(_field)}
             {#if rangeValue && (typeof rangeValue.start !== 'undefined' || typeof rangeValue.end !== 'undefined')}
                 <span class="advanced-filter--content-header-right">
                     ({rangeValue.start} - {rangeValue.end})
@@ -62,17 +76,17 @@
         {/if}
     </div>
     <div class="advanced-filter--content-body">
-        {#if field.type === 'range'}
-            <AdvancedFilterRange {field} {onChange} />
-        {:else if field.type === 'multiselect'}
-            <AdvancedFilterSelection {field} {onChange} multiple={true} />
+        {#if _field.type === 'range'}
+            <AdvancedFilterRange field={_field} {onChange} bind:this={filterRangeContainer}/>
+        {:else if _field.type === 'multiselect'}
+            <AdvancedFilterSelection field={_field} {onChange} multiple={true} />
         {:else if field.type === 'select' || field.type === 'boolean'}
-            <AdvancedFilterSelection {field} {onChange} multiple={false} />
+            <AdvancedFilterSelection field={_field} {onChange} multiple={false} />
         {/if}
     </div>
     <div class="advanced-filter--content-footer">
         <button class="btn-clear" onclick={clearSelections}>
-            Clear All
+            Clear Selection
             <Icon name="xmark" size="17px" />
         </button>
         <button class="btn-clear" onclick={deleteField}>

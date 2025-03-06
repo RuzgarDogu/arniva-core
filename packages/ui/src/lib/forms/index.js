@@ -9,3 +9,4 @@ export { default as AdvancedFilter } from './filter/AdvancedFilter.svelte';
 export { default as Radio } from './Radio.svelte';
 export { default as Checkbox } from './Checkbox.svelte';
 export { default as Range } from './Range.svelte';
+export { applyFilters } from './filter/filterfunctions.svelte.js';

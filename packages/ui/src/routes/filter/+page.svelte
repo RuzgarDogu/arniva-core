@@ -1,11 +1,16 @@
 <script>
     /** @type {{ data: import('./$types').PageData }} */
     let { data } = $props();
-    import { AdvancedFilter, Table, Tbody, Thead, Trow, Range } from '$lib'
+    import { AdvancedFilter, Table, Tbody, Thead, Trow, Range, applyFilters } from '$lib'
+
 
 
     let filterConfig = {
         name: 'filterName',
+        search: {
+            placeholder: 'Search Employees',
+            columns: ['name', 'email', 'phone']
+        },
         fields: [
             {
                 name: 'age',
@@ -72,10 +77,10 @@
         ]
     }
 
-    let filter = $state({});
-    
+    let tableData = $state(data.dummyData)
+
     function handleChange(fields) {
-        filter = fields;
+        tableData = applyFilters(data.dummyData, fields, filterConfig);
     }
 
     /**
@@ -85,80 +90,11 @@
      * @param {Object} config - The filter configuration object
      * @returns {Array} - The filtered dataset
      */
-    function applyFilters(data, filters, config) {
-        // return data
-        // If filter is empty or null, return all data
-        if (!filters || Object.keys(filters).length === 0) {
-            return data;
-        }
 
-        // Get field types mapping for easy reference
-        const fieldTypes = {};
-        config.fields.forEach(field => {
-            fieldTypes[field.name] = field.type;
-        });
-
-        // Filter the data based on the filter object
-        return data.filter(row => {
-            // Check each filter criteria
-            for (const [key, value] of Object.entries(filters)) {
-                // Skip empty filter values
-                if (value === null || value === undefined || value === '' || 
-                    (Array.isArray(value) && value.length === 0)) {
-                    continue;
-                }
-
-                // Handle different filter types based on configuration
-                const filterType = fieldTypes[key];
-                
-                if (filterType === 'range') {
-                    // Range filter (e.g., { min: 25, max: 50 })
-                    if (value.min !== undefined && row[key] < value.min) {
-                        return false;
-                    }
-                    if (value.max !== undefined && row[key] > value.max) {
-                        return false;
-                    }
-                } 
-                else if (filterType === 'multiselect') {
-                    // Multiselect filter (array of values)
-                    if (!Array.isArray(value)) {
-                        console.warn(`Expected array for multiselect filter ${key}, got:`, value);
-                        continue;
-                    }
-                    if (!value.includes(row[key])) {
-                        return false;
-                    }
-                } 
-                else if (filterType === 'boolean') {
-                    // Boolean filter (might need conversion from string)
-                    const filterValue = typeof value === 'string' ? value === 'true' : value;
-                    if (row[key] !== filterValue) {
-                        return false;
-                    }
-                } 
-                else {
-                    // Standard equality filters (string, number, select, etc.)
-                    if (row[key] !== value) {
-                        return false;
-                    }
-                }
-            }
-            
-            // If all filters pass, include this row
-            return true;
-        });
-    }
 
     // Use the new filtering function in your derived state
-    let tableData = $derived.by(() => {
-        return applyFilters(data.dummyData, filter, filterConfig);
-    });
-    import { Radio, Checkbox } from '$lib';
+    
 
-    function handleRange(value) {
-        console.log("Range changed", value);
-    }
 
 </script>
 

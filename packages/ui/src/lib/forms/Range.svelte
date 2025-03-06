@@ -20,6 +20,12 @@
     onChange
   } = $props();
   
+
+	export function reset() {
+		startValue = min;
+    endValue = max;
+	}
+
   // Initial values
   let startValue = $state(min);
   let endValue = $state(max);

@@ -8,17 +8,32 @@
      */
 
     /**
+     * @typedef {Object} RangeComponent
+     * @property {() => void} reset - Method to reset the range
+     * @property {(type: string, callback: (e: any) => void) => () => void} [$$on] - Svelte component event handler
+     * @property {(props: any) => void} [$$set] - Svelte component property setter
+     */
+
+    /**
      * @typedef {Object} Props
      * @property {Field} field - The name of the filter
      * @property {Function} onChange - Callback function triggered when filter values change
      */
-    
     
     /** @type {Props} */
     let { field, onChange } = $props();
 
     let _field = $state(JSON.parse(JSON.stringify(field)));
 
+    /**
+     * Reference to the Range component instance
+     * @type {RangeComponent | null}
+     */
+    let rangeContainer = $state(null);
+
+    export function reset() {
+        rangeContainer?.reset();
+    }
 
     let _rangeValues = {
         min: _field?.range?.min || 0,
@@ -93,11 +108,13 @@
         
         onChange(_field);
     }
+
 </script>
 
 <div class="advanced-filter--range" bind:this={container}>
     {#if isInitialized}
-        <Range 
+        <Range
+            bind:this={rangeContainer}
             type="range" 
             color="primary"
             min={_rangeValues?.min}

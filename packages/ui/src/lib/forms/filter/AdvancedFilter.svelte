@@ -7,22 +7,22 @@
     import Icon from "../../icons/Icon.svelte";
     import AdvancedFilterContent from "./AdvancedFilterContent.svelte";
     import Checkbox from "../Checkbox.svelte";
-
-    /**
-     * @typedef {Object} Props
-     * @property {Object} filterConfig - The filter configuration object
-     * @property {string} filterConfig.name - The name of the filter
-     * @property {Array<Field>} filterConfig.fields - Array of field configurations
-     * @property {Function} onChange - Callback function triggered when filter values change
-     */
     
     /**
+     * @typedef {import('./types').FilterConfig} FilterConfig
      * @typedef {import('./types').Field} Field
      */
     
+    /**
+     * @typedef {Object} Props
+     * @property {FilterConfig} filterConfig - The filter configuration object
+     * @property {Function} onChange - Callback function triggered when filter values change
+     */
+     
     /** @type {Props} */
     let { filterConfig, onChange } = $props();
     
+    let searchText = $state('');
     // Keep track of the current highest order
     let currentOrder = $state(0);
 
@@ -94,7 +94,7 @@
 
     /**
      * Function to handle field value changes
-     * @param {{name: string, value: any}} e - The change object with field name and new value
+     * @param {{name: string, value: any, isOpen: boolean}} e - The change object with field name and new value
      */
     function handleChange(e) {
         /** @type {Field|undefined} */
@@ -102,6 +102,7 @@
         if (!_field) return;
         
         _field.value = e.value;
+        _field.isOpen = e.isOpen;
         filter[e.name] = e.value;
         onChange && fields && onChange(filter);
     }
@@ -133,6 +134,47 @@
         return value;
     }
 
+
+    /**
+     * Function to handle search input
+     * @param {InputEvent} e - The input event
+     */
+    function handleSearch(e) {
+        // Cast the target to HTMLInputElement
+        let search = e?.target && /** @type {HTMLInputElement} */ (e.target).value;
+        if(!search || search === '') {
+            delete filter.search;
+            onChange && filter && onChange(filter);
+            return;
+        }
+        filter.search = search;
+        onChange && filter && onChange(filter);
+        return;
+    }
+
+    /**
+     * Function to check if filters exist
+     * @returns {boolean} True if filters exist, false otherwise
+     */
+    function checkIfFiltersExist() {
+        return Object.keys(filter).length > 0;
+    }
+
+    /**
+     * Function to delete all filters
+     */
+    function resetFilter() {
+        filter = {};
+        fields = fields.map(f => {
+            f.isOpen = false;
+            f.value = '';
+            f.order = -1;
+            return f;
+        });
+        searchText = '';
+        onChange && filter && onChange(filter);
+    }
+
 </script>
 
 <InputGroup class="advanced-filter">
@@ -157,7 +199,7 @@
     </Dropdown>
 
     {#each orderedOpenFields as field (field.name)}
-        <div class="advanced-filter--dropdown-wrapper">
+        <div class="advanced-filter--dropdown-wrapper" class:advanced-filter--dropdown-wrapper--no-value={field.value === '' || field.value === null || field.value === undefined}>
             <Dropdown bind:this={fieldDropdown[field.name]}>
                 <div class="advanced-filter--dropdown">
                     <Button dropdown size="small" square color="transparent">
@@ -188,6 +230,11 @@
             </Dropdown>
         </div>
     {/each}
-
-    <Input />
+    <Input oninput={handleSearch} bind:value={searchText}/>
+    {#if checkIfFiltersExist()}
+        <Button class="advanced-filter--reset" size="small" color="success" onClick={resetFilter}>
+            Reset
+            <Icon name="xmark" size="14px"/>
+        </Button>
+    {/if}
 </InputGroup>

@@ -95,6 +95,8 @@
 
     // Get appropriate component based on multiple mode using derived state
     const SelectionComponent = $derived(multiple ? Checkbox : Radio);
+
+    
 </script>
 
 <!-- Template section remains unchanged -->
