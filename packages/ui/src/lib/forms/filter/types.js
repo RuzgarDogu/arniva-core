@@ -1,9 +1,9 @@
 /**
  * @typedef {Object} RangeValue
- * @property {number} [min] - Minimum value for range
- * @property {number} [max] - Maximum value for range
- * @property {number} [start] - Alternative start value for range
- * @property {number} [end] - Alternative end value for range
+ * @property {number|string} [min] - Minimum value for range (number or date string)
+ * @property {number|string} [max] - Maximum value for range (number or date string)
+ * @property {number|string} [start] - Alternative start value for range (number or date string)
+ * @property {number|string} [end] - Alternative end value for range (number or date string)
  */
 
 /**
@@ -24,11 +24,11 @@
  * @property {string} name - Unique identifier for the field
  * @property {string} label - Display label for the field
  * @property {string} text - Descriptive text for the field
- * @property {string} type - Field type ('range', 'select', 'multiselect', 'boolean', etc.)
+ * @property {string} type - Field type ('range', 'select', 'multiselect', 'boolean', 'daterange', etc.)
  * @property {RangeConfig} [range] - Configuration for range-type fields
  * @property {Option[]} [options] - Available options for select-type fields
+ * @property {boolean} [isAmerican] - Whether dates should be parsed in American format (MM/DD/YYYY) instead of European (DD/MM/YYYY)
  */
-
 /**
  * @typedef {Object} RangeConfig
  * @property {number} min - Minimum value for range
@@ -51,6 +51,8 @@
  * @property {string|Array<string>|boolean|RangeValue|null} value - Current field value
  * @property {boolean} isOpen - Whether this field's dropdown is open
  * @property {number} order - Order in which fields were opened
+ * @property {boolean|null|undefined} [dateRange] - Whether this field is a range filter
+ * @property {boolean} [isAmerican] - Whether dates should be parsed in American format (MM/DD/YYYY) instead of European (DD/MM/YYYY)
  */
 
 /**
@@ -61,6 +63,12 @@
 /**
  * @typedef {Object<string, *>} FieldTypeMap
  * A mapping of field names to their types
+ */
+
+/**
+ * @typedef {Object} DateRange
+ * @property {string} [start] - Start date of the range
+ * @property {string} [end] - End date of the range
  */
 
 /**

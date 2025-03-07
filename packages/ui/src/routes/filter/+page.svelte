@@ -23,6 +23,14 @@
                 }
             },
             {
+                name: 'dob',
+                label: 'Date of Birth',
+                text: 'Select date range',
+                type: 'date',
+                isAmerican: false,
+                dateRange: true
+            },
+            {
                 name: 'gender',
                 label: 'Gender',
                 text: 'Select Gender',

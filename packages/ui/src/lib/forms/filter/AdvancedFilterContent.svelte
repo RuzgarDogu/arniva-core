@@ -1,6 +1,7 @@
 <script>
     import AdvancedFilterRange from './AdvancedFilterRange.svelte';
     import AdvancedFilterSelection from './AdvancedFilterSelection.svelte';
+    import AdvancedFilterDate from './AdvancedFilterDate.svelte';
     import Icon from '../../icons/Icon.svelte';
     /**
      * @typedef {import('./types').Field} Field
@@ -9,6 +10,11 @@
     /**
      * @typedef {Object} RangeComponentInstance
      * @property {() => void} reset - Method to reset the range
+     */
+
+     /**
+      * @typedef {Object} DateComponentInstance
+      * @property {() => void} reset - Method to reset the date
      */
 
     /**
@@ -26,6 +32,12 @@
      * @type {RangeComponentInstance | null}
      */
     let filterRangeContainer = $state(null);
+
+    /**
+     * Reference to the AdvancedFilterDate component instance
+     * @type {DateComponentInstance | null}
+     */
+    let filterDateContainer = $state(null);
     
     function clearSelections() {
         _field.value = null;
@@ -33,6 +45,7 @@
         
         // Reset range component if it exists
         filterRangeContainer?.reset();
+        filterDateContainer?.reset();
     }
 
     function deleteField() {
@@ -40,6 +53,7 @@
         _field.isOpen = false;
         _field && onChange && onChange({name: field.name, value: [], isOpen: false});
         filterRangeContainer?.reset();
+        filterDateContainer?.reset();
     }
 
     /**
@@ -82,6 +96,8 @@
             <AdvancedFilterSelection field={_field} {onChange} multiple={true} />
         {:else if field.type === 'select' || field.type === 'boolean'}
             <AdvancedFilterSelection field={_field} {onChange} multiple={false} />
+        {:else if field.type === 'date'}
+            <AdvancedFilterDate field={_field} {onChange} bind:this={filterDateContainer}/>
         {/if}
     </div>
     <div class="advanced-filter--content-footer">

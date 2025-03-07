@@ -14,6 +14,7 @@
  * @type {ApplyFiltersFunction}
  */
 export function applyFilters(data, filters, config) {
+    console.log("filters", filters);
     // If filter is empty or null, return all data
     if (!filters || Object.keys(filters).length === 0) {
         return data;
@@ -98,7 +99,91 @@ export function applyFilters(data, filters, config) {
                 if (row[key] !== filterValue) {
                     return false;
                 }
-            } 
+            }
+            // Inside the existing function where you check filterType
+            else if (filterType === 'date') {
+                // Handle both date range and exact date matching
+                /** @type {import('./types').DateRange} */
+                const dateValue = /** @type {import('./types').DateRange} */ (value);
+                const fieldConfig = config.fields.find(field => field.name === key);
+                const isAmerican = fieldConfig?.isAmerican;
+                
+                // Get the date from the row and convert to standard date object
+                let rowDate = new Date(row[key]);
+                
+                // If the date format is American (MM/DD/YYYY) and stored as string, parse it correctly
+                if (isAmerican && typeof row[key] === 'string') {
+                    const parts = row[key].split('/');
+                    if (parts.length === 3) {
+                        // American format: month is first, then day, then year
+                        rowDate = new Date(parseInt(parts[2]), parseInt(parts[0]) - 1, parseInt(parts[1]));
+                    }
+                }
+                
+                // Normalize row date to remove time component
+                const normalizedRowDate = new Date(
+                    rowDate.getFullYear(), 
+                    rowDate.getMonth(), 
+                    rowDate.getDate()
+                );
+                
+                // If both start and end are provided, filter as date range
+                if (dateValue.start && dateValue.end && 
+                    !isNaN(new Date(dateValue.start).getTime()) &&
+                    !isNaN(new Date(dateValue.end).getTime())) {
+                    
+                    const startDate = new Date(dateValue.start);
+                    // Normalize start date to beginning of day
+                    const normalizedStartDate = new Date(
+                        startDate.getFullYear(),
+                        startDate.getMonth(),
+                        startDate.getDate()
+                    );
+                    
+                    const endDate = new Date(dateValue.end);
+                    // Normalize end date to end of day
+                    const normalizedEndDate = new Date(
+                        endDate.getFullYear(),
+                        endDate.getMonth(),
+                        endDate.getDate(),
+                        23, 59, 59, 999
+                    );
+                    
+                    if (normalizedRowDate < normalizedStartDate || normalizedRowDate > normalizedEndDate) {
+                        return false;
+                    }
+                }
+                // If only start is provided, match exact date (ignoring time)
+                else if (dateValue.start && !dateValue.end && !isNaN(new Date(dateValue.start).getTime())) {
+                    const startDate = new Date(dateValue.start);
+                    const normalizedStartDate = new Date(
+                        startDate.getFullYear(),
+                        startDate.getMonth(),
+                        startDate.getDate()
+                    );
+                    
+                    // Compare only the date parts (year, month, day), ignoring time
+                    if (normalizedRowDate.getFullYear() !== normalizedStartDate.getFullYear() ||
+                        normalizedRowDate.getMonth() !== normalizedStartDate.getMonth() ||
+                        normalizedRowDate.getDate() !== normalizedStartDate.getDate()) {
+                        return false;
+                    }
+                }
+                // If only end is provided, treat as "up to" filter
+                else if (!dateValue.start && dateValue.end && !isNaN(new Date(dateValue.end).getTime())) {
+                    const endDate = new Date(dateValue.end);
+                    const normalizedEndDate = new Date(
+                        endDate.getFullYear(),
+                        endDate.getMonth(),
+                        endDate.getDate(),
+                        23, 59, 59, 999
+                    );
+                    
+                    if (normalizedRowDate > normalizedEndDate) {
+                        return false;
+                    }
+                }
+            }
             else {
                 // Standard equality filters (string, number, select, etc.)
                 if (row[key] !== value) {

@@ -175,6 +175,55 @@
         onChange && filter && onChange(filter);
     }
 
+
+    /**
+     * Formats date values for display in filter UI
+     * @param {import('./types').Field} field - The field containing date value(s)
+     * @returns {string} Formatted date string in European format (DD/MM/YYYY)
+     */
+    function getDateText(field) {
+        // Helper function to format date in European format (DD/MM/YYYY)
+        /**
+         * @param {string|number} dateStr - The date string to format
+         * @returns {string} Formatted date in DD/MM/YYYY format
+         */
+        function formatToEuropeanDate(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+        
+        const rangeValue = /** @type {import('./types').RangeValue} */ (field.value);
+        if (field.dateRange && field.value) {
+            let start = rangeValue.start;
+            let end = rangeValue.end;
+            if (!start && !end) return '';
+            
+            // Format dates using European format
+            let startDate = start ? formatToEuropeanDate(start) : '';
+            let endDate = end ? formatToEuropeanDate(end) : '';
+            
+            // Handle cases where only one date is provided in range mode
+            if (startDate && endDate) {
+                return `${startDate} - ${endDate}`;
+            } else if (startDate) {
+                return startDate;
+            } else if (endDate) {
+                return endDate;
+            }
+        } else if (field.value && rangeValue.start) {
+            let start = rangeValue.start;
+            if (!start) return '';
+            
+            // Format single date using European format
+            return formatToEuropeanDate(start);
+        }
+        return '';
+    }
+
 </script>
 
 <InputGroup class="advanced-filter">
@@ -210,6 +259,11 @@
                                 <span class="advanced-filter--item-label">
                                     ({rangeValue.start} - {rangeValue.end})
                                 </span>
+                            {:else if field.type === 'date'}
+                            {@const dateText = getDateText(field)}
+                                {#if dateText}
+                                    <span class="advanced-filter--item-label">({dateText})</span>
+                                {/if}
                             {:else}
                                 {@const val = field.options?.find(o => o.value === field.value)}
                                 {#if val && val.label}
