@@ -34,7 +34,7 @@
             
             try {
                 // Load the SVG
-                const module = await import(`./images/${name}.svg?raw`);
+                const module = await import(`$lib/icons/images/${name}.svg?raw`);
                 const svgString = module.default;
                 
                 if (!svgString) throw new Error('SVG not loaded');
@@ -101,7 +101,7 @@
                 
                 // Fallback - try with direct image tag approach
                 const img = document.createElement('img');
-                img.src = `./images/${name}.svg`;
+                img.src = `/lib/icons/images/${name}.svg`;
                 img.style.width = '100%';
                 img.style.height = '100%';
                 img.style.display = 'block';
