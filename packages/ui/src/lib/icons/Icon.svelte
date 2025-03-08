@@ -185,4 +185,5 @@
     bind:this={iconContainer}
     class={classes}
     style={style}
+    data-ar-purpose="icon"
 ></div>
