@@ -29,69 +29,93 @@
     onMount(async () => {
         try {
             // Clear previous content
-            if (iconContainer) {
-                iconContainer.innerHTML = '';
-                
+            if (!iconContainer) return;
+            iconContainer.innerHTML = '';
+            
+            try {
                 // Load the SVG
                 const module = await import(`./images/${name}.svg?raw`);
                 const svgString = module.default;
                 
+                if (!svgString) throw new Error('SVG not loaded');
+                
                 // Create a temporary container to parse SVG
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(svgString, 'image/svg+xml');
-                const svgElement = doc.documentElement;
                 
-                // Remove any fixed dimensions from the SVG
-                svgElement.removeAttribute('width');
-                svgElement.removeAttribute('height');
-                
-                // Ensure viewBox exists for proper scaling
-                if (!svgElement.hasAttribute('viewBox') && 
-                    svgElement.hasAttribute('width') && 
-                    svgElement.hasAttribute('height')) {
-                    const width = svgElement.getAttribute('width');
-                    const height = svgElement.getAttribute('height');
-                    svgElement.setAttribute('viewBox', `0 0 ${width} ${height}`);
+                // Check for parsing errors
+                const parserError = doc.querySelector('parsererror');
+                if (parserError) {
+                    throw new Error('SVG parsing error');
                 }
                 
-                // Process all elements with fill or stroke attributes
+                /** @type {SVGSVGElement} */
+                // @ts-ignore - We know this is an SVGSVGElement because we parsed it as image/svg+xml
+                const svgElement = doc.documentElement.cloneNode(true);
+                
+                // Set necessary attributes for proper display
+                svgElement.setAttribute('width', '100%');
+                svgElement.setAttribute('height', '100%');
+                svgElement.style.display = 'block';
+                
+                // Remove any fixed dimensions but preserve viewBox
+                const originalWidth = svgElement.getAttribute('width');
+                const originalHeight = svgElement.getAttribute('height');
+                
+                // Ensure viewBox exists for proper scaling
+                if (!svgElement.hasAttribute('viewBox') && originalWidth && originalHeight) {
+                    svgElement.setAttribute('viewBox', `0 0 ${originalWidth} ${originalHeight}`);
+                }
+                
+                // Process all elements with fill attributes
+                /** @type {NodeListOf<Element>} */
                 const elementsWithFill = svgElement.querySelectorAll('[fill]:not([fill="none"])');
                 elementsWithFill.forEach(el => {
                     const fillValue = el.getAttribute('fill');
-                    // Only replace if it's a hex color or named color (not "none", "url(...)", etc.)
                     if (fillValue && (fillValue.startsWith('#') || isNamedColor(fillValue))) {
                         el.setAttribute('fill', 'currentColor');
                     }
                 });
                 
+                // Process all elements with stroke attributes
+                /** @type {NodeListOf<Element>} */
                 const elementsWithStroke = svgElement.querySelectorAll('[stroke]:not([stroke="none"])');
                 elementsWithStroke.forEach(el => {
                     const strokeValue = el.getAttribute('stroke');
-                    // Only replace if it's a hex color or named color
                     if (strokeValue && (strokeValue.startsWith('#') || isNamedColor(strokeValue))) {
                         el.setAttribute('stroke', 'currentColor');
                     }
                 });
                 
                 // For SVG path elements without fill or stroke attributes, add fill="currentColor"
+                /** @type {NodeListOf<Element>} */
                 const pathsWithoutAttributes = svgElement.querySelectorAll('path:not([fill]):not([stroke])');
                 pathsWithoutAttributes.forEach(path => {
                     path.setAttribute('fill', 'currentColor');
                 });
                 
-                // Append the SVG to our component's DOM
+                // Append the modified SVG to our container
                 iconContainer.appendChild(svgElement);
+            } catch (importError) {
+                console.error('SVG import error:', importError);
+                
+                // Fallback - try with direct image tag approach
+                const img = document.createElement('img');
+                img.src = `./images/${name}.svg`;
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.display = 'block';
+                iconContainer.appendChild(img);
             }
         } catch (e) {
-            console.error(e);
+            console.error('Icon component error:', e);
         }
     });
     
-    // Helper function to detect named colors
     /**
-     * @param {string} color
-     * @returns {boolean}
-     * @param color
+     * Helper function to detect named colors
+     * @param {string} color - The color to check
+     * @returns {boolean} Whether the color is a named color
      */
     function isNamedColor(color) {
         // Basic named colors - expand this list as needed
