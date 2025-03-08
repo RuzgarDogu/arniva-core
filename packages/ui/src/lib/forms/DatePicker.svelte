@@ -12,7 +12,7 @@
 	 */
 
 	/** @type {Props} */
-	let { isRange = false, quickSelect = false, isEuropean = true, manualInput = false, onChange } = $props();
+	let { isRange = false, quickSelect = false, isEuropean = true, manualInput = true, onChange } = $props();
 
 	// State management with Svelte 5 runes
 	/** @type {Date|null} */

@@ -1,4 +1,5 @@
 import '../../packages/ui/src/lib/styles/app.scss';
+import './storybook.css';
 
 // Add Google Font link
 const link = document.createElement('link');

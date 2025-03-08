@@ -1,0 +1,189 @@
+import { Canvas, Meta, Controls, Story } from '@storybook/blocks';
+
+import * as AdvancedFilterStories from './AdvancedFilter.stories.svelte';
+
+<Meta of={AdvancedFilterStories} />
+
+# AdvancedFilter
+
+The `AdvancedFilter` component allows users to filter a list of items based on multiple criteria, including text, numbers, booleans, dates, ranges, multi-select checkboxes, and radio selections. It provides a structured filtering experience with a flexible configuration.
+
+## Usage
+
+```svelte
+<AdvancedFilter {filterConfig} onChange={handleChange} />
+```
+
+- `filterConfig`: Configuration object defining the available filters.
+- `onChange`: Event triggered when filter values change, returning the updated filter object.
+
+## Stories
+
+### Default Usage
+
+<Canvas of={AdvancedFilterStories.Default} />
+
+## Configuration
+In order to use the `AdvancedFilter` component, you must provide a configuration object that defines the available filters. The configuration object should include the following properties:
+
+- `name`: The name of the filter.
+- `search`: Configuration object for the search filter.
+  - `placeholder`: Placeholder text for the search input.
+  - `columns`: Array of column names to search within.
+- `fields`: Array of filter field objects.
+  - `name`: The name of the field.
+  - `label`: The label for the field.
+  - `text`: The text displayed in the field.
+  - `type`: The type of field.
+    - `text`: Text input field.
+    - `range`: Range input field.
+    - `date`: Date input field.
+    - `select`: Single select field.
+    - `multiselect`: Multi-select field.
+    - `boolean`: Boolean field.
+  - `options`: Array of options for select and multi-select fields.
+  - `range`: Object with `min` and `max` properties for range fields.
+  - `dateRange`: Boolean indicating whether the date field is a range.
+  - `isAmerican`: Boolean indicating whether the date field is in American format.
+
+
+### Example Configuration
+
+```js
+    let filterConfig = {
+        name: 'filterName',
+        search: {
+            placeholder: 'Search Employees',
+            columns: ['name', 'email', 'phone']
+        },
+        fields: [
+            {
+                name: 'age',
+                label: 'Age',
+                text: 'Select Age range',
+                type: 'range',
+                range: {
+                    min: dummyData.reduce((min, row) => Math.min(min, row.age), Infinity),
+                    max: dummyData.reduce((max, row) => Math.max(max, row.age), -Infinity)
+                }
+            },
+            {
+                name: 'dob',
+                label: 'Date of Birth',
+                text: 'Select date range',
+                type: 'date',
+                isAmerican: false,
+                dateRange: true
+            },
+            {
+                name: 'gender',
+                label: 'Gender',
+                text: 'Select Gender',
+                type: 'select',
+                options: [
+                    {
+                        label: 'Male Employees',
+                        value: 'male'
+                    },
+                    {
+                        label: 'Female Employees',
+                        value: 'female'
+                    }
+                ]
+            },
+            {
+                name: 'department',
+                label: 'Department',
+                text: 'Select Department',
+                type: 'multiselect',
+                options: [
+                    {
+                        label: 'Production Employees',
+                        value: 'Production'
+                    },
+                    {
+                        label: 'Sales Employees',
+                        value: 'Sales'
+                    },
+                    {
+                        label: 'Accounting Employees',
+                        value: 'Accounting'
+                    }
+                ]
+            },
+            {
+                name: 'isManager',
+                label: 'Is Manager',
+                text: 'Is this person a manager?',
+                type: 'boolean',
+                options: [
+                    {
+                        label: 'Yes',
+                        value: true
+                    },
+                    {
+                        label: 'No',
+                        value: false
+                    }
+                ]
+            }
+        ]
+    }
+```
+
+## Example Event Handler
+
+```js
+function handleChange(filterResults) {
+  console.log('Updated filters:', filterResults);
+}
+```
+
+`onChange` event returns an object with the following properties:
+```js
+  // Returns an object with the updated filter values
+  {
+    "age": {
+        "min": 30,
+        "max": 40
+    },
+    "gender": "female",
+    "department": [
+        "Sales",
+        "Accounting"
+    ],
+    "dob": {
+        "start": "2025-03-10T21:00:00.000Z",
+        "end": "2025-03-26T21:00:00.000Z"
+    },
+    "search": "John"
+}
+```
+
+### applyFilters function
+If the `applyFilters` function is imported, it can be used to apply the filters to the data. This function is not included in the component and must be implemented separately.
+The `applyFilters` function is takes three parameters: `data`, `filters` and `config`
+
+> ⚠️ Please keep in mind that, the keys in the `filters` object should match the keys in the `config` object.
+
+```js
+import { applyFilters } from '@ruzgardogu/ui';
+```
+
+```js
+let tableData = $state(data)
+
+function handleChange(filters) {
+    tableData = applyFilters(data, filters, filterConfig);
+}
+```
+
+## Type Definitions (JSDoc comments)
+
+This library use JSDoc comments and it's type definition is provided in the `types` folder. You can use the following JSDoc comment to import the type definition.
+
+```js
+/**
+* @typedef {import('@ui/forms/filter/types').Filters} Filters
+*/
+```

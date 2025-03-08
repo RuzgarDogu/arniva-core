@@ -48,7 +48,8 @@ export function applyFilters(data, filters, config) {
         });
         
         // Create a new filters object without the search property for the rest of the filtering
-        const {  ...otherFilters } = filters;
+        // eslint-disable-next-line no-unused-vars
+        const { search, ...otherFilters } = filters;
         filters = otherFilters;
     }
 

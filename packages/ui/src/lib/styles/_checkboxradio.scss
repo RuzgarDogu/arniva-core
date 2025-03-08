@@ -18,6 +18,9 @@
     cursor: pointer;
     display: inline-flex;
     align-items: center;
+    font-size: 0.85rem;
+    line-height: normal;
+    color: lighten($text-color, 10%);
   }
 }
 
@@ -25,13 +28,13 @@
     .custom-#{$type}--label {
         border: 1px solid $form-element-border-color;
         padding-left: unset;
-        padding: 1em;
+        padding: 1.2em;
         border-radius: 0.3rem;
         display: flex;
         flex-direction: column;
         justify-content: start;
         align-items: start;
-
+        gap: 0.5em;
         .custom-#{$type}--subtitle {
             font-size: 0.85rem;
             opacity: 0.8;

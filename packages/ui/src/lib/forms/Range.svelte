@@ -12,7 +12,7 @@
 
   /** @type {Props} */
   let { 
-    type = 'single',  // 'single' or 'range'
+    type = 'range',  // 'single' or 'range'
     min = 0,
     max = 99,
     color = 'primary',

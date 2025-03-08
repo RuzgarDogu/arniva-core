@@ -1,0 +1,37 @@
+import { Canvas, Meta, Controls } from '@storybook/blocks';
+
+import * as CheckboxStories from './Checkbox.stories.svelte';
+
+<Meta of={CheckboxStories} />
+
+# Checkbox
+The checkbox component is used to allow the user to select one or more options from a list of options.
+
+<Canvas of={CheckboxStories.Default} />
+<Controls of={CheckboxStories.Default} />
+
+## Boxed Checkbox
+The boxed checkbox component is used to allow the user to select one or more options from a list of options.
+
+> ⚠️ In order to use boxed mode you should pass `boxed` prop to the component.
+
+```html
+<Checkbox boxed />
+```
+
+<Canvas of={CheckboxStories.BoxedDefault} />
+<Controls of={CheckboxStories.BoxedDefault} />
+
+<Canvas of={CheckboxStories.BoxedPrimary} />
+
+<Canvas of={CheckboxStories.BoxedSecondary} />
+
+<Canvas of={CheckboxStories.BoxedSuccess} />
+
+<Canvas of={CheckboxStories.BoxedDanger} />
+
+<Canvas of={CheckboxStories.BoxedWarning} />
+
+<Canvas of={CheckboxStories.BoxedAccent} />
+
+

@@ -9,7 +9,7 @@
    * @property {string} [value] - Value of the radio button
    * @property {boolean} [checked] - Whether the radio button is checked
    * @property {boolean} [boxed] - Whether to display as a box instead of standard radio button
-	 * @property {'primary' | 'secondary' | 'default' | 'accent' | 'success' | 'danger' | 'warning'} color
+	 * @property {'primary' | 'secondary' | 'default' | 'accent' | 'success' | 'danger' | 'warning'} [color]
    * @property {string} [subtitle] - Additional descriptive text shown below the label
    * @property {(event: Event) => void} [onchange] - Function to call when the radio button value changes
    */

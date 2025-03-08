@@ -1,0 +1,38 @@
+import { Canvas, Meta, Controls } from '@storybook/blocks';
+
+import * as RadioStories from './Radio.stories.svelte';
+
+<Meta of={RadioStories} />
+
+# Radio
+The Radio component is used to allow the user to select one option from a list of options.
+
+<Canvas of={RadioStories.Default} />
+<Controls of={RadioStories.Default} />
+<Canvas of={RadioStories.DefaultMultiple} />
+## Boxed Radio
+The boxed Radio component is used to allow the user to select one or more options from a list of options.
+
+> ⚠️ In order to use boxed mode you should pass `boxed` prop to the component.
+
+```html
+<Radio boxed />
+```
+
+<Canvas of={RadioStories.BoxedDefault} />
+<Controls of={RadioStories.BoxedDefault} />
+
+
+<Canvas of={RadioStories.BoxedPrimary} />
+
+<Canvas of={RadioStories.BoxedSecondary} />
+
+<Canvas of={RadioStories.BoxedSuccess} />
+
+<Canvas of={RadioStories.BoxedDanger} />
+
+<Canvas of={RadioStories.BoxedWarning} />
+
+<Canvas of={RadioStories.BoxedAccent} />
+
+

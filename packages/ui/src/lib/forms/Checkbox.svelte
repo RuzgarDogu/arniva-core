@@ -9,7 +9,7 @@
    * @property {string} [value]
    * @property {boolean} [checked] - Whether the checkbox is checked
    * @property {boolean} [boxed] - Whether to display as a box instead of standard checkbox
-	 * @property {'primary' | 'secondary' | 'default' | 'accent' | 'success' | 'danger' | 'warning'} color
+	 * @property {'primary' | 'secondary' | 'default' | 'accent' | 'success' | 'danger' | 'warning'} [color]
    * @property {string} [subtitle] - Additional descriptive text shown below the label
    * @property {(event: Event) => void} [onchange] - Function to call when the checkbox value changes
    */

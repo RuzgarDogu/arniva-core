@@ -30,6 +30,7 @@
 		DatePicker,
 		Checkbox,
 		Radio,
+		Range,
 		toast
 	} from '$lib';
 	let switchValue = false;
@@ -127,7 +128,24 @@
 <h1 style="margin-bottom: 20px;">Introduction</h1>
 <!-- <button data-ar-toggle="modal" data-ar-target="testModal" class="input-group-text bg-lightgray border-0 border-end-0 p-1">
 	Modal 1
-</button> -->
+	</button> -->
+	<div style="margin-bottom: 20px;">
+		<Range
+			color="primary"
+			min={0}
+			max={100}
+			type="range"
+			onChange={(value) => console.log('Single Range:', value)}
+		/>
+	</div>
+<div style="margin-bottom: 20px;">
+	<Checkbox label="Check me" color="default" subtitle="Lorem impsum dolor sit amet" />
+</div>
+<div style="margin-bottom: 20px;">
+	<Radio name="asd" label="Check me" color="primary" subtitle="Lorem impsum dolor sit amet" />
+	<Radio name="asd" label="Check me 2" color="primary" subtitle="Lorem impsum dolor sit amet" />
+	<Radio name="asd" label="Check me 3" color="primary" subtitle="Lorem impsum dolor sit amet" />
+</div>
 <div style="margin-bottom: 20px;">
 	<Checkbox label="Check me" color="default" subtitle="Lorem impsum dolor sit amet" boxed />
 </div>
