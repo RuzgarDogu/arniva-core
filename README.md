@@ -43,6 +43,25 @@ then publish it by:
 ```bash
 pnpm build:ui
 ```
+### Publishing Utils
+
+First compile scss to css by running this script:
+
+```bash
+pnpm prepare:utils
+```
+
+Then change ``ìndex.js`inside`lib```folder from **scss** to **css**:
+
+```javascript
+import "./styles/app.css";
+```
+
+then publish it by:
+
+```bash
+pnpm build:utils
+```
 
 ### IMPORTANT
 

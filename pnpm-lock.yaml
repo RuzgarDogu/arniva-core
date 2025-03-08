@@ -210,6 +210,9 @@ importers:
       publint:
         specifier: ^0.3.2
         version: 0.3.5
+      sass:
+        specifier: ^1.85.0
+        version: 1.85.0
       svelte:
         specifier: ^5.0.0
         version: 5.20.0

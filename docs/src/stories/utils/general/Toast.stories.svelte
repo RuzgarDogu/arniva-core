@@ -1,9 +1,10 @@
 <script module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
-	import { Button, toast } from '@ui/general';
+	import { Button } from '@ui/general';
+    import { toast } from '@utils';
     
 	const { Story } = defineMeta({
-		title: 'UI/General/Toast',
+		title: 'Utils/General/Toast',
         argTypes: {
             position: {
                 control: { type: 'select' },
