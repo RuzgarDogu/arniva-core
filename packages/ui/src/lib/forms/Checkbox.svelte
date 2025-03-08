@@ -8,6 +8,9 @@
    * @property {string} [name]
    * @property {string} [value]
    * @property {boolean} [checked] - Whether the checkbox is checked
+   * @property {boolean} [boxed] - Whether to display as a box instead of standard checkbox
+	 * @property {'primary' | 'secondary' | 'default' | 'accent' | 'success' | 'danger' | 'warning'} color
+   * @property {string} [subtitle] - Additional descriptive text shown below the label
    * @property {(event: Event) => void} [onchange] - Function to call when the checkbox value changes
    */
 
@@ -16,18 +19,21 @@
     /** @type {Props} */
     let { 
       class: cls = '', 
-      label = '', 
+      label = '',
+      subtitle = '',
       style = '', 
       id = random_id, 
       name = '', 
       value, 
       checked,
+      color = 'default',
+      boxed = false,
       onchange,
       ...rest 
     } = $props();
   </script>
   
-  <div class={['custom-checkbox', cls].join(' ')} style={style}>
+  <div class={['custom-checkbox', boxed ? 'custom-checkbox--boxed' : '', cls].join(' ')} style={style}>
     <input 
       type="checkbox" 
       {id} 
@@ -37,5 +43,10 @@
       onchange={onchange} 
       {...rest} 
     />
-    <label for={id}>{label}</label>
+    <label class={['custom-checkbox--label', `custom-checkbox--${color}`]} for={id}>
+      {label}
+      {#if subtitle && boxed}
+        <span class="custom-checkbox--subtitle">{subtitle}</span>
+      {/if}
+    </label>
   </div>

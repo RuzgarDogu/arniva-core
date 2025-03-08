@@ -4,44 +4,9 @@
 	border-radius: $border-radius-sm;
 	padding: 1.2rem;
 
-	&--default {
-		background-color: $light-color;
-		color: $text-color;
-		border: none;
-		border-radius: 0;
-	}
+	@include colorBoxes;
 
-	&--primary {
-		background-color: $primary-color;
-		color: white;
-	}
-
-	&--accent {
-		background-color: $accent-color;
-		color: white;
-	}
-
-	&--secondary {
-		box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
-		background-color: transparent;
-		color: $text-color;
-	}
-
-	&--success {
-		background-color: lighten($success-color, 25%);
-		color: darken($success-color, 50%);
-	}
-
-	&--warning {
-		background-color: lighten($warning-color, 35%);
-		color: darken($warning-color, 50%);
-	}
-
-	&--danger {
-		background-color: lighten($danger-color, 28%);
-		color: darken($danger-color, 50%);
-	}
-	.alert-title {
+	&--title {
 		font-size: 1.25rem;
 		font-weight: 700;
 		margin-bottom: 0.5rem;

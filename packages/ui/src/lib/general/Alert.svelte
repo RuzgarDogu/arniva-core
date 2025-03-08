@@ -13,7 +13,7 @@
 
 <div class="alert alert--{color}" {...rest}>
 	{#if title}
-		<div class="alert-title">{title}</div>
+		<div class="alert--title">{title}</div>
 	{/if}
 	{@render children?.()}
 </div>

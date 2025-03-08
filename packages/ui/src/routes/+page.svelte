@@ -28,6 +28,8 @@
 		CardBody,
 		Modal,
 		DatePicker,
+		Checkbox,
+		Radio,
 		toast
 	} from '$lib';
 	let switchValue = false;
@@ -127,7 +129,31 @@
 	Modal 1
 </button> -->
 <div style="margin-bottom: 20px;">
-	<Button onClick={() => toast.show({ duration: 3000, position: 'top-right'})}>Toast Test</Button>
+	<Checkbox label="Check me" color="default" subtitle="Lorem impsum dolor sit amet" boxed />
+</div>
+<div style="margin-bottom: 20px;">
+	<Checkbox label="Check me" color="primary" subtitle="Lorem impsum dolor sit amet" boxed />
+</div>
+<div style="margin-bottom: 20px;">
+	<Checkbox label="Check me" color="danger" subtitle="Lorem impsum dolor sit amet" boxed />
+</div>
+<div style="margin-bottom: 20px;">
+	<Checkbox label="Check me" color="success" subtitle="Lorem impsum dolor sit amet" boxed />
+</div>
+<div style="margin-bottom: 20px;">
+	<Checkbox label="Check me" color="warning" subtitle="Lorem impsum dolor sit amet" boxed />
+</div>
+<div style="margin-bottom: 20px;">
+	<Checkbox label="Check me" color="accent" subtitle="Lorem impsum dolor sit amet" boxed />
+</div>
+
+<div style="margin-bottom: 20px;">
+	<Radio name="asd" label="Check me" color="primary" subtitle="Lorem impsum dolor sit amet" boxed />
+	<Radio name="asd" label="Check me 2" color="primary" subtitle="Lorem impsum dolor sit amet" boxed />
+	<Radio name="asd" label="Check me 3" color="primary" subtitle="Lorem impsum dolor sit amet" boxed />
+</div>
+<div style="margin-bottom: 20px;">
+	<Button onClick={() => toast.show("deneme", { duration: 3000, position: 'top-right'})}>Toast Test</Button>
 	<Button color="success" onClick={() => toast.success('This is success toast', { duration: 3000, title:"This is title" })}>Toast - Title</Button>
 	<Button color="danger" onClick={() => toast.danger('This is danger toast with bounce', { duration: 3000, transition:'bounce' })}>Danger - Bounce</Button>
 	<Button color="warning" onClick={() => toast.warning('This is warning toast with fade', { duration: 3000, transition: 'fade' })}>Warning - Fade</Button>

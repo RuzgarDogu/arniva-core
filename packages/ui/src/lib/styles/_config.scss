@@ -22,6 +22,15 @@ $outline-color: #90caf9;
 $sidebar-width: 300px;
 $formElementPadding: 0.5em;
 
+// Custom Form Element Variables
+$form-element-size: 20px;
+$form-element-border-color: $border-color;
+$form-element-bg-color: #fff;
+$form-element-active-color: $accent-color; // Blue color
+$form-element-label-padding: 30px;
+$form-element-inner-padding: 2px;
+
+
 @mixin label-styles {
 	font-weight: bold;
 	color: $text-color;
@@ -40,4 +49,45 @@ $formElementPadding: 0.5em;
 	box-sizing: border-box;
 	background-color: transparent;
 	min-height: 35px;
+}
+
+@mixin colorBoxes {
+	&--default {
+		background-color: $light-color;
+		color: $text-color;
+		border: 1px solid transparent $border-color ;
+	}
+
+	&--primary {
+		background-color: $primary-color;
+		color: white;
+	}
+
+	&--accent {
+		background-color: $accent-color;
+		color: white;
+	}
+
+	&--secondary {
+		box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
+		background-color: transparent;
+		color: $text-color;
+	}
+
+	&--success {
+		background-color: lighten($success-color, 25%);
+		color: darken($success-color, 50%);
+	}
+
+	&--warning {
+		background-color: lighten($warning-color, 35%);
+		color: darken($warning-color, 50%);
+	}
+
+	&--danger {
+		background-color: lighten($danger-color, 28%);
+		color: darken($danger-color, 50%);
+	}
+
+	@content; // Allows additional styles to be added
 }
