@@ -1,5 +1,6 @@
 $height: 35px;
 .datepicker {
+	position: relative;
 	&--focused {
 		border: 1px solid $accent-color;
 	}

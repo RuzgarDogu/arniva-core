@@ -61,7 +61,18 @@
         if (_field.isOpen) {
             currentOrder++;
             _field.order = currentOrder;
+            // If we have a value already saved for this field, restore it to the filter
+            if (_field.value) {
+                filter[_field.name] = _field.value;
+            }
+        } else {
+            // If closing, remove from filter
+            delete filter[_field.name];
+            // Don't clear the field value so it can be restored if reopened
         }
+        
+        // Notify about the filter change
+        onChange && onChange(filter);
         
         // Ensure next tick to allow rendering
         setTimeout(() => {
