@@ -114,6 +114,9 @@ importers:
       '@eslint/js':
         specifier: ^9.18.0
         version: 9.20.0
+      '@iconify/svelte':
+        specifier: ^4.2.0
+        version: 4.2.0(svelte@5.20.0)
       '@sveltejs/adapter-auto':
         specifier: ^4.0.0
         version: 4.0.0(@sveltejs/kit@2.17.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.20.0)(vite@6.1.0(@types/node@22.13.4)(jiti@1.21.7)(less@4.2.2)(sass@1.85.0)(terser@5.39.0)))(svelte@5.20.0)(vite@6.1.0(@types/node@22.13.4)(jiti@1.21.7)(less@4.2.2)(sass@1.85.0)(terser@5.39.0)))
@@ -689,6 +692,14 @@ packages:
   '@humanwhocodes/retry@0.4.1':
     resolution: {integrity: sha512-c7hNEllBlenFTHBky65mhq8WD2kbN9Q6gk0bTk8lSBvc554jpXSkST1iePudpt7+A/AQvuHs9EMqjHDXMY1lrA==}
     engines: {node: '>=18.18'}
+
+  '@iconify/svelte@4.2.0':
+    resolution: {integrity: sha512-fEl0T7SAPonK7xk6xUlRPDmFDZVDe2Z7ZstlqeDS/sS8ve2uyU+Qa8rTWbIqzZJlRvONkK5kVXiUf9nIc+6OOQ==}
+    peerDependencies:
+      svelte: '>4.0.0'
+
+  '@iconify/types@2.0.0':
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -4187,6 +4198,13 @@ snapshots:
   '@humanwhocodes/retry@0.3.1': {}
 
   '@humanwhocodes/retry@0.4.1': {}
+
+  '@iconify/svelte@4.2.0(svelte@5.20.0)':
+    dependencies:
+      '@iconify/types': 2.0.0
+      svelte: 5.20.0
+
+  '@iconify/types@2.0.0': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:

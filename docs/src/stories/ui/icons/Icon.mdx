@@ -4,27 +4,15 @@ import * as IconStories from './Icon.stories.svelte';
 
 <Meta of={IconStories} />
 
-# Icons
-There is a set of icons that can be used in the application. These icons are used to represent actions or objects in the application.
+# Icon
+For displaying icons in the UI, we are using the `Icon` component which extends the 'Iconify' library.
 
-<Controls of={IconStories.SingleIcon} />
-<Canvas of={IconStories.SingleIcon} />
+For icons list, visit the [Iconify Icon Set Library](https://icon-sets.iconify.design/).
 
-## How to import
-To use the icons in your application, you need to import the `Icon` component from the `@svelte-material-design/core` package.
+<Canvas of={IconStories.Default} />
+<Controls of={IconStories.Default} />
 
-```html
-<script>
-  import { Icon } from '@ruzgardogu/ui';
-</script>
-```
+## Colored Icon
+To display colored icons, use the `color` prop.
 
-## How to use
-To use the icons in your application, you need to use the `Icon` component and pass the icon name as a prop.
-
-```svelte
-<Icon name="home" />
-```
-
-<Controls of={IconStories.Icons} />
-<Canvas of={IconStories.Icons} />
+<Canvas of={IconStories.ColoredIcon} />

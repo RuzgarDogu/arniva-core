@@ -637,7 +637,7 @@
 			readonly={!manualInput}
 		/>
 		{#if isRange}
-		<Icon name="switch-horizontal-arrow" size="16px"/>
+		<Icon icon="ic:baseline-compare-arrows" width="24" height="24" />
 		<input
 		bind:this={endInputRef}
 		type="text"
@@ -650,7 +650,7 @@
 		readonly={!manualInput}
 		/>
 		{/if}
-		<Icon name="calendar-minimalistic" size="16px"/>
+		<Icon icon="ic:outline-calendar-today" width="18" height="18" />
 	</div>
 	
 	<!-- Calendar Display -->
