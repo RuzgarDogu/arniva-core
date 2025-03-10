@@ -1,7 +1,6 @@
 /** @type {import('./$types').PageLoad} */
-import { getIconNames } from '$lib'
 export async function load() {
-    let icon_list = await getIconNames();
+    let icon_list = []
     return {
         icon_list
     };

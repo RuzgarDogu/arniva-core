@@ -38,11 +38,17 @@ Then change ``ìndex.js`inside`lib```folder from **scss** to **css**:
 import "./styles/app.css";
 ```
 
+- COMMIT CHANGES TO GIT
+
 then publish it by:
 
 ```bash
 pnpm build:ui
 ```
+
+!IMPORTANT Change css to scss again
+AND DELETE css if you like.
+
 ### Publishing Utils
 
 First compile scss to css by running this script:
@@ -56,12 +62,16 @@ Then change ``ìndex.js`inside`lib```folder from **scss** to **css**:
 ```javascript
 import "./styles/app.css";
 ```
+- COMMIT CHANGES TO GIT
 
 then publish it by:
 
 ```bash
 pnpm build:utils
 ```
+
+!IMPORTANT Change css to scss again
+AND DELETE css if you like.
 
 ### IMPORTANT
 
