@@ -1,5 +1,5 @@
 <script>
-    import { Icon, Input, IconList } from '$lib'
+    import { Icon, Input } from '$lib'
     /** @type {{ data: import('./$types').PageData }} */
     let { data } = $props();
 
