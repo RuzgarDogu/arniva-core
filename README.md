@@ -26,6 +26,8 @@ DO NOT FORGET to set a new version inside package's `package.json`.
 
 ### Publishing UI
 
+#### IMPORTANT - Change Version Number inside package.json file
+
 First compile scss to css by running this script:
 
 ```bash
@@ -50,6 +52,8 @@ pnpm build:ui
 AND DELETE css if you like.
 
 ### Publishing Utils
+
+#### IMPORTANT - Change Version Number inside package.json file
 
 First compile scss to css by running this script:
 
