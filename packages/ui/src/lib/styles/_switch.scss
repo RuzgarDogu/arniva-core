@@ -82,54 +82,54 @@
 
 	&--primary {
 		input:checked ~ label {
-			background: $primary-color;
+			background: var(--ar-primary-color);
 			span:first-of-type {
-				color: lighten($primary-color, 20%);
+				color: var(--ar-primary-color-subtle);
 			}
 		}
 	}
 
 	&--secondary {
 		input:checked ~ label {
-			background: $secondary-color;
+			background: var(--ar-secondary-color);
 			span:first-of-type {
-				color: lighten($secondary-color, 20%);
+				color: var(--ar-secondary-color-subtle);
 			}
 		}
 	}
 
 	&--success {
 		input:checked ~ label {
-			background: $success-color;
+			background: var(--ar-success-color);
 			span:first-of-type {
-				color: darken($success-color, 30%);
+				color: var(--ar-success-color-emphasis);
 			}
 		}
 	}
 
 	&--danger {
 		input:checked ~ label {
-			background: $danger-color;
+			background: var(--ar-danger-color);
 			span:first-of-type {
-				color: lighten($danger-color, 20%);
+				color: var(--ar-danger-color-subtle);
 			}
 		}
 	}
 
 	&--warning {
 		input:checked ~ label {
-			background: $warning-color;
+			background: var(--ar-warning-color);
 			span:first-of-type {
-				color: lighten($warning-color, 20%);
+				color: var(--ar-warning-color-subtle);
 			}
 		}
 	}
 
 	&--accent {
 		input:checked ~ label {
-			background: $accent-color;
+			background: var(--ar-accent-color);
 			span:first-of-type {
-				color: lighten($accent-color, 20%);
+				color: var(--ar-accent-color-subtle);
 			}
 		}
 	}

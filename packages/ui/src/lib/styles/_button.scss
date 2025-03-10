@@ -6,7 +6,7 @@
 	align-items: center;
 	cursor: pointer;
 	border: 0;
-	border-radius: $border-radius;
+	border-radius: var(--ar-border-radius);
 	font-weight: 800;
 	line-height: 1;
 	font-family:
@@ -23,44 +23,73 @@
 
 	&--transparent {
 		background-color: transparent;
-		color: $text-color;
+		color: var(--ar-text-color);
 		border: none;
 		border-radius: 0;
 		&:hover {
-			background-color: lighten($accent-color, 45%);
-			color: $accent-color;
+			background-color: var(--ar-accent-color-subtle);
+			color: var(--ar-accent-color);
 		}
 	}
 
 	&--primary {
-		background-color: $primary-color;
+		background-color: var(--ar-primary-color);
 		color: white;
+		&:hover {
+			background-color: var(--ar-primary-color-emphasis);
+		}
 	}
 
 	&--secondary {
-		background-color: $secondary-color;
-		color: $text-color;
+		background-color: var(--ar-secondary-color);
+		color: var(--ar-text-color);
+		&:hover {
+			background-color: var(--ar-secondary-color-emphasis);
+		}
 	}
 
 	&--default {
 		box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
 		background-color: transparent;
-		color: $text-color;
+		color: var(--ar-text-color);
+		&:hover {
+			background-color: var(--ar-accent-color-subtle);
+			color: var(--ar-accent-color);
+			border-color: var(--ar-accent-color);
+		}
 	}
 
 	&--success {
-		background-color: lighten($success-color, 20%);
-		color: darken($success-color, 50%);
+		background-color: var(--ar-success-color-subtle);
+		color: var(--ar-success-color-emphasis);
+		&:hover {
+			background-color: var(--ar-success-color);
+		}
+	}
+
+	&--accent {
+		background-color: var(--ar-accent-color);
+		color: white;
+		&:hover {
+			background-color: var(--ar-accent-color-emphasis);
+		}
 	}
 
 	&--warning {
-		background-color: lighten($warning-color, 20%);
-		color: darken($warning-color, 50%);
+		background-color: var(--ar-warning-color-subtle);
+		color: var(--ar-warning-color-emphasis);
+		&:hover {
+			background-color: var(--ar-warning-color);
+			color: white;
+		}
 	}
 
 	&--danger {
-		background-color: lighten($danger-color, 20%);
-		color: darken($danger-color, 50%);
+		background-color: var(--ar-danger-color);
+		color: white;
+		&:hover {
+			background-color: var(--ar-danger-color-emphasis);
+		}
 	}
 
 	&--small {
@@ -105,7 +134,7 @@
 		font-weight: 400;
 		font-family: inherit;
 		&:hover {
-			background-color: lighten($accent-color, 45%);
+			background-color: var(--ar-accent-color-subtle)
 		}
 	}
 	&--no-padding {

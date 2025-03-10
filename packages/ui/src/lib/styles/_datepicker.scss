@@ -2,7 +2,7 @@ $height: 35px;
 .datepicker {
 	position: relative;
 	&--focused {
-		border: 1px solid $accent-color;
+		border: 1px solid var(--ar-accent-color);
 	}
 	@include formElement;
 	display: inline-block;
@@ -12,7 +12,7 @@ $height: 35px;
 		align-items: center;
 		padding: 0 0.5em;
 		input {
-			color: lighten($text-color, 10%);
+			color: var(--ar-text-color-subtle);
 			flex: 1;
 			padding: 0 0.5em;
 			border: none;
@@ -43,7 +43,7 @@ $height: 35px;
 		}
 
 		li {
-			border-bottom: solid 1px $border-color;
+			border-bottom: solid 1px var(--ar-border-color);
 			&:last-child {
 				border-bottom: none;
 			}
@@ -64,10 +64,10 @@ $height: 35px;
 			padding: 0.7em 1.3em;
 			font-weight: 500;
 			font-size: 0.75rem;
-			color: lighten($text-color, 20%);
+			color: var(--ar-text-color-subtle);
 			&:hover {
-				background: lighten($accent-color, 45%);
-				color: $accent-color;
+				background: var(--ar-accent-color-subtle);
+				color: var(--ar-accent-color);
 			}
 		}
 	}
@@ -106,7 +106,7 @@ $height: 35px;
 		text-align: center;
 		font-size: 0.75rem;
 		font-weight: bold;
-		color: lighten($text-color, 20%);
+		color: var(--ar-text-color-subtle);
 		padding: 5px 0;
 	}
 
@@ -123,7 +123,7 @@ $height: 35px;
 		margin-bottom: 0.7em;
 		font-size: 0.75rem;
 		&:hover {
-			background: $accent-color;
+			background: var(--ar-accent-color);
 			color: white;
 			border-radius: 50%;
 		}
@@ -138,13 +138,13 @@ $height: 35px;
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background: lighten($accent-color, 45%);
+			background: var(--ar-accent-color-subtle);
 			z-index: -1;
 		}
 	}
 
 	&--other-month {
-		color: lighten($text-color, 40%);
+		color: var(--ar-text-color-subtle);
 	}
 
 	.selected {
@@ -157,7 +157,7 @@ $height: 35px;
 			position: absolute;
 			width: 28px;
 			height: 28px;
-			background: $accent-color;
+			background: var(--ar-accent-color);
 			border-radius: 50%;
 			z-index: -1;
 		}
@@ -171,7 +171,7 @@ $height: 35px;
 	position: absolute;
 	width: 32px;
 	height: 32px;
-	background-color: lighten($accent-color, 45%);
+	background-color: var(--ar-accent-color-subtle);
 	border-top-left-radius: 50%;
 	border-bottom-left-radius: 50%;
 	z-index: -1;
@@ -181,7 +181,7 @@ $height: 35px;
 	position: absolute;
 	width: 32px;
 	height: 32px;
-	background-color: lighten($accent-color, 45%);
+	background-color: var(--ar-accent-color-subtle);
 	border-top-right-radius: 50%;
 	border-bottom-right-radius: 50%;
 	z-index: -1;

@@ -5,12 +5,12 @@
 	overflow: hidden; // Prevents body scrolling
 
 	&__sidebar {
-		width: $sidebar-width;
+		width: var(--ar-sidebar-width);
 		height: 100%;
-		background-color: $light-color;
+		background-color: var(--ar-light-color);
 		flex-shrink: 0;
 		overflow: hidden;
-		border-right: 1px solid $border-color;
+		border-right: 1px solid var(--ar-border-color);
 	}
 
 	&__main {
@@ -23,7 +23,7 @@
 		position: static;
 		height: auto;
 		background-color: #fff;
-		border-bottom: 1px solid $border-color;
+		border-bottom: 1px solid var(--ar-border-color);
 		z-index: 10;
 	}
 

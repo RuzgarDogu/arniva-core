@@ -1,37 +1,77 @@
-$border-radius: 3em;
+// var(--ar-border-radius): 3em;
 
-// Colors
-$primary-color: #555ab9;
-$accent-color: #009cfd;
-$success-color: #abf877;
-$light-color: rgb(246, 249, 252);
-$secondary-color: #efefef;
-$dark-color: #333;
-$danger-color: #f44336;
-$warning-color: #ff9800;
+// // Colors
+// var(--ar-primary-color): #555ab9;
+// var(--ar-accent-color): #009cfd;
+// var(--ar-success-color): #abf877;
+// var(--ar-light-color): rgb(246, 249, 252);
+// var(--ar-secondary-color): #efefef;
+// var(--ar-dark-color): #333;
+// var(--ar-danger-color): #f44336;
+// var(--ar-warning-color): #ff9800;
 
-$text-color: #333;
-$border-radius-sm: 0.25rem;
-$border-color: hsla(203, 50%, 30%, 0.15);
-$shadow-sm: rgba(0, 0, 0, 0.1) 0 1px 3px 0;
-// $lightColor: rgb(246, 249, 252);
-$outline-color: #90caf9;
+// var(--ar-text-color): #333;
+// var(--ar-border-radius-sm): 0.25rem;
+// var(--ar-border-color): hsla(203, 50%, 30%, 0.15);
+// var(--ar-shadow-color): rgba(0, 0, 0, 0.1) 0 1px 3px 0;
+// // $lightColor: rgb(246, 249, 252);
+// var(--ar-outline-color): #90caf9;
 
-$sidebar-width: 300px;
-$formElementPadding: 0.5em;
+// var(--ar-sidebar-width): 300px;
+// var(--ar-form-element-padding): 0.5em;
 
-// Custom Form Element Variables
-$form-element-size: 20px;
-$form-element-border-color: $border-color;
-$form-element-bg-color: #fff;
-$form-element-active-color: $accent-color; // Blue color
-$form-element-label-padding: 30px;
-$form-element-inner-padding: 2px;
+// // Custom Form Element Variables
+// var(--ar-form-element-size): 20px;
+// var(--ar-form-element-border-color): var(--ar-border-color);
+// var(--ar-form-element-bg-color): #fff;
+// var(--ar-form-element-active-color): var(--ar-accent-color); // Blue color
+// var(--ar-form-element-label-padding): 30px;
+// var(--ar-form-element-inner-padding): 2px;
+
+
+:root {
+	--ar-border-radius: 3em;
+	--ar-primary-color: #555ab9;
+	--ar-accent-color: #009cfd;
+	--ar-success-color: #a3db7e;
+	--ar-light-color: rgb(246, 249, 252);
+	--ar-secondary-color: #efefef;
+	--ar-dark-color: #333;
+	--ar-danger-color: #e91e63;
+	--ar-warning-color: #ff9800;
+	--ar-text-color: #333;
+	--ar-border-radius-sm: 0.25rem;
+	--ar-border-color: hsla(203, 50%, 30%, 0.15);
+	--ar-shadow-sm: rgba(0, 0, 0, 0.1) 0 1px 3px 0;
+	--ar-outline-color: #90caf9;
+	--ar-sidebar-width: 300px;
+	--ar-form-element-padding: 0.5em;
+	--ar-form-element-size: 20px;
+	--ar-form-element-border-color: var(--ar-border-color);
+	--ar-form-element-bg-color: #fff;
+	--ar-form-element-active-color: var(--ar-accent-color);
+	--ar-form-element-label-padding: 30px;
+	--ar-form-element-inner-padding: 2px;
+	--ar-primary-color-subtle: #f0f1f7;
+	--ar-primary-color-emphasis: #3a3f9b;
+	--ar-accent-color-subtle: #e0f7ff;
+	--ar-accent-color-emphasis: #0077b6;
+	--ar-success-color-subtle: #ecf6e6;
+	--ar-success-color-emphasis: #2e6b05;
+	--ar-warning-color-subtle: #fff3cd;
+	--ar-warning-color-emphasis: #86794c;
+	--ar-danger-color-subtle: #fff0f0;
+	--ar-danger-color-emphasis: #9b3a3a;
+	--ar-text-color-subtle: #707070;
+	--ar-text-color-emphasis: #000;
+	--ar-secondary-color-subtle: #f7f7f7;
+	--ar-secondary-color-emphasis: #d8d8d8;
+}
 
 
 @mixin label-styles {
 	font-weight: bold;
-	color: $text-color;
+	color: var(--ar-text-color);
 	font-size: 0.85rem;
 }
 
@@ -42,8 +82,8 @@ $form-element-inner-padding: 2px;
 @mixin formElement {
 	font-family: inherit;
 	width: 100%;
-	border: solid 1px $border-color;
-	border-radius: $border-radius-sm;
+	border: solid 1px var(--ar-border-color);
+	border-radius: var(--ar-border-radius-sm);
 	box-sizing: border-box;
 	background-color: transparent;
 	min-height: 35px;
@@ -51,41 +91,44 @@ $form-element-inner-padding: 2px;
 
 @mixin colorBoxes {
 	&--default {
-		background-color: $light-color;
-		color: $text-color;
-		border: 1px solid transparent $border-color ;
+		background-color: var(--ar-light-color);
+		color: var(--ar-text-color);
+		border: 1px solid transparent var(--ar-border-color) ;
 	}
 
 	&--primary {
-		background-color: $primary-color;
+		background-color: var(--ar-primary-color);
 		color: white;
 	}
 
 	&--accent {
-		background-color: $accent-color;
+		background-color: var(--ar-accent-color);
 		color: white;
 	}
 
 	&--secondary {
 		box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
 		background-color: transparent;
-		color: $text-color;
+		color: var(--ar-text-color);
 	}
 
 	&--success {
-		background-color: lighten($success-color, 25%);
-		color: darken($success-color, 50%);
+		background-color: var(--ar-success-color-subtle);
+		color: var(--ar-success-color-emphasis);
 	}
 
 	&--warning {
-		background-color: lighten($warning-color, 35%);
-		color: darken($warning-color, 50%);
+		background-color: var(--ar-warning-color-subtle);
+		color: var(--ar-warning-color-emphasis);
 	}
 
 	&--danger {
-		background-color: lighten($danger-color, 28%);
-		color: darken($danger-color, 50%);
+		background-color: var(--ar-danger-color-subtle);
+		color: var(--ar-danger-color-emphasis);
 	}
 
 	@content; // Allows additional styles to be added
 }
+
+
+

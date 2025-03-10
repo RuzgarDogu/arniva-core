@@ -2,27 +2,27 @@ $card-padding: 0.6rem 1.5rem;
 
 @mixin cardOptions {
 	&-primary {
-		background-color: $primary-color;
+		background-color: var(--ar-primary-color);
 		color: #fff;
 	}
 	&-secondary {
-		background-color: $secondary-color;
-		color: $text-color;
+		background-color: var(--ar-secondary-color);
+		color: var(--ar-text-color);
 	}
 	&-success {
-		background-color: $success-color;
+		background-color: var(--ar-success-color);
 		color: #fff;
 	}
 	&-danger {
-		background-color: $danger-color;
+		background-color: var(--ar-danger-color);
 		color: #fff;
 	}
 	&-warning {
-		background-color: $warning-color;
+		background-color: var(--ar-warning-color);
 		color: #fff;
 	}
 	&-accent {
-		background-color: $accent-color;
+		background-color: var(--ar-accent-color);
 		color: #fff;
 	}
 }
@@ -31,12 +31,12 @@ $card-padding: 0.6rem 1.5rem;
 	width: 100%;
 	padding: $card-padding;
 	box-sizing: border-box;
-	border-radius: $border-radius-sm;
-	box-shadow: $shadow-sm;
-	border: 1px solid $border-color;
+	border-radius: var(--ar-border-radius-sm);
+	box-shadow: var(--ar-shadow-color);
+	border: 1px solid var(--ar-border-color);
 	overflow: hidden;
 	font-size: 0.95rem;
-	color: lighten($text-color, 10%);
+	color: var(--ar-text-color-subtle);
 	&:has(.card--header),
 	&:has(.card--footer) {
 		padding: 0;
@@ -44,14 +44,14 @@ $card-padding: 0.6rem 1.5rem;
 			padding: $card-padding;
 			@include cardOptions;
 			&-border {
-				border-bottom: 1px solid $border-color;
+				border-bottom: 1px solid var(--ar-border-color);
 			}
 		}
 		.card--footer {
 			padding: $card-padding;
 			@include cardOptions;
 			&-border {
-				border-top: 1px solid $border-color;
+				border-top: 1px solid var(--ar-border-color);
 			}
 			font-size: 0.9rem;
 		}

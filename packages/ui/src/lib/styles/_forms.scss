@@ -1,12 +1,12 @@
 
 
 [class^='form-']:focus {
-	outline: 1px solid $outline-color;
+	outline: 1px solid var(--ar-outline-color);
 	border: 1px solid transparent;
 }
 
 .form-input-group:focus-within {
-	outline: 1px solid $outline-color;
+	outline: 1px solid var(--ar-outline-color);
 	border: 1px solid transparent;
 	.form-input {
 		border: none;
@@ -16,7 +16,7 @@
 
 .form-input {
 	@include formElement;
-	padding: $formElementPadding;
+	padding: var(--ar-form-element-padding);
 	&::placeholder {
 		font-family: inherit; // Inherit the font-family from the body
 	}
@@ -27,14 +27,14 @@
 		padding: 0.85em;
 	}
 	&--disabled {
-		background-color: $light-color;
-		color: $secondary-color;
+		background-color: var(--ar-light-color);
+		color: var(--ar-secondary-color);
 	}
 }
 
 .form-select {
 	@include formElement;
-	padding: $formElementPadding;
+	padding: var(--ar-form-element-padding);
 	&--small {
 		padding: 0.25em;
 	}
@@ -42,8 +42,8 @@
 		padding: 0.85em;
 	}
 	&--disabled {
-		background-color: $light-color;
-		color: $secondary-color;
+		background-color: var(--ar-light-color);
+		color: var(--ar-secondary-color);
 	}
 	&--search {
 		position: relative;
@@ -62,10 +62,10 @@
 				border-radius: 0;
 				font-weight: normal;
 				&.focused {
-					background-color: lighten($accent-color, 45%);
+					background-color: var(--ar-accent-color-subtle);
 				}
 				&:hover {
-					background-color: lighten($accent-color, 45%);
+					background-color: var(--ar-accent-color-subtle);
 				}
 			}
 		}
@@ -94,8 +94,8 @@
 	width: 100%;
 	align-items: center;
 	justify-content: space-between;
-	border: solid 1px $border-color;
-	border-radius: $border-radius-sm;
+	border: solid 1px var(--ar-border-color);
+	border-radius: var(--ar-border-radius-sm);
 	box-sizing: border-box;
 	padding: 0 0.5em;
 

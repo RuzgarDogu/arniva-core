@@ -33,12 +33,12 @@
 		position: relative;
 		color: rgb(92, 104, 112);
 		&:not(.button--square):hover {
-			background-color: $light-color;
-			color: $accent-color;
+			background-color: var(--ar-light-color);
+			color: var(--ar-accent-color);
 		}
 		&--square:hover {
-			background-color: lighten($accent-color, 45%);
-			color: $accent-color;
+			background-color: var(--ar-accent-color-subtle);
+			color: var(--ar-accent-color);
 		}
 	}
 }

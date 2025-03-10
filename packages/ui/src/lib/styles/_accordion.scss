@@ -11,12 +11,12 @@ $leftPadding: 1.5rem; // Set the padding for the left side of the accordion head
 		flex-direction: column;
 		width: 100%;
 		box-sizing: border-box;
-		border-bottom: 1px solid $border-color;
+		border-bottom: 1px solid var(--ar-border-color);
 		&:last-child {
 			border-bottom: none;
 		}
 		.accordion-header {
-			background-color: $light-color;
+			background-color: var(--ar-light-color);
 			-webkit-box-align: center;
 			align-items: center;
 			-webkit-box-pack: justify;
@@ -49,7 +49,7 @@ $leftPadding: 1.5rem; // Set the padding for the left side of the accordion head
 				transform: translateY(-50%) rotate(-45deg); // Right-pointing chevron
 			}
 			&:hover {
-				color: $accent-color;
+				color: var(--ar-accent-color);
 			}
 		}
 		.accordion-content {
@@ -75,14 +75,14 @@ $leftPadding: 1.5rem; // Set the padding for the left side of the accordion head
 						color: inherit;
 					}
 					&:hover {
-						background-color: lighten($accent-color, 45%);
+						background-color: var(--ar-accent-color-subtle);
 					}
 				}
 			}
 		}
 		&.active {
 			.accordion-header {
-				color: $accent-color;
+				color: var(--ar-accent-color);
 			}
 			.accordion-header::before {
 				transform: translateY(-50%) rotate(45deg); // Down-pointing chevron

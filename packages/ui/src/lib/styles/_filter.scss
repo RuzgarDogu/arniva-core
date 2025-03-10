@@ -3,7 +3,7 @@
         position: relative;
         display: inline-block;
         margin-left: 8px;
-        background-color: lighten($accent-color, 45%);
+        background-color: var(--ar-accent-color-subtle);
         border-radius: 4px;
         .dropdown.open .dropdown-content {
             padding: 0;
@@ -29,7 +29,7 @@
         justify-content: space-between;
         gap: 10px;
         &-right {
-            color: $accent-color;
+            color: var(--ar-accent-color);
             font-weight: 700;
         }
     }
@@ -39,7 +39,7 @@
     }
     &--content-footer {
         padding: 10px;
-        background-color: $light-color;
+        background-color: var(--ar-light-color);
         display: flex;
         justify-content: space-between;
         gap: 5px;
@@ -47,13 +47,13 @@
             background-color: transparent;
             border: none;
             cursor: pointer;
-            color: lighten($text-color, 20%);
+            color: var(--ar-text-color-subtle);
             display: flex;
             align-items: center;
             gap: 2px;
             font-size: 0.8rem;
             &:hover {
-                color: $accent-color;
+                color: var(--ar-accent-color);
             }
         }
     }
@@ -101,13 +101,13 @@
     &--date-picker {
         padding: 0;
         .datepicker--inputs {
-            color: lighten($text-color, 20%);
+            color: var(--ar-text-color-subtle);
         }
         .datepicker, .datepicker--focused {
             border: none;
         }
         .datepicker--picker-container {
-            border-top: solid 1px $border-color;
+            border-top: solid 1px var(--ar-border-color);
             position: relative;
             filter: none;
         }

@@ -1,7 +1,7 @@
 .badge {
 	display: inline-block;
 	vertical-align: top;
-	border-radius: $border-radius-sm;
+	border-radius: var(--ar-border-radius-sm);
 	padding: 4px 12px;
 	font-weight: 700;
 	font-size: 11px;

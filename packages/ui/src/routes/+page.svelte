@@ -313,6 +313,12 @@
 		laboriosam illo!
 	</p>
 	<Button modal="testModal2" color="danger" style="margin-bottom: 20px;">Modal 2</Button>
+	<Button modal="testModal2" color="primary" style="margin-bottom: 20px;">Modal 2</Button>
+	<Button modal="testModal2" color="warning" style="margin-bottom: 20px;">Modal 2</Button>
+	<Button modal="testModal2" color="accent" style="margin-bottom: 20px;">Modal 2</Button>
+	<Button modal="testModal2" color="secondary" style="margin-bottom: 20px;">Modal 2</Button>
+	<Button modal="testModal2" color="success" style="margin-bottom: 20px;">Modal 2</Button>
+	<Button modal="testModal2" color="default" style="margin-bottom: 20px;">Modal 2</Button>
 </Modal>
 
 <Modal id="testModal2" title="Test Modal2" size="lg" name="Test_Modal2">
@@ -450,6 +456,31 @@
 </p>
 
 <Alert color="success" title="Testing" style="margin-bottom: 20px;">
+	Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda ipsa, est doloribus, quaerat
+	temporibus modi eveniet at debitis a reprehenderit esse consequuntur saepe voluptatum pariatur
+	iusto harum rem? Quis, consequuntur.
+</Alert>
+<Alert color="default" title="Testing" style="margin-bottom: 20px;">
+	Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda ipsa, est doloribus, quaerat
+	temporibus modi eveniet at debitis a reprehenderit esse consequuntur saepe voluptatum pariatur
+	iusto harum rem? Quis, consequuntur.
+</Alert>
+<Alert color="warning" title="Testing" style="margin-bottom: 20px;">
+	Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda ipsa, est doloribus, quaerat
+	temporibus modi eveniet at debitis a reprehenderit esse consequuntur saepe voluptatum pariatur
+	iusto harum rem? Quis, consequuntur.
+</Alert>
+<Alert color="accent" title="Testing" style="margin-bottom: 20px;">
+	Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda ipsa, est doloribus, quaerat
+	temporibus modi eveniet at debitis a reprehenderit esse consequuntur saepe voluptatum pariatur
+	iusto harum rem? Quis, consequuntur.
+</Alert>
+<Alert color="primary" title="Testing" style="margin-bottom: 20px;">
+	Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda ipsa, est doloribus, quaerat
+	temporibus modi eveniet at debitis a reprehenderit esse consequuntur saepe voluptatum pariatur
+	iusto harum rem? Quis, consequuntur.
+</Alert>
+<Alert color="danger" title="Testing" style="margin-bottom: 20px;">
 	Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda ipsa, est doloribus, quaerat
 	temporibus modi eveniet at debitis a reprehenderit esse consequuntur saepe voluptatum pariatur
 	iusto harum rem? Quis, consequuntur.

@@ -11,7 +11,7 @@ $sticky-negative-margin: -32px;
 	border-collapse: collapse;
 
 	&--head {
-		background-color: $light-color;
+		background-color: var(--ar-light-color);
 		&--flush {
 			background-color: transparent;
 		}
@@ -20,7 +20,7 @@ $sticky-negative-margin: -32px;
 			font-weight: 700;
 			letter-spacing: 0.1em;
 			text-transform: uppercase;
-			color: $text-color;
+			color: var(--ar-text-color);
 			font-size: 0.7rem;
 			text-transform: uppercase;
 			padding: $table-padding;
@@ -31,19 +31,19 @@ $sticky-negative-margin: -32px;
 		td {
 			padding: $table-padding;
 			text-align: left;
-			color: lighten($text-color, 20%);
+			color: var(--ar-text-color-subtle);
 		}
 	}
 	&--border {
 		&--inline {
 			tr {
-				border-bottom: 1px solid $border-color;
+				border-bottom: 1px solid var(--ar-border-color);
 			}
 		}
 		&--full {
-			border: 1px solid $border-color;
+			border: 1px solid var(--ar-border-color);
 			tr {
-				border-bottom: 1px solid $border-color;
+				border-bottom: 1px solid var(--ar-border-color);
 			}
 		}
 		&--none {
@@ -55,7 +55,7 @@ $sticky-negative-margin: -32px;
 	}
 	&--stripe {
 		tr:nth-child(even) {
-			background-color: $light-color;
+			background-color: var(--ar-light-color);
 		}
 	}
 	&--header-type-static {
@@ -63,7 +63,7 @@ $sticky-negative-margin: -32px;
 			position: sticky;
 			top: 0;
 			z-index: 1; // Ensures header stays above body content
-			background-color: $light-color;
+			background-color: var(--ar-light-color);
 			&.table--head--flush {
 				background-color: #fff;
 			}
@@ -80,7 +80,7 @@ $sticky-negative-margin: -32px;
 			position: sticky;
 			top: $sticky-negative-margin;
 			z-index: 2;
-			background-color: $light-color;
+			background-color: var(--ar-light-color);
 			&.table--head--flush {
 				background-color: #fff;
 			}

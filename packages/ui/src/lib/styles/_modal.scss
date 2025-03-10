@@ -1,7 +1,7 @@
 .modal {
 	z-index: 1001;
 	position: fixed;
-	// left: $sidebar-width;
+	// left: var(--ar-sidebar-width);
 	left: 0;
 	right: 0;
 	top: 0;
@@ -27,7 +27,7 @@
 		background-color: #fff;
 		border-radius: 5px;
 		@include shadow;
-		color: lighten($text-color, 10%);
+		color: var(--ar-text-color-subtle);
 		font-size: 0.9rem;
 		transition: all 0.2s ease-in-out;
 		width: 10%; // Default width
@@ -66,17 +66,17 @@
 		display: flex;
 		align-items: center;
 		gap: 0.3rem;
-		background: $light-color;
+		background: var(--ar-light-color);
 		padding: 5px 10px;
 		font-weight: 600;
 		&-item {
 			cursor: pointer;
-			color: $primary-color;
+			color: var(--ar-primary-color);
 			&:hover {
 				text-decoration: underline;
 			}
 			&:last-child {
-				color: $text-color;
+				color: var(--ar-text-color);
 				cursor: default;
 				&:hover {
 					text-decoration: none;
@@ -104,7 +104,7 @@
 			padding: 0.2rem;
 			&:hover {
 				background-color: transparent;
-				color: $accent-color;
+				color: var(--ar-accent-color);
 			}
 		}
 		// button[data-ar-dismiss="modal"] {
@@ -115,7 +115,7 @@
 		// 	border: none !important;
 		// 	padding: 0;
 		// 	&:after {
-		// 		color: $text-color;
+		// 		color: var(--ar-text-color);
 		// 		content: "\2716"; // Unicode for heavy multiplication sign
 		// 		line-height: 20px;
 		// 		font-size: 15px;
@@ -141,7 +141,7 @@
 	&--title {
 		font-weight: 700;
 		letter-spacing: 0.16em;
-		color: lighten($text-color, 10%);
+		color: var(--ar-text-color-subtle);
 		font-size: 0.9rem;
 		text-transform: uppercase;
 	}

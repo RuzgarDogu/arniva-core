@@ -1,6 +1,6 @@
 .alert {
 	display: block;
-	border-radius: $border-radius-sm;
+	border-radius: var(--ar-border-radius-sm);
 	padding: 1.2rem;
 
 	@include colorBoxes;

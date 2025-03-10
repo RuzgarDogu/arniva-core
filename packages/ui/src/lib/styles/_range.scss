@@ -11,7 +11,7 @@
     left: 8px;
     right: 8px;
     height: 4px;
-    background-color: darken($light-color, 5%);
+    background-color: #f0f4f7;
     border-radius: 2px;
     transform: translateY(-50%);
   }
@@ -65,61 +65,61 @@
   /* Color variations */
   &--primary {
     .range--filled-track {
-      background-color: $primary-color;
+      background-color: var(--ar-primary-color);
     }
     
     .range--handle {
-      border: 2px solid $primary-color;
+      border: 2px solid var(--ar-primary-color);
     }
   }
   
   &--secondary {
     .range--filled-track {
-      background-color: $secondary-color;
+      background-color: var(--ar-secondary-color);
     }
     
     .range--handle {
-      border: 2px solid $secondary-color;
+      border: 2px solid var(--ar-secondary-color);
     }
   }
   
   &--accent {
     .range--filled-track {
-      background-color: $accent-color;
+      background-color: var(--ar-accent-color);
     }
     
     .range--handle {
-      border: 2px solid $accent-color;
+      border: 2px solid var(--ar-accent-color);
     }
   }
   
   &--warning {
     .range--filled-track {
-      background-color: $warning-color;
+      background-color: var(--ar-warning-color);
     }
     
     .range--handle {
-      border: 2px solid $warning-color;
+      border: 2px solid var(--ar-warning-color);
     }
   }
   
   &--danger {
     .range--filled-track {
-      background-color: $danger-color;
+      background-color: var(--ar-danger-color);
     }
     
     .range--handle {
-      border: 2px solid $danger-color;
+      border: 2px solid var(--ar-danger-color);
     }
   }
   
   &--success {
     .range--filled-track {
-      background-color: $success-color;
+      background-color: var(--ar-success-color);
     }
     
     .range--handle {
-      border: 2px solid $success-color;
+      border: 2px solid var(--ar-success-color);
     }
   }
 }

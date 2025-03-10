@@ -6,27 +6,27 @@
     opacity: 0;
     position: absolute;
     z-index: 1; // Ensure the input is above and clickable
-    width: $form-element-size;
-    height: $form-element-size;
+    width: var(--ar-form-element-size);
+    height: var(--ar-form-element-size);
     margin: 0;
     cursor: pointer;
   }
   
   &--label {
     position: relative;
-    padding-left: $form-element-label-padding;
+    padding-left: var(--ar-form-element-label-padding);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     font-size: 0.85rem;
     line-height: normal;
-    color: lighten($text-color, 10%);
+    color: var(--ar-text-color-subtle);
   }
 }
 
 @mixin boxedStyles($type) {
     .custom-#{$type}--label {
-        border: 1px solid $form-element-border-color;
+        border: 1px solid var(--ar-form-element-border-color);
         padding-left: unset;
         padding: 1.2em;
         border-radius: 0.3rem;
@@ -62,10 +62,10 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: $form-element-size;
-  height: $form-element-size;
-  border: 1px solid $form-element-border-color;
-  background: $form-element-bg-color;
+  width: var(--ar-form-element-size);
+  height: var(--ar-form-element-size);
+  border: 1px solid var(--ar-form-element-border-color);
+  background: var(--ar-form-element-bg-color);
   box-sizing: border-box;
 }
 
@@ -80,12 +80,12 @@
     
     input:checked + label::before {
       content: '✓'; // Checkmark
-      font-size: $form-element-size - 4px;
-      color: $form-element-bg-color;
+      font-size: var(--ar-form-element-size) - 4px;
+      color: var(--ar-form-element-bg-color);
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: $form-element-active-color;
+      background-color: var(--ar-form-element-active-color);
     }
     &--boxed {
         @include boxedStyles("checkbox");
@@ -104,17 +104,17 @@
     }
     
     input:checked + label::before {
-      background: $form-element-bg-color;
+      background: var(--ar-form-element-bg-color);
     }
     
     input:checked + label::after {
       content: "";
       position: absolute;
-      left: $form-element-inner-padding;
-      top: $form-element-inner-padding;
-      width: $form-element-size - ($form-element-inner-padding * 2); // Account for border
-      height: $form-element-size - ($form-element-inner-padding * 2);
-      background: $form-element-active-color;
+      left: var(--ar-form-element-inner-padding);
+      top: var(--ar-form-element-inner-padding);
+      width: calc(var(--ar-form-element-size) - (var(--ar-form-element-inner-padding) * 2)); // Account for border
+      height: calc(var(--ar-form-element-size) - (var(--ar-form-element-inner-padding) * 2));
+      background: var(--ar-form-element-active-color);
       border-radius: 50%;
     }
     &--boxed {
