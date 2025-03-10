@@ -240,7 +240,7 @@
 <InputGroup class="advanced-filter">
     <Dropdown bind:this={filterDropdown}>
         <Button dropdown size="small" square color="primary" class="advanced-filter--main-button">
-            <Icon name="filter" size="14px"/>
+            <Icon icon="mdi:filter-outline" width="14" height="14" />
             Filter
         </Button>
         <DropdownContent>
@@ -286,7 +286,7 @@
                         {/if}
                     </Button>
                     <Button class="advanced-filter--close" size="small" square color="transparent" onClick={() => deleteField(field)}>
-                        <Icon name="xmark" size="12px"/>
+                        <Icon icon="ic:baseline-close" width="14" height="14" />
                     </Button>
                 </div>
                 <DropdownContent>
@@ -299,7 +299,7 @@
     {#if checkIfFiltersExist()}
         <Button class="advanced-filter--reset" size="small" color="success" onClick={resetFilter}>
             Reset
-            <Icon name="xmark" size="14px"/>
+            <Icon icon="ic:baseline-close" width="14" height="14" />
         </Button>
     {/if}
 </InputGroup>
