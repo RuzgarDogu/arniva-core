@@ -4,7 +4,7 @@
 	import DropdownContent from '../../general/DropdownContent.svelte';
 	import Button from '../../general/Button.svelte';
 	import Input from '../../forms/Input.svelte';
-	
+
 	/**
 	 * @typedef {Object} SelectOption
 	 * @property {number|string} id - Unique identifier for the option

@@ -1,125 +1,125 @@
 .range {
-  position: relative;
-  height: 40px;
-  width: 100%;
-  padding: 0 12px;
-  box-sizing: border-box;
-  
-  &--track {
-    position: absolute;
-    top: 50%;
-    left: 8px;
-    right: 8px;
-    height: 4px;
-    background-color: #f0f4f7;
-    border-radius: 2px;
-    transform: translateY(-50%);
-  }
-  
-  &--filled-track {
-    position: absolute;
-    height: 100%;
-    border-radius: 2px;
-    top: 0;
-  }
-  
-  &--handle {
-    position: absolute;
-    top: 50%;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    transform: translate(-50%, -50%);
-    cursor: pointer;
-    z-index: 2;
-    transition: transform 0.1s ease;
-    
-    &:hover, 
-    &-active {
-      transform: translate(-50%, -50%) scale(1.2);
-    }
-  }
-  
-  &--tooltip {
-    position: absolute;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 12px;
-    opacity: 0;
-    transition: opacity 0.2s;
-    pointer-events: none;
-    
-    .range--handle:hover &,
-    .range--handle-active & {
-      opacity: 1;
-    }
-  }
-  
-  /* Color variations */
-  &--primary {
-    .range--filled-track {
-      background-color: var(--ar-primary-color);
-    }
-    
-    .range--handle {
-      border: 2px solid var(--ar-primary-color);
-    }
-  }
-  
-  &--secondary {
-    .range--filled-track {
-      background-color: var(--ar-secondary-color);
-    }
-    
-    .range--handle {
-      border: 2px solid var(--ar-secondary-color);
-    }
-  }
-  
-  &--accent {
-    .range--filled-track {
-      background-color: var(--ar-accent-color);
-    }
-    
-    .range--handle {
-      border: 2px solid var(--ar-accent-color);
-    }
-  }
-  
-  &--warning {
-    .range--filled-track {
-      background-color: var(--ar-warning-color);
-    }
-    
-    .range--handle {
-      border: 2px solid var(--ar-warning-color);
-    }
-  }
-  
-  &--danger {
-    .range--filled-track {
-      background-color: var(--ar-danger-color);
-    }
-    
-    .range--handle {
-      border: 2px solid var(--ar-danger-color);
-    }
-  }
-  
-  &--success {
-    .range--filled-track {
-      background-color: var(--ar-success-color);
-    }
-    
-    .range--handle {
-      border: 2px solid var(--ar-success-color);
-    }
-  }
+	position: relative;
+	height: 40px;
+	width: 100%;
+	padding: 0 12px;
+	box-sizing: border-box;
+
+	&--track {
+		position: absolute;
+		top: 50%;
+		left: 8px;
+		right: 8px;
+		height: 4px;
+		background-color: #f0f4f7;
+		border-radius: 2px;
+		transform: translateY(-50%);
+	}
+
+	&--filled-track {
+		position: absolute;
+		height: 100%;
+		border-radius: 2px;
+		top: 0;
+	}
+
+	&--handle {
+		position: absolute;
+		top: 50%;
+		width: 16px;
+		height: 16px;
+		border-radius: 50%;
+		background: white;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+		transform: translate(-50%, -50%);
+		cursor: pointer;
+		z-index: 2;
+		transition: transform 0.1s ease;
+
+		&:hover,
+		&-active {
+			transform: translate(-50%, -50%) scale(1.2);
+		}
+	}
+
+	&--tooltip {
+		position: absolute;
+		top: -30px;
+		left: 50%;
+		transform: translateX(-50%);
+		background: rgba(0, 0, 0, 0.7);
+		color: white;
+		padding: 2px 6px;
+		border-radius: 4px;
+		font-size: 12px;
+		opacity: 0;
+		transition: opacity 0.2s;
+		pointer-events: none;
+
+		.range--handle:hover &,
+		.range--handle-active & {
+			opacity: 1;
+		}
+	}
+
+	/* Color variations */
+	&--primary {
+		.range--filled-track {
+			background-color: var(--ar-primary-color);
+		}
+
+		.range--handle {
+			border: 2px solid var(--ar-primary-color);
+		}
+	}
+
+	&--secondary {
+		.range--filled-track {
+			background-color: var(--ar-secondary-color);
+		}
+
+		.range--handle {
+			border: 2px solid var(--ar-secondary-color);
+		}
+	}
+
+	&--accent {
+		.range--filled-track {
+			background-color: var(--ar-accent-color);
+		}
+
+		.range--handle {
+			border: 2px solid var(--ar-accent-color);
+		}
+	}
+
+	&--warning {
+		.range--filled-track {
+			background-color: var(--ar-warning-color);
+		}
+
+		.range--handle {
+			border: 2px solid var(--ar-warning-color);
+		}
+	}
+
+	&--danger {
+		.range--filled-track {
+			background-color: var(--ar-danger-color);
+		}
+
+		.range--handle {
+			border: 2px solid var(--ar-danger-color);
+		}
+	}
+
+	&--success {
+		.range--filled-track {
+			background-color: var(--ar-success-color);
+		}
+
+		.range--handle {
+			border: 2px solid var(--ar-success-color);
+		}
+	}
 }

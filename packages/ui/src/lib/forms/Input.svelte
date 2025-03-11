@@ -10,7 +10,14 @@
 	 */
 
 	/** @type {Props} */
-	let { class: cls = '', value=$bindable(), disabled = false, size = 'medium', dropdown = false, ...rest } = $props();
+	let {
+		class: cls = '',
+		value = $bindable(),
+		disabled = false,
+		size = 'medium',
+		dropdown = false,
+		...rest
+	} = $props();
 </script>
 
 <input

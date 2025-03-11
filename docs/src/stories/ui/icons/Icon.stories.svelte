@@ -9,26 +9,34 @@
 	});
 </script>
 
-<Story name="Default Icon" exportName="Default" args={{
-    icon: 'mdi:home',
-    inline: false,
-    width: '24px',
-    height: '24px',
-    hFlip: false,
-    vFlip: false,
-    flip: '',
-    rotate: 0,
-    color: ''
-}} />
+<Story
+	name="Default Icon"
+	exportName="Default"
+	args={{
+		icon: 'mdi:home',
+		inline: false,
+		width: '24px',
+		height: '24px',
+		hFlip: false,
+		vFlip: false,
+		flip: '',
+		rotate: 0,
+		color: ''
+	}}
+/>
 
-<Story name="Colored Icon" exportName="ColoredIcon" args={{
-    icon: 'mdi:home',
-    inline: false,
-    width: '48',
-    height: '48',
-    hFlip: false,
-    vFlip: false,
-    flip: '',
-    rotate: 0,
-    color: 'blue'
-}} />
+<Story
+	name="Colored Icon"
+	exportName="ColoredIcon"
+	args={{
+		icon: 'mdi:home',
+		inline: false,
+		width: '48',
+		height: '48',
+		hFlip: false,
+		vFlip: false,
+		flip: '',
+		rotate: 0,
+		color: 'blue'
+	}}
+/>

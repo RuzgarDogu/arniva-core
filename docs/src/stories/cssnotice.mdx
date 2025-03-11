@@ -7,6 +7,7 @@ import { Meta } from '@storybook/blocks';
 This component library is using its own `css`file compiled from `scss` files. There are some important points to consider when using this library.
 
 ## Configuration
+
 In order to configure your own predefined colors, please define `hmtl:root` variables in your main css file. Here is an example:
 
 > **Note:** You can change the values of the variables according to your needs.
@@ -55,287 +56,645 @@ htmll:root {
 ## Variable Definitions
 
 <table>
-    <tr>
-        <th>Variable</th>
-        <th>Description</th>
-        <th>Default Value</th>
-    </tr>
-    <tr>
-        <td>--ar-border-radius</td>
-        <td>Border radius for all components</td>
-        <td>3em</td>
-    </tr>
-    <tr>
-        <td>--ar-primary-color</td>
-        <td>Primary color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#555ab9 <span style={{ backgroundColor: '#555ab9', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-accent-color</td>
-        <td>Accent color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#009cfd <span style={{ backgroundColor: '#009cfd', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-success-color</td>
-        <td>Success color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#a3db7e <span style={{ backgroundColor: '#a3db7e', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-light-color</td>
-        <td>Light color for the components</td>
-        <td>rgb(246, 249, 252)</td>
-    </tr>
-    <tr>
-        <td>--ar-secondary-color</td>
-        <td>Secondary color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#efefef <span style={{ backgroundColor: '#efefef', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-dark-color</td>
-        <td>Dark color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#333 <span style={{ backgroundColor: '#333', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-danger-color</td>
-        <td>Danger color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#e91e63 <span style={{ backgroundColor: '#e91e63', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-warning-color</td>
-        <td>Warning color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#ff9800 <span style={{ backgroundColor: '#ff9800', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-text-color</td>
-        <td>Text color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#333 <span style={{ backgroundColor: '#333', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-border-radius-sm</td>
-        <td>Border radius for small components</td>
-        <td>0.25rem</td>
-    </tr>
-    <tr>
-        <td>--ar-border-color</td>
-        <td>Border color for the components</td>
-        <td>hsla(203, 50%, 30%, 0.15)</td>
-    </tr>
-    <tr>
-        <td>--ar-shadow-sm</td>
-        <td>Shadow for the components</td>
-        <td>rgba(0, 0, 0, 0.1) 0 1px 3px 0</td>
-    </tr>
-    <tr>
-        <td>--ar-outline-color</td>
-        <td>Outline color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#90caf9 <span style={{ backgroundColor: '#90caf9', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-sidebar-width</td>
-        <td>Sidebar width for the components</td>
-        <td>300px</td>
-    </tr>
-    <tr>
-        <td>--ar-form-element-padding</td>
-        <td>Padding for form elements</td>
-        <td>0.5em</td>
-    </tr>
-    <tr>
-        <td>--ar-form-element-size</td>
-        <td>Size for form elements</td>
-        <td>20px</td>
-    </tr>
-    <tr>
-        <td>--ar-form-element-border-color</td>
-        <td>Border color for form elements</td>
-        <td>var(--ar-border-color)</td>
-    </tr>
-    <tr>
-        <td>--ar-form-element-bg-color</td>
-        <td>Background color for form elements</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#fff <span style={{ backgroundColor: '#fff', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-form-element-active-color</td>
-        <td>Active color for form elements</td>
-        <td>var(--ar-accent-color)</td>
-    </tr>
-    <tr>
-        <td>--ar-form-element-label-padding</td>
-        <td>Padding for form element labels</td>
-        <td>30px</td>
-    </tr>
-    <tr>
-        <td>--ar-form-element-inner-padding</td>
-        <td>Inner padding for form elements</td>
-        <td>2px</td>
-    </tr>
-    <tr>
-        <td>--ar-primary-color-subtle</td>
-        <td>Subtle primary color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#f0f1f7 <span style={{ backgroundColor: '#f0f1f7', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-primary-color-emphasis</td>
-        <td>Emphasized primary color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#3a3f9b <span style={{ backgroundColor: '#3a3f9b', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-accent-color-subtle</td>
-        <td>Subtle accent color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#e0f7ff <span style={{ backgroundColor: '#e0f7ff', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-accent-color-emphasis</td>
-        <td>Emphasized accent color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#0077b6 <span style={{ backgroundColor: '#0077b6', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-success-color-subtle</td>
-        <td>Subtle success color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#ecf6e6 <span style={{ backgroundColor: '#ecf6e6', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-success-color-emphasis</td>
-        <td>Emphasized success color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#2e6b05 <span style={{ backgroundColor: '#2e6b05', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-warning-color-subtle</td>
-        <td>Subtle warning color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#fff3cd <span style={{ backgroundColor: '#fff3cd', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-warning-color-emphasis</td>
-        <td>Emphasized warning color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#86794c <span style={{ backgroundColor: '#86794c', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-danger-color-subtle</td>
-        <td>Subtle danger color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#fff0f0 <span style={{ backgroundColor: '#fff0f0', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-danger-color-emphasis</td>
-        <td>Emphasized danger color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#9b3a3a <span style={{ backgroundColor: '#9b3a3a', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-text-color-subtle</td>
-        <td>Subtle text color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#707070 <span style={{ backgroundColor: '#707070', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-text-color-emphasis</td>
-        <td>Emphasized text color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#000 <span style={{ backgroundColor: '#000', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-secondary-color-subtle</td>
-        <td>Subtle secondary color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#f7f7f7 <span style={{ backgroundColor: '#f7f7f7', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
-    <tr>
-        <td>--ar-secondary-color-emphasis</td>
-        <td>Emphasized secondary color for the components</td>
-        <td><div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>#d8d8d8 <span style={{ backgroundColor: '#d8d8d8', width: '15px', height:'15px', borderRadius: '50%', display:'inline-block' }}></span></div></td>
-    </tr>
+	<tr>
+		<th>Variable</th>
+		<th>Description</th>
+		<th>Default Value</th>
+	</tr>
+	<tr>
+		<td>--ar-border-radius</td>
+		<td>Border radius for all components</td>
+		<td>3em</td>
+	</tr>
+	<tr>
+		<td>--ar-primary-color</td>
+		<td>Primary color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#555ab9{' '}
+				<span
+					style={{
+						backgroundColor: '#555ab9',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-accent-color</td>
+		<td>Accent color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#009cfd{' '}
+				<span
+					style={{
+						backgroundColor: '#009cfd',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-success-color</td>
+		<td>Success color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#a3db7e{' '}
+				<span
+					style={{
+						backgroundColor: '#a3db7e',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-light-color</td>
+		<td>Light color for the components</td>
+		<td>rgb(246, 249, 252)</td>
+	</tr>
+	<tr>
+		<td>--ar-secondary-color</td>
+		<td>Secondary color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#efefef{' '}
+				<span
+					style={{
+						backgroundColor: '#efefef',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-dark-color</td>
+		<td>Dark color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#333{' '}
+				<span
+					style={{
+						backgroundColor: '#333',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-danger-color</td>
+		<td>Danger color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#e91e63{' '}
+				<span
+					style={{
+						backgroundColor: '#e91e63',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-warning-color</td>
+		<td>Warning color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#ff9800{' '}
+				<span
+					style={{
+						backgroundColor: '#ff9800',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-text-color</td>
+		<td>Text color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#333{' '}
+				<span
+					style={{
+						backgroundColor: '#333',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-border-radius-sm</td>
+		<td>Border radius for small components</td>
+		<td>0.25rem</td>
+	</tr>
+	<tr>
+		<td>--ar-border-color</td>
+		<td>Border color for the components</td>
+		<td>hsla(203, 50%, 30%, 0.15)</td>
+	</tr>
+	<tr>
+		<td>--ar-shadow-sm</td>
+		<td>Shadow for the components</td>
+		<td>rgba(0, 0, 0, 0.1) 0 1px 3px 0</td>
+	</tr>
+	<tr>
+		<td>--ar-outline-color</td>
+		<td>Outline color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#90caf9{' '}
+				<span
+					style={{
+						backgroundColor: '#90caf9',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-sidebar-width</td>
+		<td>Sidebar width for the components</td>
+		<td>300px</td>
+	</tr>
+	<tr>
+		<td>--ar-form-element-padding</td>
+		<td>Padding for form elements</td>
+		<td>0.5em</td>
+	</tr>
+	<tr>
+		<td>--ar-form-element-size</td>
+		<td>Size for form elements</td>
+		<td>20px</td>
+	</tr>
+	<tr>
+		<td>--ar-form-element-border-color</td>
+		<td>Border color for form elements</td>
+		<td>var(--ar-border-color)</td>
+	</tr>
+	<tr>
+		<td>--ar-form-element-bg-color</td>
+		<td>Background color for form elements</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#fff{' '}
+				<span
+					style={{
+						backgroundColor: '#fff',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-form-element-active-color</td>
+		<td>Active color for form elements</td>
+		<td>var(--ar-accent-color)</td>
+	</tr>
+	<tr>
+		<td>--ar-form-element-label-padding</td>
+		<td>Padding for form element labels</td>
+		<td>30px</td>
+	</tr>
+	<tr>
+		<td>--ar-form-element-inner-padding</td>
+		<td>Inner padding for form elements</td>
+		<td>2px</td>
+	</tr>
+	<tr>
+		<td>--ar-primary-color-subtle</td>
+		<td>Subtle primary color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#f0f1f7{' '}
+				<span
+					style={{
+						backgroundColor: '#f0f1f7',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-primary-color-emphasis</td>
+		<td>Emphasized primary color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#3a3f9b{' '}
+				<span
+					style={{
+						backgroundColor: '#3a3f9b',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-accent-color-subtle</td>
+		<td>Subtle accent color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#e0f7ff{' '}
+				<span
+					style={{
+						backgroundColor: '#e0f7ff',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-accent-color-emphasis</td>
+		<td>Emphasized accent color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#0077b6{' '}
+				<span
+					style={{
+						backgroundColor: '#0077b6',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-success-color-subtle</td>
+		<td>Subtle success color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#ecf6e6{' '}
+				<span
+					style={{
+						backgroundColor: '#ecf6e6',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-success-color-emphasis</td>
+		<td>Emphasized success color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#2e6b05{' '}
+				<span
+					style={{
+						backgroundColor: '#2e6b05',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-warning-color-subtle</td>
+		<td>Subtle warning color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#fff3cd{' '}
+				<span
+					style={{
+						backgroundColor: '#fff3cd',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-warning-color-emphasis</td>
+		<td>Emphasized warning color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#86794c{' '}
+				<span
+					style={{
+						backgroundColor: '#86794c',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-danger-color-subtle</td>
+		<td>Subtle danger color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#fff0f0{' '}
+				<span
+					style={{
+						backgroundColor: '#fff0f0',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-danger-color-emphasis</td>
+		<td>Emphasized danger color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#9b3a3a{' '}
+				<span
+					style={{
+						backgroundColor: '#9b3a3a',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-text-color-subtle</td>
+		<td>Subtle text color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#707070{' '}
+				<span
+					style={{
+						backgroundColor: '#707070',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-text-color-emphasis</td>
+		<td>Emphasized text color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#000{' '}
+				<span
+					style={{
+						backgroundColor: '#000',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-secondary-color-subtle</td>
+		<td>Subtle secondary color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#f7f7f7{' '}
+				<span
+					style={{
+						backgroundColor: '#f7f7f7',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>--ar-secondary-color-emphasis</td>
+		<td>Emphasized secondary color for the components</td>
+		<td>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between'
+				}}
+			>
+				#d8d8d8{' '}
+				<span
+					style={{
+						backgroundColor: '#d8d8d8',
+						width: '15px',
+						height: '15px',
+						borderRadius: '50%',
+						display: 'inline-block'
+					}}
+				></span>
+			</div>
+		</td>
+	</tr>
 </table>
-
-    

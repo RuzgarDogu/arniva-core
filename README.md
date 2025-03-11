@@ -66,6 +66,7 @@ Then change ``ìndex.js`inside`lib```folder from **scss** to **css**:
 ```javascript
 import "./styles/app.css";
 ```
+
 - COMMIT CHANGES TO GIT
 
 then publish it by:

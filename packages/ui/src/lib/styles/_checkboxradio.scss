@@ -1,123 +1,125 @@
 // Mixin for shared styles between checkbox and radio
 @mixin custom-form-element {
-  position: relative;
-  
-  input {
-    opacity: 0;
-    position: absolute;
-    z-index: 1; // Ensure the input is above and clickable
-    width: var(--ar-form-element-size);
-    height: var(--ar-form-element-size);
-    margin: 0;
-    cursor: pointer;
-  }
-  
-  &--label {
-    position: relative;
-    padding-left: var(--ar-form-element-label-padding);
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    font-size: 0.85rem;
-    line-height: normal;
-    color: var(--ar-text-color-subtle);
-  }
+	position: relative;
+
+	input {
+		opacity: 0;
+		position: absolute;
+		z-index: 1; // Ensure the input is above and clickable
+		width: var(--ar-form-element-size);
+		height: var(--ar-form-element-size);
+		margin: 0;
+		cursor: pointer;
+	}
+
+	&--label {
+		position: relative;
+		padding-left: var(--ar-form-element-label-padding);
+		cursor: pointer;
+		display: inline-flex;
+		align-items: center;
+		font-size: 0.85rem;
+		line-height: normal;
+		color: var(--ar-text-color-subtle);
+	}
 }
 
 @mixin boxedStyles($type) {
-    .custom-#{$type}--label {
-        border: 1px solid var(--ar-form-element-border-color);
-        padding-left: unset;
-        padding: 1.2em;
-        border-radius: 0.3rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        align-items: start;
-        gap: 0.5em;
-        .custom-#{$type}--subtitle {
-            font-size: 0.85rem;
-            opacity: 0.8;
-        }
-    }
+	.custom-#{$type}--label {
+		border: 1px solid var(--ar-form-element-border-color);
+		padding-left: unset;
+		padding: 1.2em;
+		border-radius: 0.3rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: start;
+		align-items: start;
+		gap: 0.5em;
+		.custom-#{$type}--subtitle {
+			font-size: 0.85rem;
+			opacity: 0.8;
+		}
+	}
 
-    input:checked + .custom-#{$type}--label.custom-#{$type} {
-        @include colorBoxes;
-    }
+	input:checked + .custom-#{$type}--label.custom-#{$type} {
+		@include colorBoxes;
+	}
 
-    label::before, input:checked + label::before {
-        display: none;            
-    }
+	label::before,
+	input:checked + label::before {
+		display: none;
+	}
 
-    @if $type == "radio" {
-        label::after, input:checked + label::after {
-            display: none;            
-        }
-    }
+	@if $type == 'radio' {
+		label::after,
+		input:checked + label::after {
+			display: none;
+		}
+	}
 }
 
 // Mixin for the outer container (common to both)
 @mixin form-element-outer {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: var(--ar-form-element-size);
-  height: var(--ar-form-element-size);
-  border: 1px solid var(--ar-form-element-border-color);
-  background: var(--ar-form-element-bg-color);
-  box-sizing: border-box;
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: var(--ar-form-element-size);
+	height: var(--ar-form-element-size);
+	border: 1px solid var(--ar-form-element-border-color);
+	background: var(--ar-form-element-bg-color);
+	box-sizing: border-box;
 }
 
 // Checkbox specific styles
 .custom-checkbox {
-    @include custom-form-element;
-    
-    label::before {
-      @include form-element-outer;
-      border-radius: 3px; // Slight rounding for checkboxes
-    }
-    
-    input:checked + label::before {
-      content: '✓'; // Checkmark
-      font-size: var(--ar-form-element-size) - 4px;
-      color: var(--ar-form-element-bg-color);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: var(--ar-form-element-active-color);
-    }
-    &--boxed {
-        @include boxedStyles("checkbox");
-    }
-  }
-  
+	@include custom-form-element;
 
+	label::before {
+		@include form-element-outer;
+		border-radius: 3px; // Slight rounding for checkboxes
+	}
 
-  // Radio specific styles
-  .custom-radio {
-    @include custom-form-element;
-    
-    label::before {
-      @include form-element-outer;
-      border-radius: 50%; // Circle for radio buttons
-    }
-    
-    input:checked + label::before {
-      background: var(--ar-form-element-bg-color);
-    }
-    
-    input:checked + label::after {
-      content: "";
-      position: absolute;
-      left: var(--ar-form-element-inner-padding);
-      top: var(--ar-form-element-inner-padding);
-      width: calc(var(--ar-form-element-size) - (var(--ar-form-element-inner-padding) * 2)); // Account for border
-      height: calc(var(--ar-form-element-size) - (var(--ar-form-element-inner-padding) * 2));
-      background: var(--ar-form-element-active-color);
-      border-radius: 50%;
-    }
-    &--boxed {
-        @include boxedStyles("radio");
-    }
-  }
+	input:checked + label::before {
+		content: '✓'; // Checkmark
+		font-size: var(--ar-form-element-size) - 4px;
+		color: var(--ar-form-element-bg-color);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: var(--ar-form-element-active-color);
+	}
+	&--boxed {
+		@include boxedStyles('checkbox');
+	}
+}
+
+// Radio specific styles
+.custom-radio {
+	@include custom-form-element;
+
+	label::before {
+		@include form-element-outer;
+		border-radius: 50%; // Circle for radio buttons
+	}
+
+	input:checked + label::before {
+		background: var(--ar-form-element-bg-color);
+	}
+
+	input:checked + label::after {
+		content: '';
+		position: absolute;
+		left: var(--ar-form-element-inner-padding);
+		top: var(--ar-form-element-inner-padding);
+		width: calc(
+			var(--ar-form-element-size) - (var(--ar-form-element-inner-padding) * 2)
+		); // Account for border
+		height: calc(var(--ar-form-element-size) - (var(--ar-form-element-inner-padding) * 2));
+		background: var(--ar-form-element-active-color);
+		border-radius: 50%;
+	}
+	&--boxed {
+		@include boxedStyles('radio');
+	}
+}

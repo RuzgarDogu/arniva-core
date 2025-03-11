@@ -17,6 +17,7 @@
     "prepare:utils": "pnpm --filter @ruzgardogu/utils run build:styles",
     "build:ui": "pnpm --filter @ruzgardogu/ui publish --access restricted",
     "build:utils": "pnpm --filter @ruzgardogu/utils publish --access restricted",
+    "build:api": "pnpm --filter @ruzgardogu/api publish --access restricted",
     "dev": "pnpm --parallel run dev:*",
     "build:storybook": "pnpm --filter @ruzgardogu/docs run build-storybook",
     "format": "prettier --write ."

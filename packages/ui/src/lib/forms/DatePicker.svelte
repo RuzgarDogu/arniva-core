@@ -12,7 +12,13 @@
 	 */
 
 	/** @type {Props} */
-	let { isRange = false, quickSelect = false, isEuropean = true, manualInput = true, onChange } = $props();
+	let {
+		isRange = false,
+		quickSelect = false,
+		isEuropean = true,
+		manualInput = true,
+		onChange
+	} = $props();
 
 	// State management with Svelte 5 runes
 	/** @type {Date|null} */
@@ -33,64 +39,63 @@
 	/** @type {HTMLInputElement|null} */
 	let endInputRef = $state(null);
 
-
-    function updateDateValues() {
-        startInputValue = formatDate(startDate);
-        if (isRange) {
-            endInputValue = formatDate(endDate);
-        }
-        if (onChange) {
-            onChange({ start: startDate, end: endDate });
-        }
-    }
+	function updateDateValues() {
+		startInputValue = formatDate(startDate);
+		if (isRange) {
+			endInputValue = formatDate(endDate);
+		}
+		if (onChange) {
+			onChange({ start: startDate, end: endDate });
+		}
+	}
 
 	/**
 	 * Handle keyboard events for the input fields
 	 * @param {KeyboardEvent} e - The keyboard event
 	 * @param {'start'|'end'} inputType - Which input field triggered the event
 	 */
-	 function handleKeyDown(e, inputType) {
-        // Enter key (13) or Tab key (9)
-        if (e.key === 'Enter' || e.key === 'Tab') {
-            if (inputType === 'start') {
-                const parsedDate = parseInputDate(startInputValue);
+	function handleKeyDown(e, inputType) {
+		// Enter key (13) or Tab key (9)
+		if (e.key === 'Enter' || e.key === 'Tab') {
+			if (inputType === 'start') {
+				const parsedDate = parseInputDate(startInputValue);
 
-                if (parsedDate) {
-                    startDate = parsedDate;
-                    updateDateValues();
+				if (parsedDate) {
+					startDate = parsedDate;
+					updateDateValues();
 
-                    if (isRange) {
-                        // In range mode, focus the end input
-                        e.preventDefault(); // Prevent default for Tab to handle focus manually
-                        if (endInputRef) {
-                            endInputRef.focus();
-                        }
-                    } else {
-                        // In single mode, close the calendar
-                        showStartPicker = false;
-                    }
-                }
-            } else if (inputType === 'end') {
-                const parsedDate = parseInputDate(endInputValue);
+					if (isRange) {
+						// In range mode, focus the end input
+						e.preventDefault(); // Prevent default for Tab to handle focus manually
+						if (endInputRef) {
+							endInputRef.focus();
+						}
+					} else {
+						// In single mode, close the calendar
+						showStartPicker = false;
+					}
+				}
+			} else if (inputType === 'end') {
+				const parsedDate = parseInputDate(endInputValue);
 
-                if (parsedDate) {
-                    // If end date is before start date, swap them
-                    if (startDate && parsedDate < startDate) {
-                        endDate = startDate;
-                        startDate = parsedDate;
-                        updateDateValues();
-                    } else {
-                        endDate = parsedDate;
-                        updateDateValues();
-                    }
+				if (parsedDate) {
+					// If end date is before start date, swap them
+					if (startDate && parsedDate < startDate) {
+						endDate = startDate;
+						startDate = parsedDate;
+						updateDateValues();
+					} else {
+						endDate = parsedDate;
+						updateDateValues();
+					}
 
-                    // Close the calendar after successful end date input
-                    showStartPicker = false;
-                    showEndPicker = false;
-                }
-            }
-        }
-    }
+					// Close the calendar after successful end date input
+					showStartPicker = false;
+					showEndPicker = false;
+				}
+			}
+		}
+	}
 
 	// Parse user input date string to Date object
 	/**
@@ -135,62 +140,62 @@
 		return date;
 	}
 
-    /**
-     * Handle input change for start date
-     * @param {Event} e - The input event
-     */
-	 function handleStartInputChange(e) {
-        const target = /** @type {HTMLInputElement} */ (e.target);
-        if (target) {
-            startInputValue = target.value;
-        }
-        const parsedDate = parseInputDate(startInputValue);
+	/**
+	 * Handle input change for start date
+	 * @param {Event} e - The input event
+	 */
+	function handleStartInputChange(e) {
+		const target = /** @type {HTMLInputElement} */ (e.target);
+		if (target) {
+			startInputValue = target.value;
+		}
+		const parsedDate = parseInputDate(startInputValue);
 
-        if (parsedDate) {
-            startDate = parsedDate;
-            updateDateValues();
-            // Update current month to match the entered date
-            currentMonth = new Date(parsedDate.getFullYear(), parsedDate.getMonth(), 1);
-        }
-    }
+		if (parsedDate) {
+			startDate = parsedDate;
+			updateDateValues();
+			// Update current month to match the entered date
+			currentMonth = new Date(parsedDate.getFullYear(), parsedDate.getMonth(), 1);
+		}
+	}
 
-    // Handle input change for end date
-    /**
-     * Handle input change for end date
-     * @param {Event} e - The input event
-     */
-    function handleEndInputChange(e) {
-        const target = /** @type {HTMLInputElement} */ (e.target);
-        if (target) {
-            endInputValue = target.value;
-        }
-        const parsedDate = parseInputDate(endInputValue);
+	// Handle input change for end date
+	/**
+	 * Handle input change for end date
+	 * @param {Event} e - The input event
+	 */
+	function handleEndInputChange(e) {
+		const target = /** @type {HTMLInputElement} */ (e.target);
+		if (target) {
+			endInputValue = target.value;
+		}
+		const parsedDate = parseInputDate(endInputValue);
 
-        if (parsedDate) {
-            endDate = parsedDate;
-            // If end date is before start date, swap them
-            if (startDate && parsedDate < startDate) {
-                endDate = startDate;
-                startDate = parsedDate;
-                updateDateValues();
-            } else {
-                updateDateValues();
-            }
-        }
-    }
+		if (parsedDate) {
+			endDate = parsedDate;
+			// If end date is before start date, swap them
+			if (startDate && parsedDate < startDate) {
+				endDate = startDate;
+				startDate = parsedDate;
+				updateDateValues();
+			} else {
+				updateDateValues();
+			}
+		}
+	}
 
-    // Handle input blur to format the date correctly
-    /**
-     * Handle input blur to format the date correctly
-     * @param {'start'|'end'} inputType - Which input was blurred
-     */
-	 function handleInputBlur(inputType) {
-        if (inputType === 'start') {
-            startInputValue = formatDate(startDate);
-        } else if (inputType === 'end') {
-            endInputValue = formatDate(endDate);
-        }
-    }
+	// Handle input blur to format the date correctly
+	/**
+	 * Handle input blur to format the date correctly
+	 * @param {'start'|'end'} inputType - Which input was blurred
+	 */
+	function handleInputBlur(inputType) {
+		if (inputType === 'start') {
+			startInputValue = formatDate(startDate);
+		} else if (inputType === 'end') {
+			endInputValue = formatDate(endDate);
+		}
+	}
 
 	// Calendar generation
 	function generateCalendar(date = currentMonth) {
@@ -328,39 +333,39 @@
 	 * Handle date selection when a user clicks on a day in the calendar
 	 * @param {Date} date - The selected date
 	 */
-    /**
-     * Handle date selection when a user clicks on a day in the calendar
-     * @param {Date} date - The selected date
-     */
-	 function selectDate(date) {
-        if (!isRange) {
-            startDate = date;
-            updateDateValues();
-            showStartPicker = false;
-            return;
-        }
+	/**
+	 * Handle date selection when a user clicks on a day in the calendar
+	 * @param {Date} date - The selected date
+	 */
+	function selectDate(date) {
+		if (!isRange) {
+			startDate = date;
+			updateDateValues();
+			showStartPicker = false;
+			return;
+		}
 
-        if (!startDate || (startDate && endDate)) {
-            // First selection in a new range
-            startDate = date;
-            endDate = null;
-            updateDateValues();
-            // Don't close the picker yet, waiting for second selection
-        } else {
-            // Second selection to complete the range
-            if (date < startDate) {
-                // If selecting backwards, swap the dates
-                endDate = startDate;
-                startDate = date;
-            } else {
-                endDate = date;
-            }
-            updateDateValues();
-            // Close the picker now that range is complete
-            showStartPicker = false;
-            showEndPicker = false;
-        }
-    }
+		if (!startDate || (startDate && endDate)) {
+			// First selection in a new range
+			startDate = date;
+			endDate = null;
+			updateDateValues();
+			// Don't close the picker yet, waiting for second selection
+		} else {
+			// Second selection to complete the range
+			if (date < startDate) {
+				// If selecting backwards, swap the dates
+				endDate = startDate;
+				startDate = date;
+			} else {
+				endDate = date;
+			}
+			updateDateValues();
+			// Close the picker now that range is complete
+			showStartPicker = false;
+			showEndPicker = false;
+		}
+	}
 
 	// Navigation functions
 	function prevMonth() {
@@ -374,19 +379,19 @@
 	// Weekday names
 	const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-    function handleClickOutside() {
-        // If in range mode and only one date is selected (incomplete range),
-        // reset all the selections
-        if (isRange && ((startDate && !endDate) || (!startDate && endDate))) {
-            startDate = null;
-            endDate = null;
-            updateDateValues();
-        }
+	function handleClickOutside() {
+		// If in range mode and only one date is selected (incomplete range),
+		// reset all the selections
+		if (isRange && ((startDate && !endDate) || (!startDate && endDate))) {
+			startDate = null;
+			endDate = null;
+			updateDateValues();
+		}
 
-        // Always close the pickers when clicking outside
-        showStartPicker = false;
-        showEndPicker = false;
-    }
+		// Always close the pickers when clicking outside
+		showStartPicker = false;
+		showEndPicker = false;
+	}
 
 	// Quick select options
 
@@ -616,14 +621,14 @@
 		startInputValue = '';
 		endInputValue = '';
 	}
-
 </script>
 
 <div
-    class="datepicker {(showStartPicker || showEndPicker) ? 'datepicker--focused' : ''}"
-    use:clickOutside
-    onclick_outside={handleClickOutside}
->	<!-- Input Fields -->
+	class="datepicker {showStartPicker || showEndPicker ? 'datepicker--focused' : ''}"
+	use:clickOutside
+	onclick_outside={handleClickOutside}
+>
+	<!-- Input Fields -->
 	<div class="datepicker--inputs">
 		<input
 			bind:this={startInputRef}
@@ -637,44 +642,44 @@
 			readonly={!manualInput}
 		/>
 		{#if isRange}
-		<Icon icon="ic:baseline-compare-arrows" width="24" height="24" />
-		<input
-		bind:this={endInputRef}
-		type="text"
-		value={endInputValue}
-		placeholder="Select end date"
-		onfocus={() => (showEndPicker = true)}
-		oninput={handleEndInputChange}
-		onblur={() => handleInputBlur('end')}
-		onkeydown={(e) => handleKeyDown(e, 'end')}
-		readonly={!manualInput}
-		/>
+			<Icon icon="ic:baseline-compare-arrows" width="24" height="24" />
+			<input
+				bind:this={endInputRef}
+				type="text"
+				value={endInputValue}
+				placeholder="Select end date"
+				onfocus={() => (showEndPicker = true)}
+				oninput={handleEndInputChange}
+				onblur={() => handleInputBlur('end')}
+				onkeydown={(e) => handleKeyDown(e, 'end')}
+				readonly={!manualInput}
+			/>
 		{/if}
 		<Icon icon="ic:outline-calendar-today" width="18" height="18" />
 	</div>
-	
+
 	<!-- Calendar Display -->
 	{#if showStartPicker || (isRange && showEndPicker)}
-	<div class="datepicker--picker-container">
-		<!-- Quick Selection Panel -->
-		{#if quickSelect}
-		<div class="datepicker--quick-select">
-			<ul>
-				{#if !isRange}
-				{#each singleDateOptions as option}
-				<li>
-					<button onclick={option.action}
-					>{option.label}
-					<Icon name="alt-arrow-right" size="13px"/>
-				</button>
-			</li>
-			{/each}
-			{:else}
-			{#each rangeDateOptions as option}
-			<li>
-				<button onclick={option.action}
-				>{option.label}
-						<Icon name="alt-arrow-right" size="13px"/>
+		<div class="datepicker--picker-container">
+			<!-- Quick Selection Panel -->
+			{#if quickSelect}
+				<div class="datepicker--quick-select">
+					<ul>
+						{#if !isRange}
+							{#each singleDateOptions as option}
+								<li>
+									<button onclick={option.action}
+										>{option.label}
+										<Icon name="alt-arrow-right" size="13px" />
+									</button>
+								</li>
+							{/each}
+						{:else}
+							{#each rangeDateOptions as option}
+								<li>
+									<button onclick={option.action}
+										>{option.label}
+										<Icon name="alt-arrow-right" size="13px" />
 									</button>
 								</li>
 							{/each}
@@ -687,11 +692,11 @@
 				<!-- Month navigation -->
 				<div class="datepicker--calendar-header">
 					<button aria-label="prev" class="datepicker--month-nav" onclick={prevMonth}>
-						<Icon name="alt-arrow-left" size="14px"/>
+						<Icon name="alt-arrow-left" size="14px" />
 					</button>
 					<div class="datepicker--month-title">{formatMonth(currentMonth)}</div>
 					<button aria-label="next" class="datepicker--month-nav" onclick={nextMonth}>
-						<Icon name="alt-arrow-right" size="14px"/>
+						<Icon name="alt-arrow-right" size="14px" />
 					</button>
 				</div>
 

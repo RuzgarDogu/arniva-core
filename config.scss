@@ -28,107 +28,103 @@
 // var(--ar-form-element-label-padding): 30px;
 // var(--ar-form-element-inner-padding): 2px;
 
-
 :root {
-	--ar-border-radius: 3em;
-	--ar-primary-color: #555ab9;
-	--ar-accent-color: #009cfd;
-	--ar-success-color: #a3db7e;
-	--ar-light-color: rgb(246, 249, 252);
-	--ar-secondary-color: #efefef;
-	--ar-dark-color: #333;
-	--ar-danger-color: #e91e63;
-	--ar-warning-color: #ff9800;
-	--ar-text-color: #333;
-	--ar-border-radius-sm: 0.25rem;
-	--ar-border-color: hsla(203, 50%, 30%, 0.15);
-	--ar-shadow-sm: rgba(0, 0, 0, 0.1) 0 1px 3px 0;
-	--ar-outline-color: #90caf9;
-	--ar-sidebar-width: 300px;
-	--ar-form-element-padding: 0.5em;
-	--ar-form-element-size: 20px;
-	--ar-form-element-border-color: var(--ar-border-color);
-	--ar-form-element-bg-color: #fff;
-	--ar-form-element-active-color: var(--ar-accent-color);
-	--ar-form-element-label-padding: 30px;
-	--ar-form-element-inner-padding: 2px;
-	--ar-primary-color-subtle: #f0f1f7;
-	--ar-primary-color-emphasis: #3a3f9b;
-	--ar-accent-color-subtle: #e0f7ff;
-	--ar-accent-color-emphasis: #0077b6;
-	--ar-success-color-subtle: #ecf6e6;
-	--ar-success-color-emphasis: #2e6b05;
-	--ar-warning-color-subtle: #fff3cd;
-	--ar-warning-color-emphasis: #86794c;
-	--ar-danger-color-subtle: #fff0f0;
-	--ar-danger-color-emphasis: #9b3a3a;
-	--ar-text-color-subtle: #707070;
-	--ar-text-color-emphasis: #000;
-	--ar-secondary-color-subtle: #f7f7f7;
-	--ar-secondary-color-emphasis: #d8d8d8;
+  --ar-border-radius: 3em;
+  --ar-primary-color: #555ab9;
+  --ar-accent-color: #009cfd;
+  --ar-success-color: #a3db7e;
+  --ar-light-color: rgb(246, 249, 252);
+  --ar-secondary-color: #efefef;
+  --ar-dark-color: #333;
+  --ar-danger-color: #e91e63;
+  --ar-warning-color: #ff9800;
+  --ar-text-color: #333;
+  --ar-border-radius-sm: 0.25rem;
+  --ar-border-color: hsla(203, 50%, 30%, 0.15);
+  --ar-shadow-sm: rgba(0, 0, 0, 0.1) 0 1px 3px 0;
+  --ar-outline-color: #90caf9;
+  --ar-sidebar-width: 300px;
+  --ar-form-element-padding: 0.5em;
+  --ar-form-element-size: 20px;
+  --ar-form-element-border-color: var(--ar-border-color);
+  --ar-form-element-bg-color: #fff;
+  --ar-form-element-active-color: var(--ar-accent-color);
+  --ar-form-element-label-padding: 30px;
+  --ar-form-element-inner-padding: 2px;
+  --ar-primary-color-subtle: #f0f1f7;
+  --ar-primary-color-emphasis: #3a3f9b;
+  --ar-accent-color-subtle: #e0f7ff;
+  --ar-accent-color-emphasis: #0077b6;
+  --ar-success-color-subtle: #ecf6e6;
+  --ar-success-color-emphasis: #2e6b05;
+  --ar-warning-color-subtle: #fff3cd;
+  --ar-warning-color-emphasis: #86794c;
+  --ar-danger-color-subtle: #fff0f0;
+  --ar-danger-color-emphasis: #9b3a3a;
+  --ar-text-color-subtle: #707070;
+  --ar-text-color-emphasis: #000;
+  --ar-secondary-color-subtle: #f7f7f7;
+  --ar-secondary-color-emphasis: #d8d8d8;
 }
 
-
 @mixin label-styles {
-	font-weight: bold;
-	color: var(--ar-text-color);
-	font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--ar-text-color);
+  font-size: 0.85rem;
 }
 
 @mixin shadow {
-	filter: drop-shadow(rgba(0, 0, 0, 0.05) 0px 5px 5px) drop-shadow(rgba(0, 0, 0, 0.1) 0px 1px 3px);
+  filter: drop-shadow(rgba(0, 0, 0, 0.05) 0px 5px 5px)
+    drop-shadow(rgba(0, 0, 0, 0.1) 0px 1px 3px);
 }
 
 @mixin formElement {
-	font-family: inherit;
-	width: 100%;
-	border: solid 1px var(--ar-border-color);
-	border-radius: var(--ar-border-radius-sm);
-	box-sizing: border-box;
-	background-color: transparent;
-	min-height: 35px;
+  font-family: inherit;
+  width: 100%;
+  border: solid 1px var(--ar-border-color);
+  border-radius: var(--ar-border-radius-sm);
+  box-sizing: border-box;
+  background-color: transparent;
+  min-height: 35px;
 }
 
 @mixin colorBoxes {
-	&--default {
-		background-color: var(--ar-light-color);
-		color: var(--ar-text-color);
-		border: 1px solid transparent var(--ar-border-color) ;
-	}
+  &--default {
+    background-color: var(--ar-light-color);
+    color: var(--ar-text-color);
+    border: 1px solid transparent var(--ar-border-color);
+  }
 
-	&--primary {
-		background-color: var(--ar-primary-color);
-		color: white;
-	}
+  &--primary {
+    background-color: var(--ar-primary-color);
+    color: white;
+  }
 
-	&--accent {
-		background-color: var(--ar-accent-color);
-		color: white;
-	}
+  &--accent {
+    background-color: var(--ar-accent-color);
+    color: white;
+  }
 
-	&--secondary {
-		box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
-		background-color: transparent;
-		color: var(--ar-text-color);
-	}
+  &--secondary {
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
+    background-color: transparent;
+    color: var(--ar-text-color);
+  }
 
-	&--success {
-		background-color: var(--ar-success-color-subtle);
-		color: var(--ar-success-color-emphasis);
-	}
+  &--success {
+    background-color: var(--ar-success-color-subtle);
+    color: var(--ar-success-color-emphasis);
+  }
 
-	&--warning {
-		background-color: var(--ar-warning-color-subtle);
-		color: var(--ar-warning-color-emphasis);
-	}
+  &--warning {
+    background-color: var(--ar-warning-color-subtle);
+    color: var(--ar-warning-color-emphasis);
+  }
 
-	&--danger {
-		background-color: var(--ar-danger-color-subtle);
-		color: var(--ar-danger-color-emphasis);
-	}
+  &--danger {
+    background-color: var(--ar-danger-color-subtle);
+    color: var(--ar-danger-color-emphasis);
+  }
 
-	@content; // Allows additional styles to be added
+  @content; // Allows additional styles to be added
 }
-
-
-

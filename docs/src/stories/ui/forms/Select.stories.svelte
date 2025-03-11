@@ -104,27 +104,27 @@
 </Story>
 
 <Story
-    name="Select Example (Searchable)"
-    args={{
-        size: 'medium',
-        placeholder: 'Start typing...',
-        search: true,
-        data: dummyData,
-        /**
-         * @param {Object} e - The selected item data
-         */
-		 onSelect: (e) => {
+	name="Select Example (Searchable)"
+	args={{
+		size: 'medium',
+		placeholder: 'Start typing...',
+		search: true,
+		data: dummyData,
+		/**
+		 * @param {Object} e - The selected item data
+		 */
+		onSelect: (e) => {
 			if (e) {
 				alert(JSON.stringify(e));
 			} else {
-				alert("Search is cleared");
+				alert('Search is cleared');
 			}
 		}
-    }}
+	}}
 >
-    {#snippet children(args)}
-        <Select {...args} />
-    {/snippet}
+	{#snippet children(args)}
+		<Select {...args} />
+	{/snippet}
 </Story>
 
 <Story name="Inside Input Group" args={{ size: 'medium', placeholder: 'Select an option' }}>
