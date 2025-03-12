@@ -3,11 +3,7 @@ const defaultConfig = {
 	baseUrl: '',
 
 	// Authentication token details
-	token: {
-		type: 'Bearer',
-		key: 'Authorization',
-		value: ''
-	},
+	token: null,
 
 	// Keys to extract specific data from API responses
 	dataKey: '',
@@ -19,7 +15,7 @@ const defaultConfig = {
 	useSveltekitFetch: false,
 
 	// Error handling and suppression
-	suppressErrors: false,
+	suppressErrors: false, // Set to true if you don't want errors to block execution
 	
 	// Request lifecycle hooks and callbacks
 	onError: () => {},
@@ -33,12 +29,14 @@ const defaultConfig = {
 	onClientError: () => {},
 	onUnauthorized: () => {},
 	onRateLimit: () => {},
+	onLoading: () => {},
 
 	// Request & Response Handling
 	timeout: 5000, // Timeout for requests in milliseconds
 	headers: {
 		'Content-Type': 'application/json'
 	},
+	forceContentType: false,
 	paramsSerializer: (params) => new URLSearchParams(params).toString(),
 	responseType: 'json',
 

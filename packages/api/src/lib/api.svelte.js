@@ -76,7 +76,7 @@ class ApiClient {
 			if (timeout) {
 				setTimeout(() => {
 					abortController.abort('Request timeout');
-					if (typeof this.config.onTimeout === 'function') {
+					if (typeof this.config.onTimeout === 'function' && this.config.onTimeout.toString() !== '() => {}') {
 						this.config.onTimeout();
 					}
 				}, timeout);
@@ -86,6 +86,9 @@ class ApiClient {
 		// Prepare headers
 		const headers = { ...configHeaders, ...options.headers };
 
+		if ((method === 'GET' || method === 'HEAD') && !options.forceContentType) {
+			delete headers['Content-Type'];
+		  }
 		// Add authentication token if available
 		if (token && token.value) {
 			headers[token.key] = `${token.type} ${token.value}`;
@@ -161,65 +164,84 @@ class ApiClient {
 
 		// Debug logging
 		if (debug) {
-			this.config.logger('Response:', response);
+		  this.config.logger('Response:', response);
 		}
-
+	  
 		// Handle errors
 		if (!response.ok) {
-			let errorData;
-			try {
-				errorData = await response.json();
-			} catch (e) {
-				errorData = {
-					status: response.status,
-					statusText: response.statusText
-				};
+		  let errorData;
+		  try {
+			errorData = await response.json();
+		  } catch (e) {
+			errorData = {
+			  status: response.status,
+			  statusText: response.statusText
+			};
+		  }
+	  
+		// Create a standardized error object with more detail
+		const error = {
+			message: `HTTP Error: ${response.status} ${response.statusText}`,
+			status: response.status,
+			data: errorData,
+			type: 'http',
+			timestamp: new Date().toISOString(),
+			handledByClient: true,
+			// Include request details that might be useful for debugging
+			request: {
+			url: response.url,
+			method: response.method
+			},
+			response: {
+			status: response.status,
+			statusText: response.statusText,
+			headers: Object.fromEntries([...response.headers.entries()]),
+			data: errorData
 			}
-
-			// Create error object
-			const error = new Error(`HTTP Error: ${response.status}`);
-			error.status = response.status;
-			error.data = errorData;
-
-			// Call specific error handlers based on status code
-			if (response.status === 401 && typeof this.config.onUnauthorized === 'function') {
-				this.config.onUnauthorized(error);
-			} else if (response.status === 429 && typeof this.config.onRateLimit === 'function') {
-				this.config.onRateLimit(error);
-			} else if (response.status >= 500 && typeof this.config.onServerError === 'function') {
-				this.config.onServerError(error);
-			} else if (response.status >= 400 && typeof this.config.onClientError === 'function') {
-				this.config.onClientError(error);
-			}
-
+		};
+	  
+		// Make logging more obvious with timestamps and unique identifiers
+		if (debug) {
+			const errorId = Math.random().toString(36).substring(2, 10);
+			config.logger(`===== HTTP ERROR ${errorId} START =====`);
+			config.logger("Error details:", error);
+			config.logger(`===== HTTP ERROR ${errorId} END =====`);
+		}
+	
+		// Call specific error handlers based on status code
+		if (response.status === 401 && typeof config.onUnauthorized === 'function' && config.onUnauthorized.toString() !== '() => {}') {
+			config.onUnauthorized(error);
+		} else if (response.status === 429 && typeof config.onRateLimit === 'function' && config.onRateLimit.toString() !== '() => {}') {
+			config.onRateLimit(error);
+		} else if (response.status >= 500 && typeof config.onServerError === 'function' && config.onServerError.toString() !== '() => {}') {
+			config.onServerError(error);
+		} else if (response.status >= 400 && typeof config.onClientError === 'function' && config.onClientError.toString() !== '() => {}') {
+			config.onClientError(error);
+		}
+	  
     // Apply error interceptor if provided
-    const interceptedError = errorInterceptor(error);
-    
-    // Make logging more obvious with timestamps and unique identifiers
-    const errorId = Math.random().toString(36).substring(2, 10);
-    console.log(`===== ERROR ${errorId} START =====`);
-    console.log("Error details:", {
-      url: response.url,
-      status: response.status,
-      timestamp: new Date().toISOString(),
-      errorMessage: interceptedError.message,
-      errorData: interceptedError.data
-    });
-    
-    // Call general error handler
-    if (typeof config.onError === 'function') {
-      console.log(`===== ERROR HANDLER CALLED ${errorId} =====`);
-      config.onError(interceptedError);
-      console.log(`===== ERROR HANDLER FINISHED ${errorId} =====`);
+    let interceptedError = error;
+    if (typeof errorInterceptor === 'function' && errorInterceptor.toString() !== '() => {}') {
+      interceptedError = errorInterceptor(error);
+      interceptedError.handledByClient = true;  // Make sure the intercepted error is also marked as handled
     }
-    
-    console.log(`===== ERROR ${errorId} END - NOW THROWING =====`);
-    
-    // Consider adding a slight delay to ensure logging completes
-    // This is only for debugging - remove in production
-    await new Promise(resolve => setTimeout(resolve, 50));
-    
-    throw interceptedError;
+
+    // Check if onError is defined AND not the default empty function
+    if (typeof config.onError === 'function' && config.onError.toString() !== '() => {}') {
+      config.onError(interceptedError);
+    }
+
+    // If suppressErrors is true, return error object instead of throwing
+    if (config.suppressErrors) {
+      return { error: interceptedError, success: false };
+    } else {
+      // Convert plain object to throwable Error with all properties
+      const throwableError = new Error(interceptedError.message);
+	  console.log("throwableError", throwableError);
+      Object.assign(throwableError, interceptedError);
+      throw throwableError;
+    }
+
 		}
 
 		// Process successful response
@@ -438,95 +460,123 @@ class ApiClient {
 	 * @param {Object} options - Additional fetch options
 	 * @returns {Promise<any>} - Response data
 	 */
-  async _request(method, endpoint, params = {}, data = null, options = {}) {
-    const { config: tempConfig, ...restOptions } = options;
-    const requestConfig = tempConfig ? { ...this.config, ...tempConfig } : this.config;
-    
-    try {
-      // Call onBefore hook if provided
-      if (typeof requestConfig.onBefore === 'function') {
-        requestConfig.onBefore({ method, endpoint, params, data, options: restOptions });
-      }
-      
-      // Prepare URL and options
-      const url = ApiClient._prepareUrl(endpoint, params, requestConfig);
-      const { fetchOptions, abortController } = this._prepareOptions(
-        method,
-        restOptions,
-        data,
-        requestConfig
-      );
-      
-      // Store abort controller if we created one
-      if (abortController) {
-        const requestId = Date.now().toString();
-        this.abortControllers.set(requestId, abortController);
-      }
-      
-      let response;
-      try {
-        // Make request - this is where CORS errors can happen
-        response = await fetch(url, fetchOptions);
-      } catch (networkError) {
-        // Handle network errors (including CORS)
-        console.error("Network error:", networkError);
-        
-        // Create a standardized error object
-        const error = new Error('Network error: ' + networkError.message);
-        error.originalError = networkError;
-        error.type = 'network';
-        error.isCors = networkError.message.includes('CORS');
-        
-        // Call network error handler
-        if (typeof requestConfig.onNetworkError === 'function') {
-          requestConfig.onNetworkError(error);
+	// ...existing code...
+
+	async _request(method, endpoint, params = {}, data = null, options = {}) {
+	const { config: tempConfig, ...restOptions } = options;
+	const requestConfig = tempConfig ? { ...this.config, ...tempConfig } : this.config;
+	
+	try {
+		// Call onBefore hook if provided
+		if (typeof requestConfig.onBefore === 'function' && requestConfig.onBefore.toString() !== '() => {}') {
+			requestConfig.onBefore({ method, endpoint, params, data, options: restOptions });
+		}
+		if (typeof requestConfig.onLoading === 'function' && requestConfig.onLoading.toString() !== '() => {}') {
+            requestConfig.onLoading(true);
         }
-        
-        // Call general error handler
-        if (typeof requestConfig.onError === 'function') {
-          requestConfig.onError(error);
+		// Prepare URL and options
+		const url = ApiClient._prepareUrl(endpoint, params, requestConfig);
+		const { fetchOptions, abortController } = this._prepareOptions(
+		method,
+		restOptions,
+		data,
+		requestConfig
+		);
+		
+		// Store abort controller if we created one
+		if (abortController) {
+		const requestId = Date.now().toString();
+		this.abortControllers.set(requestId, abortController);
+		}
+		
+		let response;
+		try {
+		// Make request - this is where CORS errors can happen
+		response = await fetch(url, fetchOptions);
+		} catch (networkError) {
+		// Handle network errors (including CORS)
+		
+		// Create a standardized error object with more detailed information
+		const error = {
+		  message: 'Network error: ' + networkError.message,
+		  originalError: networkError,
+		  type: 'network',
+		  timestamp: new Date().toISOString(),
+		  url: url,
+		  method: method,
+		  status: 0, // Network errors usually don't have HTTP status codes
+		  handledByClient: true,
+		  // Include request details that might be useful for debugging
+		  request: {
+			url,
+			method,
+			params: Object.keys(params).length > 0 ? params : undefined,
+			headers: fetchOptions.headers
+		  }
+		};
+		
+		// Log the error through the logger if debugging is enabled
+		if (requestConfig.debug) {
+		  const errorId = Math.random().toString(36).substring(2, 10);
+		  requestConfig.logger(`===== NETWORK ERROR ${errorId} START =====`);
+		  requestConfig.logger("Network error details:", error);
+		  requestConfig.logger(`===== NETWORK ERROR ${errorId} END =====`);
+		}
+		
+		// Call network error handler with the detailed error object
+		if (typeof requestConfig.onNetworkError === 'function' && requestConfig.onNetworkError.toString() !== '() => {}') {
+		  requestConfig.onNetworkError(error);
+		} else if (typeof requestConfig.onError === 'function' && requestConfig.onError.toString() !== '() => {}') {
+		  requestConfig.onError(error);
+		}
+		
+		// If suppressErrors is true, return error object instead of throwing
+		if (requestConfig.suppressErrors) {
+		  return { error, success: false };
+		} else {
+		  const throwableError = new Error(error.message);
+		  Object.assign(throwableError, error);
+		  throw throwableError;
+		}
+		}
+		
+		// Process response
+		const result = await this._processResponse(response, requestConfig);
+		
+		// Call onAfter hook if provided
+		if (typeof requestConfig.onAfter === 'function' && requestConfig.onAfter.toString() !== '() => {}') {
+		requestConfig.onAfter(result);
+		}
+		
+		return result;
+	} catch (error) {
+		// This catches any errors not caught in the network error handling
+		// Such as errors from _processResponse or other parts of the method
+		
+		// Handle aborted requests
+		if (error && error.name === 'AbortError' && typeof requestConfig.onAbort === 'function' && requestConfig.onAbort.toString() !== '() => {}') {
+		requestConfig.onAbort(error);
+		} 
+		
+		// Call general error handler if not already called
+		if (error && !error.handledByClient && typeof requestConfig.onError === 'function' && requestConfig.onError.toString() !== '() => {}') {
+		error.handledByClient = true;
+		requestConfig.onError(error);
+		}
+		
+		throw error;
+	} finally {
+		// Call onFinally hook if provided
+		if (typeof requestConfig.onFinally === 'function' && requestConfig.onFinally.toString() !== '() => {}') {
+			requestConfig.onFinally();
+		}
+		if (typeof requestConfig.onLoading === 'function' && requestConfig.onLoading.toString() !== '() => {}') {
+            requestConfig.onLoading(false);
         }
-        
-        // If suppressErrors is true, return error object instead of throwing
-        if (requestConfig.suppressErrors) {
-          return { error, success: false };
-        }
-        
-        throw error;
-      }
-      
-      // Process response
-      const result = await this._processResponse(response, requestConfig);
-      
-      // Call onAfter hook if provided
-      if (typeof requestConfig.onAfter === 'function') {
-        requestConfig.onAfter(result);
-      }
-      
-      return result;
-    } catch (error) {
-      // This catches any errors not caught in the network error handling
-      // Such as errors from _processResponse or other parts of the method
-      
-      // Handle aborted requests
-      if (error.name === 'AbortError' && typeof requestConfig.onAbort === 'function') {
-        requestConfig.onAbort(error);
-      } 
-      
-      // Call general error handler if not already called
-      if (!error.handledByClient && typeof requestConfig.onError === 'function') {
-        error.handledByClient = true;
-        requestConfig.onError(error);
-      }
-      
-      throw error;
-    } finally {
-      // Call onFinally hook if provided
-      if (typeof requestConfig.onFinally === 'function') {
-        requestConfig.onFinally();
-      }
-    }
-  }
+	}
+	}
+
+	// ...existing code...
 
 	/**
 	 * Create an HTTP method function (GET, POST, etc.)
@@ -573,7 +623,47 @@ class ApiClient {
 			normalized.options
 		);
 	}
-
+	
+	/**
+	 * Execute multiple API requests in parallel with named results
+	 * @param {Object} requestsMap - Object mapping result names to API call promises
+	 * @returns {Object} - Object containing results with the same keys as the input object
+	 */
+	all(requestsMap) {
+		// Handle both array and object inputs
+		if (Array.isArray(requestsMap)) {
+			// Array input - use numbered properties
+			const promises = requestsMap;
+			return Promise.all(promises)
+				.then(responses => {
+					const results = {};
+					responses.forEach((response, index) => {
+						results[`result${index + 1}`] = response;
+					});
+					return results;
+				})
+				.catch(error => {
+					throw error;
+				});
+		} else {
+			// Object input - preserve property names
+			const keys = Object.keys(requestsMap);
+			const promises = Object.values(requestsMap);
+			
+			return Promise.all(promises)
+				.then(responses => {
+					const results = {};
+					keys.forEach((key, index) => {
+						results[key] = responses[index];
+					});
+					return results;
+				})
+				.catch(error => {
+					throw error;
+				});
+		}
+	}
+	
 	/**
 	 * Abort all pending requests
 	 * @param {string} reason - Reason for aborting
