@@ -1,0 +1,150 @@
+.spinner-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  box-sizing: border-box;
+}
+
+.spinner-position-relative {
+  position: relative;
+  display: inline-flex;
+}
+
+.spinner-position-absolute {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spinner-position-fixed {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spinner-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9998;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+.spinner-backdrop-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+// Base spinner style
+.spinner {
+  width: 1em;
+  height: 1em;
+  max-width: 30px;
+  max-height: 30px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 2px solid #3498db;
+  animation: spin 1s linear infinite;
+  flex-shrink: 0;
+}
+
+// Text that may accompany a spinner
+.spinner-text {
+  margin-top: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.8em;
+  color: #333333;
+  line-height: 1;
+}
+
+// Size variations
+.spinner-size-small {
+  .spinner {
+    width: 0.8em;
+    height: 0.8em;
+    max-width: 20px;
+    max-height: 20px;
+    border-width: 1.5px;
+  }
+  
+  .spinner-text {
+    font-size: 0.7em;
+  }
+}
+
+.spinner-size-medium {
+  .spinner {
+    // Explicitly define medium size values for clarity
+    width: 1em;
+    height: 1em;
+    max-width: 30px;
+    max-height: 30px;
+    border-width: 2px;
+  }
+  
+  .spinner-text {
+    font-size: 0.8em;
+  }
+}
+
+.spinner-size-large {
+  .spinner {
+    width: 1.5em;
+    height: 1.5em;
+    max-width: 48px;
+    max-height: 48px;
+    border-width: 3px;
+  }
+  
+  .spinner-text {
+    font-size: 0.9em;
+  }
+}
+
+// Context-specific styles
+.spinner-inline {
+  display: inline-flex;
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+// For handling loading states in interactive elements
+.loading-container {
+  position: relative;
+  
+  &.is-loading {
+    .spinner-wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    > *:not(.spinner-wrapper) {
+      visibility: hidden;
+    }
+  }
+}
+
+.spinner-crescent .spinner {
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
