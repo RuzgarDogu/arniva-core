@@ -7,16 +7,18 @@ const defaultConfig = {
 
 	// Keys to extract specific data from API responses
 	dataKey: '',
-	messageKey: '',
-	codeKey: '',
-
+	// Get error details from JSON response
+	jsonErrorResponse: {
+		messageKey: 'message',
+		codeKey: 'code',
+	},
 	// Toast notifications and SvelteKit-specific options
 	useDefaultToast: false,
 	useSveltekitFetch: false,
 
 	// Error handling and suppression
 	suppressErrors: false, // Set to true if you don't want errors to block execution
-	
+
 	// Request lifecycle hooks and callbacks
 	onError: () => {},
 	onBefore: () => {},
@@ -30,6 +32,11 @@ const defaultConfig = {
 	onUnauthorized: () => {},
 	onRateLimit: () => {},
 	onLoading: () => {},
+	interceptors: {
+		request: [],
+		response: []
+	},
+	onApplicationError: () => {}, // New handler for application errors (when API returns error with 200 status)
 
 	// Request & Response Handling
 	timeout: 5000, // Timeout for requests in milliseconds
@@ -41,7 +48,10 @@ const defaultConfig = {
 	responseType: 'json',
 
 	// Retry and Caching Options
-	retry: 2, // Number of retries on failure
+	retry: 0, // Number of retries on failure (0 means no retry)
+	retryDelay: 1000, // Milliseconds between retries
+	retryCondition: (error) => error.status >= 500, // Only retry on server errors by default
+
 	cache: 'no-cache', // Cache mode ('default', 'no-cache', etc.)
 	staleWhileRevalidate: false, // Enable/disable stale-while-revalidate caching
 

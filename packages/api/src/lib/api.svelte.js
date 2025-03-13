@@ -11,6 +11,142 @@ class ApiClient {
 	constructor(config = {}) {
 		this.config = { ...defaultConfig, ...config };
 		this.abortControllers = new Map();
+
+		// Initialize interceptors
+		this.interceptors = {
+			request: {
+				use: (fulfilled, rejected) => {
+					this.config.interceptors.request.push({ fulfilled, rejected });
+					return this.config.interceptors.request.length - 1;
+				},
+				eject: (id) => {
+					if (id !== undefined) {
+						this.config.interceptors.request.splice(id, 1);
+					}
+				},
+				clear: () => {
+					this.config.interceptors.request = [];
+				}
+			},
+			response: {
+				use: (fulfilled, rejected) => {
+					this.config.interceptors.response.push({ fulfilled, rejected });
+					return this.config.interceptors.response.length - 1;
+				},
+				eject: (id) => {
+					if (id !== undefined) {
+						this.config.interceptors.response.splice(id, 1);
+					}
+				},
+				clear: () => {
+					this.config.interceptors.response = [];
+				}
+			}
+		};
+	}
+
+	/**
+	 * Apply request interceptors to modify request options
+	 * @private
+	 * @param {Object} requestConfig - Original request configuration
+	 * @param {Object} fetchOptions - Original fetch options
+	 * @returns {Promise<Object>} - Modified fetch options
+	 */
+	async _applyRequestInterceptors(requestConfig, fetchOptions) {
+		let config = { ...requestConfig };
+		let options = { ...fetchOptions };
+
+		// Apply registered request interceptors in sequence
+		for (const interceptor of this.config.interceptors.request) {
+			try {
+				if (typeof interceptor.fulfilled === 'function') {
+					const result = await interceptor.fulfilled({ config, options });
+					if (result) {
+						config = result.config || config;
+						options = result.options || options;
+					}
+				}
+			} catch (error) {
+				if (typeof interceptor.rejected === 'function') {
+					await interceptor.rejected(error);
+				}
+				throw error;
+			}
+		}
+
+		return { config, options };
+	}
+
+	/**
+	 * Apply response interceptors to modify response data
+	 * @private
+	 * @param {Object} response - Original response object
+	 * @param {Object} data - Processed response data
+	 * @param {Object} requestConfig - Request configuration
+	 * @returns {Promise<any>} - Modified response data
+	 */
+	async _applyResponseInterceptors(response, data, requestConfig) {
+		let responseData = data;
+		let responseObj = response;
+		let config = requestConfig;
+
+		// Apply registered response interceptors in sequence
+		for (const interceptor of this.config.interceptors.response) {
+			try {
+				if (typeof interceptor.fulfilled === 'function') {
+					const result = await interceptor.fulfilled({
+						data: responseData,
+						response: responseObj,
+						config
+					});
+					if (result && result.data !== undefined) {
+						responseData = result.data;
+					}
+					if (result && result.response !== undefined) {
+						responseObj = result.response;
+					}
+				}
+			} catch (error) {
+				if (typeof interceptor.rejected === 'function') {
+					await interceptor.rejected(error);
+				}
+				throw error;
+			}
+		}
+
+		return responseData;
+	}
+
+	/**
+	 * Execute a request with retry mechanism
+	 * @private
+	 * @param {Function} requestFn - Function that performs the request
+	 * @param {Object} requestConfig - Request configuration
+	 * @param {number} retries - Number of retries remaining
+	 * @returns {Promise<any>} - Response data
+	 */
+	async _executeWithRetry(requestFn, requestConfig, retries) {
+		try {
+			return await requestFn();
+		} catch (error) {
+			const { retry, retryDelay, retryCondition, debug, logger } = requestConfig;
+
+			// Check if we should retry
+			if (retries > 0 && retryCondition(error)) {
+				if (debug) {
+					logger(`Retrying request (${retry - retries + 1}/${retry}). Waiting ${retryDelay}ms...`);
+				}
+
+				// Wait for the specified delay
+				await new Promise((resolve) => setTimeout(resolve, retryDelay));
+
+				// Try again with one less retry
+				return this._executeWithRetry(requestFn, requestConfig, retries - 1);
+			}
+
+			// No more retries or condition not met - propagate the error
+			throw error;
+		}
 	}
 
 	/**
@@ -76,7 +212,10 @@ class ApiClient {
 			if (timeout) {
 				setTimeout(() => {
 					abortController.abort('Request timeout');
-					if (typeof this.config.onTimeout === 'function' && this.config.onTimeout.toString() !== '() => {}') {
+					if (
+						typeof this.config.onTimeout === 'function' &&
+						this.config.onTimeout.toString() !== '() => {}'
+					) {
 						this.config.onTimeout();
 					}
 				}, timeout);
@@ -88,7 +227,7 @@ class ApiClient {
 
 		if ((method === 'GET' || method === 'HEAD') && !options.forceContentType) {
 			delete headers['Content-Type'];
-		  }
+		}
 		// Add authentication token if available
 		if (token && token.value) {
 			headers[token.key] = `${token.type} ${token.value}`;
@@ -164,103 +303,216 @@ class ApiClient {
 
 		// Debug logging
 		if (debug) {
-		  this.config.logger('Response:', response);
-		}
-	  
-		// Handle errors
-		if (!response.ok) {
-		  let errorData;
-		  try {
-			errorData = await response.json();
-		  } catch (e) {
-			errorData = {
-			  status: response.status,
-			  statusText: response.statusText
-			};
-		  }
-	  
-		// Create a standardized error object with more detail
-		const error = {
-			message: `HTTP Error: ${response.status} ${response.statusText}`,
-			status: response.status,
-			data: errorData,
-			type: 'http',
-			timestamp: new Date().toISOString(),
-			handledByClient: true,
-			// Include request details that might be useful for debugging
-			request: {
-			url: response.url,
-			method: response.method
-			},
-			response: {
-			status: response.status,
-			statusText: response.statusText,
-			headers: Object.fromEntries([...response.headers.entries()]),
-			data: errorData
-			}
-		};
-	  
-		// Make logging more obvious with timestamps and unique identifiers
-		if (debug) {
-			const errorId = Math.random().toString(36).substring(2, 10);
-			config.logger(`===== HTTP ERROR ${errorId} START =====`);
-			config.logger("Error details:", error);
-			config.logger(`===== HTTP ERROR ${errorId} END =====`);
-		}
-	
-		// Call specific error handlers based on status code
-		if (response.status === 401 && typeof config.onUnauthorized === 'function' && config.onUnauthorized.toString() !== '() => {}') {
-			config.onUnauthorized(error);
-		} else if (response.status === 429 && typeof config.onRateLimit === 'function' && config.onRateLimit.toString() !== '() => {}') {
-			config.onRateLimit(error);
-		} else if (response.status >= 500 && typeof config.onServerError === 'function' && config.onServerError.toString() !== '() => {}') {
-			config.onServerError(error);
-		} else if (response.status >= 400 && typeof config.onClientError === 'function' && config.onClientError.toString() !== '() => {}') {
-			config.onClientError(error);
-		}
-	  
-    // Apply error interceptor if provided
-    let interceptedError = error;
-    if (typeof errorInterceptor === 'function' && errorInterceptor.toString() !== '() => {}') {
-      interceptedError = errorInterceptor(error);
-      interceptedError.handledByClient = true;  // Make sure the intercepted error is also marked as handled
-    }
-
-    // Check if onError is defined AND not the default empty function
-    if (typeof config.onError === 'function' && config.onError.toString() !== '() => {}') {
-      config.onError(interceptedError);
-    }
-
-    // If suppressErrors is true, return error object instead of throwing
-    if (config.suppressErrors) {
-      return { error: interceptedError, success: false };
-    } else {
-      // Convert plain object to throwable Error with all properties
-      const throwableError = new Error(interceptedError.message);
-	  console.log("throwableError", throwableError);
-      Object.assign(throwableError, interceptedError);
-      throw throwableError;
-    }
-
+			config.logger('Response:', response);
 		}
 
-		// Process successful response
 		let data;
+		let isJson = false;
 
-		// Handle different response types
-		if (responseType === 'json') {
-			data = await response.json();
+		// Parse response based on content type
+		if (responseType === 'json' || !responseType) {
+			try {
+				data = await response.json();
+				isJson = true;
+			} catch (e) {
+				data = null;
+			}
 		} else if (responseType === 'text') {
 			data = await response.text();
 		} else if (responseType === 'blob') {
 			data = await response.blob();
 		} else if (responseType === 'arrayBuffer') {
 			data = await response.arrayBuffer();
-		} else {
-			data = await response.json();
 		}
+
+		// This handles the case where the API returns error data with non-200 status
+		if (!response.ok && isJson && data && typeof data === 'object' && this.config.jsonErrorResponse) {
+			// This is an application error returned with a non-200 status code
+			const appError = {
+				message: data[this.config.jsonErrorResponse.messageKey] || 'Unknown error',
+				code: data[this.config.jsonErrorResponse.codeKey] || 'UNKNOWN_ERROR',
+				status: response.status,
+				// Mark as application error even though it came with non-200 status
+				type: 'application',
+				timestamp: new Date().toISOString(),
+				handledByClient: true,
+				request: {
+					url: response.url,
+					method: response.method
+				},
+				response: {
+					status: response.status,
+					statusText: response.statusText,
+					headers: Object.fromEntries([...response.headers.entries()]),
+					data: data
+				}
+			};
+			if (debug) {
+				const errorId = Math.random().toString(36).substring(2, 10);
+				config.logger(`===== APPLICATION ERROR ${errorId} START =====`);
+				config.logger('Error details:', appError);
+				config.logger(`===== APPLICATION ERROR ${errorId} END =====`);
+			}
+		
+			// Apply error interceptor if provided
+			let interceptedError = appError;
+			if (typeof errorInterceptor === 'function' && errorInterceptor.toString() !== '() => {}') {
+				interceptedError = errorInterceptor(appError);
+				interceptedError.handledByClient = true;
+			}
+		
+			// Call application error handler if provided
+			if (
+				typeof config.onApplicationError === 'function' &&
+				config.onApplicationError.toString() !== '() => {}'
+			) {
+				config.onApplicationError(interceptedError);
+			} else if (typeof config.onError === 'function' && config.onError.toString() !== '() => {}') {
+				config.onError(interceptedError);
+			}
+		
+			// If suppressErrors is true, return error object instead of throwing
+			if (config.suppressErrors) {
+				return { error: interceptedError, success: false };
+			} else {
+				// Convert plain object to throwable Error with all properties
+				const throwableError = new Error(interceptedError.message);
+				Object.assign(throwableError, interceptedError);
+				throw throwableError;
+			}
+		}
+
+		// First, handle application-level errors that come with 200 status codes
+		// Look for common error indicators in the response data
+		if (data && typeof data === 'object' && data.code && data.message && response.ok) {
+			// [Existing application error code for 200 responses]
+			// ...existing code...
+		}
+
+		// Handle standard HTTP errors (non-2xx responses) that weren't handled as application errors above
+		if (!response.ok) {
+			let errorData = data;
+
+			if (!errorData) {
+				errorData = {
+					status: response.status,
+					statusText: response.statusText
+				};
+			}
+
+			// Extract a message from the error data if possible
+			let errorMessage = '';
+			if (errorData && typeof errorData === 'object') {
+				if (errorData.message) {
+					errorMessage = errorData.message;
+				} else if (errorData.error) {
+					errorMessage = errorData.error;
+				}
+			}
+
+			if (!errorMessage) {
+				errorMessage = `HTTP Error: ${response.status} ${response.statusText}`;
+			}
+
+			// Create a standardized error object with more detail
+			const error = {
+				message: errorMessage,
+				status: response.status,
+				data: errorData,
+				type: 'http', // This is a standard HTTP error
+				timestamp: new Date().toISOString(),
+				handledByClient: true,
+				request: {
+					url: response.url,
+					method: response.method
+				},
+				response: {
+					status: response.status,
+					statusText: response.statusText,
+					headers: Object.fromEntries([...response.headers.entries()]),
+					data: errorData
+				}
+			};
+
+			// Make logging more obvious with timestamps and unique identifiers
+			if (debug) {
+				const errorId = Math.random().toString(36).substring(2, 10);
+				config.logger(`===== HTTP ERROR ${errorId} START =====`);
+				config.logger('Error details:', error);
+				config.logger(`===== HTTP ERROR ${errorId} END =====`);
+			}
+
+			// Call specific error handlers based on status code
+			let handledBySpecificHandler = false;
+
+			if (
+				response.status === 404 &&
+				typeof config.onNotFound === 'function' &&
+				config.onNotFound.toString() !== '() => {}'
+			) {
+				config.onNotFound(error);
+				handledBySpecificHandler = true;
+			} else if (
+				response.status === 401 &&
+				typeof config.onUnauthorized === 'function' &&
+				config.onUnauthorized.toString() !== '() => {}'
+			) {
+				config.onUnauthorized(error);
+				handledBySpecificHandler = true;
+			} else if (
+				response.status === 429 &&
+				typeof config.onRateLimit === 'function' &&
+				config.onRateLimit.toString() !== '() => {}'
+			) {
+				config.onRateLimit(error);
+				handledBySpecificHandler = true;
+			} else if (
+				response.status >= 500 &&
+				typeof config.onServerError === 'function' &&
+				config.onServerError.toString() !== '() => {}'
+			) {
+				config.onServerError(error);
+				handledBySpecificHandler = true;
+			} else if (
+				response.status >= 400 &&
+				response.status < 500 &&
+				typeof config.onClientError === 'function' &&
+				config.onClientError.toString() !== '() => {}'
+			) {
+				config.onClientError(error);
+				handledBySpecificHandler = true;
+			}
+
+			// Apply error interceptor if provided
+			let interceptedError = error;
+			if (typeof errorInterceptor === 'function' && errorInterceptor.toString() !== '() => {}') {
+				interceptedError = errorInterceptor(error);
+				interceptedError.handledByClient = true;
+			}
+
+			// Only call general error handler if no specific handler was called
+			if (
+				!handledBySpecificHandler &&
+				typeof config.onError === 'function' &&
+				config.onError.toString() !== '() => {}'
+			) {
+				config.onError(interceptedError);
+			}
+
+			// If suppressErrors is true, return error object instead of throwing
+			if (config.suppressErrors) {
+				return { error: interceptedError, success: false };
+			} else {
+				// Convert plain object to throwable Error with all properties
+				const throwableError = new Error(interceptedError.message);
+				Object.assign(throwableError, interceptedError);
+				throw throwableError;
+			}
+		}
+
+		// Process successful response
 		// Extract specific data if dataKey is provided
-		if (dataKey) {
+		if (dataKey && data && typeof data === 'object') {
 			if (data[dataKey] !== undefined) {
 				data = data[dataKey];
 			} else {
@@ -268,9 +520,179 @@ class ApiClient {
 			}
 		}
 
+		// Apply response interceptors
+		data = await this._applyResponseInterceptors(response, data, config);
+
 		return data;
 	}
 
+	// ...existing code...
+
+	async _request(method, endpoint, params = {}, data = null, options = {}) {
+		const { config: tempConfig, ...restOptions } = options;
+		const requestConfig = tempConfig ? { ...this.config, ...tempConfig } : this.config;
+
+		try {
+			// Call onBefore hook if provided
+			if (
+				typeof requestConfig.onBefore === 'function' &&
+				requestConfig.onBefore.toString() !== '() => {}'
+			) {
+				requestConfig.onBefore({ method, endpoint, params, data, options: restOptions });
+			}
+			if (
+				typeof requestConfig.onLoading === 'function' &&
+				requestConfig.onLoading.toString() !== '() => {}'
+			) {
+				requestConfig.onLoading(true);
+			}
+
+			// Prepare URL and initial options
+			const url = ApiClient._prepareUrl(endpoint, params, requestConfig);
+			let { fetchOptions, abortController } = this._prepareOptions(
+				method,
+				restOptions,
+				data,
+				requestConfig
+			);
+
+			// Apply request interceptors
+			const intercepted = await this._applyRequestInterceptors(requestConfig, fetchOptions);
+			const finalRequestConfig = intercepted.config;
+			const finalFetchOptions = intercepted.options;
+
+			// Store abort controller if we created one
+			if (abortController) {
+				const requestId = Date.now().toString();
+				this.abortControllers.set(requestId, abortController);
+			}
+
+			// Execute request with retry functionality
+			// In your _request method, modify the makeRequest function:
+
+			const makeRequest = async () => {
+				try {
+					// This will only throw for true network errors like CORS or no internet
+					const response = await fetch(url, finalFetchOptions);
+
+					// Process the response, which handles HTTP errors (4xx, 5xx)
+					return await this._processResponse(response, finalRequestConfig);
+				} catch (error) {
+					// Check if this is a network error or an error already handled by _processResponse
+					if (error.handledByClient) {
+						// This error was already handled by _processResponse, just rethrow it
+						throw error;
+					}
+
+					// This is a TRUE network error (not an HTTP status error)
+					const networkError = {
+						message: 'Network error: ' + error.message,
+						originalError: error,
+						type: 'network',
+						timestamp: new Date().toISOString(),
+						url: url,
+						method: method,
+						status: 0,
+						handledByClient: true,
+						request: {
+							url,
+							method,
+							params: Object.keys(params).length > 0 ? params : undefined,
+							headers: finalFetchOptions.headers
+						}
+					};
+
+					// Log network error
+					if (finalRequestConfig.debug) {
+						const errorId = Math.random().toString(36).substring(2, 10);
+						finalRequestConfig.logger(`===== NETWORK ERROR ${errorId} START =====`);
+						finalRequestConfig.logger('Network error details:', networkError);
+						finalRequestConfig.logger(`===== NETWORK ERROR ${errorId} END =====`);
+					}
+
+					// Call the network error handler specifically
+					if (
+						typeof finalRequestConfig.onNetworkError === 'function' &&
+						finalRequestConfig.onNetworkError.toString() !== '() => {}'
+					) {
+						finalRequestConfig.onNetworkError(networkError);
+					} else if (
+						typeof finalRequestConfig.onError === 'function' &&
+						finalRequestConfig.onError.toString() !== '() => {}'
+					) {
+						finalRequestConfig.onError(networkError);
+					}
+
+					// Return or throw based on suppressErrors setting
+					if (finalRequestConfig.suppressErrors) {
+						return { error: networkError, success: false };
+					} else {
+						const throwableError = new Error(networkError.message);
+						Object.assign(throwableError, networkError);
+						throw throwableError;
+					}
+				}
+			};
+
+			// Execute with retry if configured
+			const result = await this._executeWithRetry(
+				makeRequest,
+				finalRequestConfig,
+				finalRequestConfig.retry
+			);
+
+			// Call onAfter hook if provided
+			if (
+				typeof finalRequestConfig.onAfter === 'function' &&
+				finalRequestConfig.onAfter.toString() !== '() => {}'
+			) {
+				finalRequestConfig.onAfter(result);
+			}
+
+			return result;
+		} catch (error) {
+			// If the error has already been handled by a specific handler, don't call onError again
+			if (!error || error.handledByClient) {
+				// Just re-throw without additional processing
+				throw error;
+			}
+
+			// Handle aborted requests
+			if (error && error.name === 'AbortError') {
+				if (
+					typeof requestConfig.onAbort === 'function' &&
+					requestConfig.onAbort.toString() !== '() => {}'
+				) {
+					requestConfig.onAbort(error);
+					error.handledByClient = true;
+				}
+			}
+			// For any errors that haven't been handled yet
+			else if (
+				typeof requestConfig.onError === 'function' &&
+				requestConfig.onError.toString() !== '() => {}'
+			) {
+				error.handledByClient = true;
+				requestConfig.onError(error);
+			}
+
+			throw error;
+		} finally {
+			// Call onFinally hook if provided
+			if (
+				typeof requestConfig.onFinally === 'function' &&
+				requestConfig.onFinally.toString() !== '() => {}'
+			) {
+				requestConfig.onFinally();
+			}
+			if (
+				typeof requestConfig.onLoading === 'function' &&
+				requestConfig.onLoading.toString() !== '() => {}'
+			) {
+				requestConfig.onLoading(false);
+			}
+		}
+	}
 	/**
 	 * Helper method to normalize parameters for all request methods
 	 * @private
@@ -462,120 +884,6 @@ class ApiClient {
 	 */
 	// ...existing code...
 
-	async _request(method, endpoint, params = {}, data = null, options = {}) {
-	const { config: tempConfig, ...restOptions } = options;
-	const requestConfig = tempConfig ? { ...this.config, ...tempConfig } : this.config;
-	
-	try {
-		// Call onBefore hook if provided
-		if (typeof requestConfig.onBefore === 'function' && requestConfig.onBefore.toString() !== '() => {}') {
-			requestConfig.onBefore({ method, endpoint, params, data, options: restOptions });
-		}
-		if (typeof requestConfig.onLoading === 'function' && requestConfig.onLoading.toString() !== '() => {}') {
-            requestConfig.onLoading(true);
-        }
-		// Prepare URL and options
-		const url = ApiClient._prepareUrl(endpoint, params, requestConfig);
-		const { fetchOptions, abortController } = this._prepareOptions(
-		method,
-		restOptions,
-		data,
-		requestConfig
-		);
-		
-		// Store abort controller if we created one
-		if (abortController) {
-		const requestId = Date.now().toString();
-		this.abortControllers.set(requestId, abortController);
-		}
-		
-		let response;
-		try {
-		// Make request - this is where CORS errors can happen
-		response = await fetch(url, fetchOptions);
-		} catch (networkError) {
-		// Handle network errors (including CORS)
-		
-		// Create a standardized error object with more detailed information
-		const error = {
-		  message: 'Network error: ' + networkError.message,
-		  originalError: networkError,
-		  type: 'network',
-		  timestamp: new Date().toISOString(),
-		  url: url,
-		  method: method,
-		  status: 0, // Network errors usually don't have HTTP status codes
-		  handledByClient: true,
-		  // Include request details that might be useful for debugging
-		  request: {
-			url,
-			method,
-			params: Object.keys(params).length > 0 ? params : undefined,
-			headers: fetchOptions.headers
-		  }
-		};
-		
-		// Log the error through the logger if debugging is enabled
-		if (requestConfig.debug) {
-		  const errorId = Math.random().toString(36).substring(2, 10);
-		  requestConfig.logger(`===== NETWORK ERROR ${errorId} START =====`);
-		  requestConfig.logger("Network error details:", error);
-		  requestConfig.logger(`===== NETWORK ERROR ${errorId} END =====`);
-		}
-		
-		// Call network error handler with the detailed error object
-		if (typeof requestConfig.onNetworkError === 'function' && requestConfig.onNetworkError.toString() !== '() => {}') {
-		  requestConfig.onNetworkError(error);
-		} else if (typeof requestConfig.onError === 'function' && requestConfig.onError.toString() !== '() => {}') {
-		  requestConfig.onError(error);
-		}
-		
-		// If suppressErrors is true, return error object instead of throwing
-		if (requestConfig.suppressErrors) {
-		  return { error, success: false };
-		} else {
-		  const throwableError = new Error(error.message);
-		  Object.assign(throwableError, error);
-		  throw throwableError;
-		}
-		}
-		
-		// Process response
-		const result = await this._processResponse(response, requestConfig);
-		
-		// Call onAfter hook if provided
-		if (typeof requestConfig.onAfter === 'function' && requestConfig.onAfter.toString() !== '() => {}') {
-		requestConfig.onAfter(result);
-		}
-		
-		return result;
-	} catch (error) {
-		// This catches any errors not caught in the network error handling
-		// Such as errors from _processResponse or other parts of the method
-		
-		// Handle aborted requests
-		if (error && error.name === 'AbortError' && typeof requestConfig.onAbort === 'function' && requestConfig.onAbort.toString() !== '() => {}') {
-		requestConfig.onAbort(error);
-		} 
-		
-		// Call general error handler if not already called
-		if (error && !error.handledByClient && typeof requestConfig.onError === 'function' && requestConfig.onError.toString() !== '() => {}') {
-		error.handledByClient = true;
-		requestConfig.onError(error);
-		}
-		
-		throw error;
-	} finally {
-		// Call onFinally hook if provided
-		if (typeof requestConfig.onFinally === 'function' && requestConfig.onFinally.toString() !== '() => {}') {
-			requestConfig.onFinally();
-		}
-		if (typeof requestConfig.onLoading === 'function' && requestConfig.onLoading.toString() !== '() => {}') {
-            requestConfig.onLoading(false);
-        }
-	}
-	}
-
 	// ...existing code...
 
 	/**
@@ -623,7 +931,7 @@ class ApiClient {
 			normalized.options
 		);
 	}
-	
+
 	/**
 	 * Execute multiple API requests in parallel with named results
 	 * @param {Object} requestsMap - Object mapping result names to API call promises
@@ -635,35 +943,35 @@ class ApiClient {
 			// Array input - use numbered properties
 			const promises = requestsMap;
 			return Promise.all(promises)
-				.then(responses => {
+				.then((responses) => {
 					const results = {};
 					responses.forEach((response, index) => {
 						results[`result${index + 1}`] = response;
 					});
 					return results;
 				})
-				.catch(error => {
+				.catch((error) => {
 					throw error;
 				});
 		} else {
 			// Object input - preserve property names
 			const keys = Object.keys(requestsMap);
 			const promises = Object.values(requestsMap);
-			
+
 			return Promise.all(promises)
-				.then(responses => {
+				.then((responses) => {
 					const results = {};
 					keys.forEach((key, index) => {
 						results[key] = responses[index];
 					});
 					return results;
 				})
-				.catch(error => {
+				.catch((error) => {
 					throw error;
 				});
 		}
 	}
-	
+
 	/**
 	 * Abort all pending requests
 	 * @param {string} reason - Reason for aborting

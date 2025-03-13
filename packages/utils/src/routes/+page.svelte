@@ -2,63 +2,61 @@
 	import { hello, toast, spinner } from '$lib';
 	// hello('emre');
 
-
 	function testSpinner() {
-		spinner.show('divSpinner', { 
-			container: '#container', 
+		spinner.show('divSpinner', {
+			container: '#container',
 			color: '#fff',
 			adaptSize: true,
-			sizeFactor: 0.7,  // Use 70% of available space
-			minSize: 12,      // Minimum 12px
-			sizeMargin: 8,     // Keep 8px margin within container
-			position: 'absolute',
+			sizeFactor: 0.7, // Use 70% of available space
+			minSize: 12, // Minimum 12px
+			sizeMargin: 8, // Keep 8px margin within container
+			position: 'absolute'
 			// type: 'crescent'
-			});
-		spinner.show('buttonSpinner', { 
-			container: '#spinnerTest', 
+		});
+		spinner.show('buttonSpinner', {
+			container: '#spinnerTest',
 			color: '#fff',
 			adaptSize: true,
-			sizeFactor: 0.7,  // Use 70% of available space
-			minSize: 12,      // Minimum 12px
-			sizeMargin: 8,     // Keep 8px margin within container
+			sizeFactor: 0.7, // Use 70% of available space
+			minSize: 12, // Minimum 12px
+			sizeMargin: 8, // Keep 8px margin within container
 			position: 'relative',
 			type: 'crescent'
-			});
-		spinner.show('bodySpinner', { 
-			container: 'red', 
+		});
+		spinner.show('bodySpinner', {
+			container: 'red',
 			color: 'transparent',
 			backgroundColor: 'var(--ar-accent-color)',
 			adaptSize: true,
-			sizeFactor: 0.7,  // Use 70% of available space
-			minSize: 12,      // Minimum 12px
-			sizeMargin: 8,     // Keep 8px margin within container
-			position: 'fixed',
+			sizeFactor: 0.7, // Use 70% of available space
+			minSize: 12, // Minimum 12px
+			sizeMargin: 8, // Keep 8px margin within container
+			position: 'fixed'
 			// type: 'crescent'
-			});
+		});
 		setTimeout(() => {
 			spinner.hide('bodySpinner');
 			spinner.hide('buttonSpinner');
 		}, 3000);
 	}
-
 </script>
+
 <div id="container">
 	<h1>Welcome to your library project</h1>
 	<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
-	<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+	<p>
+		Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation
+	</p>
 </div>
 
 <div style="margin-bottom: 30px;">
-<button onclick={() => toast.danger('deneme', { duration: 3000, position: 'top-right' })}
-	>Toast Test</button
->
-
+	<button onclick={() => toast.danger('deneme', { duration: 3000, position: 'top-right' })}
+		>Toast Test</button
+	>
 </div>
 <div style="margin-bottom: 30px;">
 	<button id="spinnerTest" onclick={testSpinner}>Spinner</button>
 </div>
-
-
 
 <style>
 	#container {
