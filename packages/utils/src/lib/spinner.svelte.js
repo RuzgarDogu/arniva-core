@@ -1,20 +1,21 @@
 /**
  * @typedef {Object} SpinnerConfigProps
- * @property {'fixed' | 'absolute' | 'relative'} position - Position of the spinner
- * @property {boolean} showBackdrop - Whether to show a backdrop (only for fixed and absolute)
- * @property {string} className - Additional CSS classes to add to the spinner
- * @property {string} id - Custom ID for the spinner (if not provided, will be generated from name)
- * @property {HTMLElement|string} container - Container element or selector to append the spinner to (defaults to body)
- * @property {string} text - Optional text to display with the spinner
- * @property {boolean} adaptSize - Whether to adapt the spinner size to its container
- * @property {number} sizeFactor - Factor to multiply container dimensions (0-1, default 0.6)
- * @property {number} minSize - Minimum size in pixels
- * @property {number} maxSize - Maximum size in pixels
- * @property {number} sizeMargin - Margin to subtract from container dimensions
- * @property {string} color - Color of the spinner's moving part
- * @property {string} backgroundColor - Color of the spinner's background/track
- * @property {string} backdropColor - Color of the backdrop (when showBackdrop is true)
- * @property {number} backdropOpacity - Opacity of the backdrop (0-1)
+ * @property {'fixed' | 'absolute' | 'relative'} [position] - Position of the spinner
+ * @property {boolean} [showBackdrop] - Whether to show a backdrop (only for fixed and absolute)
+ * @property {string} [className] - Additional CSS classes to add to the spinner
+ * @property {string} [id] - Custom ID for the spinner (if not provided, will be generated from name)
+ * @property {string} [type] - Type of spinner (default or crescent)
+ * @property {HTMLElement|string|null} [container] - Container element or selector to append the spinner to (defaults to body)
+ * @property {string} [text] - Optional text to display with the spinner
+ * @property {boolean} [adaptSize] - Whether to adapt the spinner size to its container
+ * @property {number} [sizeFactor] - Factor to multiply container dimensions (0-1, default 0.6)
+ * @property {number} [minSize] - Minimum size in pixels
+ * @property {number} [maxSize] - Maximum size in pixels
+ * @property {number} [sizeMargin] - Margin to subtract from container dimensions
+ * @property {string} [color] - Color of the spinner's moving part
+ * @property {string} [backgroundColor] - Color of the spinner's background/track
+ * @property {string} [backdropColor] - Color of the backdrop (when showBackdrop is true)
+ * @property {number} [backdropOpacity] - Opacity of the backdrop (0-1)
  */
 
 /** @type {SpinnerConfigProps} */
@@ -58,7 +59,7 @@ class Spinner {
 
   /**
    * Resolves the container element from the configuration
-   * @returns {HTMLElement} The resolved container element
+   * @returns {HTMLElement|Element|DocumentFragment} The resolved container element or document fragment
    */
   resolveContainer() {
     const container = this.config.container;
@@ -115,11 +116,14 @@ class Spinner {
 
 /**
  * Adapts the spinner size based on container dimensions
- * @param {HTMLElement} container - The container element
+ * @param {Element|HTMLElement} container - The container element
  * @param {HTMLElement} spinnerElement - The spinner element
  */
 adaptSpinnerSize(container, spinnerElement) {
   if (!this.config.adaptSize || !container || !spinnerElement) return;
+  
+  // Ensure spinnerElement is HTMLElement
+  if (!(spinnerElement instanceof HTMLElement)) return;
   
   // Get container dimensions and computed styles
   const rect = container.getBoundingClientRect();
@@ -148,14 +152,14 @@ adaptSpinnerSize(container, spinnerElement) {
   } else {
     // For larger containers, use the container dimensions
     const smallestDimension = Math.min(containerWidth, containerHeight);
-    baseSize = (smallestDimension - this.config.sizeMargin);
+    baseSize = smallestDimension - (this.config.sizeMargin || 0);
   }
   
   // Apply size factor
-  let size = baseSize * this.config.sizeFactor;
+  let size = baseSize * (this.config.sizeFactor || 1);
   
   // Apply min/max constraints
-  size = Math.max(this.config.minSize, Math.min(size, this.config.maxSize));
+  size = Math.max(this.config.minSize || 16, Math.min(size, this.config.maxSize || 60));
   
   // Apply the calculated size
   spinnerElement.style.width = `${size}px`;
@@ -166,12 +170,12 @@ adaptSpinnerSize(container, spinnerElement) {
   spinnerElement.style.borderWidth = `${borderWidth}px`;
   
   // Ensure colors are maintained when adjusting size
-  spinnerElement.style.borderColor = this.config.backgroundColor;
-  spinnerElement.style.borderTopColor = this.config.color;
+  spinnerElement.style.borderColor = this.config.backgroundColor || 'rgba(0, 0, 0, 0.1)';
+  spinnerElement.style.borderTopColor = this.config.color || '#3498db';
   
   // For small containers, ensure wrapper doesn't cause layout shifts
   if (contentHeight < 40) {
-    if (this.element) {
+    if (this.element && this.element instanceof HTMLElement) {
       // Set size constraints on wrapper
       this.element.style.width = `${size}px`;
       this.element.style.height = `${size}px`;
@@ -197,7 +201,7 @@ create() {
   // Add custom classes if provided
   if (this.config.className) {
     this.config.className.split(' ').forEach(cls => {
-      if (cls) this.element.classList.add(cls);
+      if (cls && this.element) this.element.classList.add(cls);
     });
   }
   
@@ -206,8 +210,8 @@ create() {
   spinnerElement.classList.add('spinner');
   
   // Apply colors from config
-  spinnerElement.style.borderColor = this.config.backgroundColor;
-  spinnerElement.style.borderTopColor = this.config.color;
+  spinnerElement.style.borderColor = this.config.backgroundColor || 'rgba(0, 0, 0, 0.1)';
+  spinnerElement.style.borderTopColor = this.config.color || '#3498db';
   
   this.element.appendChild(spinnerElement);
   
@@ -227,8 +231,8 @@ create() {
     this.backdrop.id = `backdrop-${this.id}`;
     
     // Apply backdrop color and opacity from config
-    this.backdrop.style.backgroundColor = this.config.backdropColor;
-    this.backdrop.style.opacity = String(this.config.backdropOpacity);
+    this.backdrop.style.backgroundColor = this.config.backdropColor || '#000000';
+    this.backdrop.style.opacity = String(this.config.backdropOpacity || 0.1);
   }
 }
   
@@ -250,14 +254,17 @@ mount() {
       mounted = this.appendToContainer(elements[0]);
       
       // Adapt size if enabled and spinner was mounted
-      if (mounted && this.config.adaptSize) {
+      if (mounted && this.config.adaptSize && this.element) {
         const spinnerElement = this.element.querySelector('.spinner');
-        this.adaptSpinnerSize(elements[0], spinnerElement);
+        if (spinnerElement instanceof HTMLElement && elements[0] instanceof HTMLElement) {
+          this.adaptSpinnerSize(elements[0], spinnerElement);
+        }
       }
     }
     // If multiple elements, clone spinner for each one
     else if (elements.length > 1) {
       // Keep track of all created elements to add to active spinners
+      /** @type {Array<Spinner>} */
       const cloneSpinners = [];
       
       elements.forEach((el, index) => {
@@ -267,9 +274,11 @@ mount() {
           mounted = firstMounted;
           
           // Adapt size if enabled and spinner was mounted
-          if (firstMounted && this.config.adaptSize) {
+          if (mounted && this.config.adaptSize && this.element) {
             const spinnerElement = this.element.querySelector('.spinner');
-            this.adaptSpinnerSize(el, spinnerElement);
+            if (spinnerElement instanceof HTMLElement && el instanceof HTMLElement) {
+              this.adaptSpinnerSize(el, spinnerElement);
+            }
           }
           return;
         }
@@ -280,12 +289,14 @@ mount() {
         const cloneMounted = cloneSpinner.appendToContainer(el);
         
         // Adapt size for clones if enabled and mounted
-        if (cloneMounted && this.config.adaptSize) {
+        if (cloneMounted && cloneSpinner.config.adaptSize && cloneSpinner.element) {
           const spinnerElement = cloneSpinner.element.querySelector('.spinner');
-          cloneSpinner.adaptSpinnerSize(el, spinnerElement);
-          
-          // Only add successfully mounted spinners to the list
-          cloneSpinners.push(cloneSpinner);
+          if (spinnerElement instanceof HTMLElement && el instanceof HTMLElement) {
+            cloneSpinner.adaptSpinnerSize(el, spinnerElement);
+            
+            // Only add successfully mounted spinners to the list
+            cloneSpinners.push(cloneSpinner);
+          }
         }
       });
       
@@ -295,7 +306,10 @@ mount() {
           activeSpinners.set(this.name, []);
         }
         
-        activeSpinners.get(this.name).push(...cloneSpinners);
+        if(activeSpinners) {
+          let spinners = activeSpinners.get(this.name);
+          if(spinners) spinners.push(...cloneSpinners);
+        }
       }
     }
   } else {
@@ -303,9 +317,11 @@ mount() {
     mounted = this.appendToContainer(container);
     
     // Adapt size if enabled and spinner was mounted
-    if (mounted && this.config.adaptSize) {
+    if (mounted && this.config.adaptSize && this.element) {
       const spinnerElement = this.element.querySelector('.spinner');
-      this.adaptSpinnerSize(container, spinnerElement);
+      if (spinnerElement instanceof HTMLElement && container instanceof HTMLElement) {
+        this.adaptSpinnerSize(container, spinnerElement);
+      }
     }
   }
   
@@ -314,7 +330,10 @@ mount() {
     if (!activeSpinners.has(this.name)) {
       activeSpinners.set(this.name, []);
     }
-    activeSpinners.get(this.name).push(this);
+    if(activeSpinners) {
+      let spinners = activeSpinners.get(this.name);
+      if(spinners) spinners.push(this);
+    }
   }
   
   return mounted;
@@ -323,7 +342,7 @@ mount() {
 
 /**
  * Checks if container already has a spinner as a direct child
- * @param {HTMLElement} container - The container to check
+ * @param {Element|HTMLElement} container - The container to check
  * @returns {boolean} True if container already has a spinner
  */
 hasExistingSpinner(container) {
@@ -344,11 +363,25 @@ hasExistingSpinner(container) {
 
 /**
  * Appends spinner to a specific container
- * @param {HTMLElement} container - The container to append to
+ * @param {Element|HTMLElement|DocumentFragment} container - The container to append to
  * @returns {boolean} True if spinner was appended, false if a spinner already exists
  */
 appendToContainer(container) {
-    // First check if container already has a spinner as a direct child
+    // Skip check for DocumentFragment since it's a special case
+    if (container instanceof DocumentFragment) {
+      // For document fragments, we just append directly
+      if (this.backdrop) {
+        container.appendChild(this.backdrop);
+      }
+      
+      if (this.element) {
+        container.appendChild(this.element);
+      }
+      
+      return true;
+    }
+    
+    // For normal elements, check if container already has a spinner
     if (this.hasExistingSpinner(container)) {
       // Skip appending if spinner exists
       return false;
@@ -365,7 +398,7 @@ appendToContainer(container) {
     }
     
     return true;
-  }
+}
   
   /**
    * Removes the spinner from the DOM
@@ -386,13 +419,14 @@ appendToContainer(container) {
     // Remove from active spinners
     if (activeSpinners.has(this.name)) {
       const spinners = activeSpinners.get(this.name);
-      const index = spinners.indexOf(this);
-      if (index !== -1) {
-        spinners.splice(index, 1);
-      }
-      
+      if(spinners) {
+        const index = spinners.indexOf(this);
+        if (index !== -1) {
+          spinners.splice(index, 1);
+        }
+      }      
       // Clean up if no spinners left with this name
-      if (spinners.length === 0) {
+      if (spinners?.length === 0) {
         activeSpinners.delete(this.name);
       }
     }
@@ -420,8 +454,11 @@ function showSpinner(name = 'default', config = {}) {
  */
 function hideSpinner(name = 'default') {
   if (activeSpinners.has(name)) {
-    const spinners = [...activeSpinners.get(name)];
-    spinners.forEach(spinner => spinner.destroy());
+    const spinnersArray = activeSpinners.get(name);
+    if (spinnersArray) {
+      const spinners = [...spinnersArray];
+      spinners.forEach(spinner => spinner.destroy());
+    }
   }
 }
 

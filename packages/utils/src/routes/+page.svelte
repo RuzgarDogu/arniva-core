@@ -4,6 +4,16 @@
 
 
 	function testSpinner() {
+		spinner.show('divSpinner', { 
+			container: '#container', 
+			color: '#fff',
+			adaptSize: true,
+			sizeFactor: 0.7,  // Use 70% of available space
+			minSize: 12,      // Minimum 12px
+			sizeMargin: 8,     // Keep 8px margin within container
+			position: 'absolute',
+			// type: 'crescent'
+			});
 		spinner.show('buttonSpinner', { 
 			container: '#spinnerTest', 
 			color: '#fff',
@@ -11,11 +21,13 @@
 			sizeFactor: 0.7,  // Use 70% of available space
 			minSize: 12,      // Minimum 12px
 			sizeMargin: 8,     // Keep 8px margin within container
-			// type: 'crescent'
+			position: 'relative',
+			type: 'crescent'
 			});
 		spinner.show('bodySpinner', { 
-			container: 'body', 
-			color: 'blue',
+			container: 'red', 
+			color: 'transparent',
+			backgroundColor: 'var(--ar-accent-color)',
 			adaptSize: true,
 			sizeFactor: 0.7,  // Use 70% of available space
 			minSize: 12,      // Minimum 12px
@@ -30,10 +42,12 @@
 	}
 
 </script>
+<div id="container">
+	<h1>Welcome to your library project</h1>
+	<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
+	<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+</div>
 
-<h1>Welcome to your library project</h1>
-<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
 <div style="margin-bottom: 30px;">
 <button onclick={() => toast.danger('deneme', { duration: 3000, position: 'top-right' })}
 	>Toast Test</button
@@ -45,7 +59,12 @@
 </div>
 
 
+
 <style>
+	#container {
+		width: 100%;
+		position: relative;
+	}
 	button {
 		padding: 10px 15px;
 		background-color: blueviolet;
