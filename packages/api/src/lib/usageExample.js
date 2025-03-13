@@ -3,60 +3,56 @@ import { toast } from '@ruzgardogu/utils';
 export const Api = new ApiClient({
 	baseUrl: 'https://jsonplaceholder.typicode.com',
 	suppressErrors: false, // Set to true if you don't want errors to throw,
-	// onApplicationError: (error) => {
-	// 	console.log('APPLICATION ERROR:', error);
-	// 	toast.warning(error.message);
-	// },
+	onApplicationError: (error) => {
+		console.log('APPLICATION ERROR:', error);
+		toast.warning(error.message);
+	},
 
-	// // Network errors (CORS, no connection, etc)
-	// onNetworkError: (error) => {
-	// 	console.log('NETWORK ERROR:', error);
-	// 	toast.danger('Connection error: ' + error.message);
-	// },
+	// Network errors (CORS, no connection, etc)
+	onNetworkError: (error) => {
+		console.log('NETWORK ERROR:', error);
+		toast.danger('Connection error: ' + error.message);
+	},
 
-	// // Not found errors (404)
-	// onNotFound: (error) => {
-	// 	console.log('NOT FOUND:', error);
-	// 	toast.warning('Resource not found: ' + error.message);
-	// },
+	// Not found errors (404)
+	onNotFound: (error) => {
+		console.log('NOT FOUND:', error);
+		toast.warning('Resource not found: ' + error.message);
+	},
 
-	// // Other client errors (400-499 except those with specific handlers)
-	// onClientError: (error) => {
-	// 	console.log('CLIENT ERROR:', error);
-	// 	toast.warning('Request error: ' + error.message);
-	// },
+	// Other client errors (400-499 except those with specific handlers)
+	onClientError: (error) => {
+		console.log('CLIENT ERROR:', error);
+		toast.warning('Request error: ' + error.message);
+	},
 
-	// // Server errors (500+)
-	// onServerError: (error) => {
-	// 	console.log('SERVER ERROR:', error);
-	// 	toast.danger('Server error: ' + error.message);
-	// },
+	// Server errors (500+)
+	onServerError: (error) => {
+		console.log('SERVER ERROR:', error);
+		toast.danger('Server error: ' + error.message);
+	},
 
-	// // General fallback (will not be called if any specific handler above is used)
-	// onError: (error) => {
-	// 	console.log('GENERAL ERROR:', error);
-	// 	toast.danger('Error: ' + error.message);
-	// },
-	// logger: (message) => {
-	// 	// Either enhance console logging or send logs to a third-party service
-	// 	console.log('aaa', message);
-	// },
-	// onBefore: (requestInfo) => {
-	// 	console.log('Before request:', requestInfo.endpoint);
-	// 	// You can modify headers or other request properties here
-	// },
-	// onAfter: (result) => {
-	// 	console.log('After request:', result);
-	// 	// Process successful results
-	// },
-	// onFinally: () => {
-	// 	console.log('Request complete');
-	// 	// Cleanup operations, hide loading spinners, etc.
-	// },
-	// onLoading: (isLoading) => {
-	// 	console.log('Loading:', isLoading);
-	// 	// Show/hide loading spinners or other UI elements
-	// },
+	// General fallback (will not be called if any specific handler above is used)
+	onError: (error) => {
+		console.log('GENERAL ERROR:', error);
+		toast.danger('Error: ' + error.message);
+	},
+	onBefore: (requestInfo) => {
+		// console.log('Before request:', requestInfo.endpoint);
+		// You can modify headers or other request properties here
+	},
+	onAfter: (result) => {
+		// console.log('After request:', result);
+		// Process successful results
+	},
+	onFinally: () => {
+		// console.log('Request complete');
+		// Cleanup operations, hide loading spinners, etc.
+	},
+	onLoading: (isLoading) => {
+		// console.log('Loading:', isLoading);
+		// Show/hide loading spinners or other UI elements
+	},
 	errorInterceptor: (error) => {
         // Add a human-friendly message based on the error type
         if (error.status === 401) {
