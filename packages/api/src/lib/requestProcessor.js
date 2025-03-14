@@ -1,10 +1,16 @@
+/** @typedef {import('./types').ApiConfig} ApiConfig */
+/** @typedef {import('./types').ParamsObject} ParamsObject */
+/** @typedef {import('./types').AbortControllerInfo} AbortControllerInfo */
+/** @typedef {import('./types').ApiToken} ApiToken */
+/** @typedef {import('./types').RequestOptions} RequestOptions */
+
 /**
  * Handles request preparation and modification
  */
 class RequestProcessor {
   /**
    * Create a new request processor
-   * @param {Object} config - API configuration
+   * @param {ApiConfig} config - API configuration
    */
   constructor(config) {
     this.config = config;
@@ -13,50 +19,50 @@ class RequestProcessor {
   /**
    * Prepares the URL by normalizing path and handling parameters
    * @param {string} endpoint - The endpoint path with or without query string
-   * @param {Object} params - Parameters to include in the query string
-   * @param {Object} config - Configuration including baseUrl and paramsSerializer
+   * @param {ParamsObject} params - Parameters to include in the query string
+   * @param {ApiConfig} config - Configuration including baseUrl and paramsSerializer
    * @returns {string} The fully prepared URL
    */
   prepareUrl(endpoint, params = {}, config = this.config) {
     // Check if the endpoint is already an absolute URL (starts with http:// or https://)
     const isAbsoluteUrl = /^https?:\/\//i.test(endpoint);
-
+  
     // Extract any existing query parameters from the endpoint
     const [path, existingQuery] = endpoint.split('?');
-
+  
     // Parse existing query parameters if any
     let mergedParams = { ...params };
     if (existingQuery) {
       const urlSearchParams = new URLSearchParams(existingQuery);
       urlSearchParams.forEach((value, key) => {
-        // Only add if not already in params object
-        if (!mergedParams.hasOwnProperty(key)) {
+        // Use Object.prototype.hasOwnProperty.call instead of direct method access
+        if (!Object.prototype.hasOwnProperty.call(mergedParams, key)) {
           mergedParams[key] = value;
         }
       });
     }
-
+  
     // Generate query string from merged parameters
     const queryString = config.paramsSerializer(mergedParams);
-
+  
     // If it's an absolute URL, use it directly (without baseUrl)
     if (isAbsoluteUrl) {
       return `${path}${queryString ? '?' + queryString : ''}`;
     }
-
+  
     // Otherwise, normalize the relative path and combine with baseUrl
     const normalizedPath = path.replace(/^\/|\/$/g, '');
     return `${config.baseUrl}/${normalizedPath}${queryString ? '?' + queryString : ''}`;
   }
 
-  /**
-   * Prepares request options with headers, credentials, etc.
-   * @param {string} method - HTTP method (GET, POST, PUT, DELETE)
-   * @param {Object} options - User-provided options
-   * @param {*} data - Request body data (for POST, PUT)
-   * @param {Object} config - Configuration
-   * @returns {Object} Prepared fetch options and abort controller
-   */
+/**
+ * Prepares request options with headers, credentials, etc.
+ * @param {string} method - HTTP method (GET, POST, PUT, DELETE)
+ * @param {RequestOptions} options - User-provided options
+ * @param {*} data - Request body data (for POST, PUT)
+ * @param {ApiConfig} config - Configuration
+ * @returns {{fetchOptions: Object, abortController: AbortController|null}} Prepared fetch options and abort controller
+ */
   prepareOptions(method, options = {}, data = null, config = this.config) {
     const { token, headers: configHeaders, timeout, signal, debug } = config;
 
@@ -98,9 +104,9 @@ class RequestProcessor {
 
   /**
    * Creates and configures an AbortController
-   * @param {AbortSignal} existingSignal - Existing signal if provided
+   * @param {AbortSignal|null} existingSignal - Existing signal if provided
    * @param {number} timeout - Request timeout in ms
-   * @returns {Object} AbortController and effective signal
+   * @returns {AbortControllerInfo} AbortController and effective signal
    */
   createAbortController(existingSignal, timeout) {
     // Use provided signal or create a new controller
@@ -133,120 +139,148 @@ class RequestProcessor {
     };
   }
 
-  /**
-   * Prepares the request body based on content type
-   * @param {Object} fetchOptions - Fetch options object to modify
-   * @param {Object} headers - Request headers
-   * @param {*} data - Request body data
-   */
-  prepareRequestBody(fetchOptions, headers, data) {
-    const contentType = headers['Content-Type']?.toLowerCase();
+/**
+ * Prepares the request body based on content type
+ * @param {RequestInit} fetchOptions - Fetch options object to modify
+ * @param {Object.<string, string>} headers - Request headers
+ * @param {*} data - Request body data
+ */
+prepareRequestBody(fetchOptions, headers, data) {
+  const contentType = headers['Content-Type']?.toLowerCase();
 
-    // For multipart/form-data, use FormData object
-    if (contentType?.includes('multipart/form-data')) {
-      // If data is already FormData, use it directly
-      if (data instanceof FormData) {
-        fetchOptions.body = data;
-      } else {
-        // Convert object to FormData
-        const formData = new FormData();
-        Object.entries(data).forEach(([key, value]) => {
-          // Handle File objects specially
-          if (value instanceof File) {
-            formData.append(key, value, value.name);
-          }
-          // Handle arrays
-          else if (Array.isArray(value)) {
-            value.forEach((item) => formData.append(`${key}[]`, item));
-          }
-          // Handle everything else
-          else {
-            formData.append(key, value);
-          }
-        });
-        fetchOptions.body = formData;
+  // For multipart/form-data, use FormData object
+  if (contentType?.includes('multipart/form-data')) {
+    // If data is already FormData, use it directly
+    if (data instanceof FormData) {
+      fetchOptions.body = data;
+    } else {
+      // Convert object to FormData
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        // Handle File objects specially
+        if (value instanceof File) {
+          formData.append(key, value, value.name);
+        }
+        // Handle arrays
+        else if (Array.isArray(value)) {
+          value.forEach((item) => formData.append(`${key}[]`, item));
+        }
+        // Handle everything else
+        else {
+          formData.append(key, value);
+        }
+      });
+      fetchOptions.body = formData;
+    }
+
+    // Remove Content-Type header to let browser set it with boundary
+    if (fetchOptions.headers) {
+      if (fetchOptions.headers instanceof Headers) {
+        // If it's a Headers object, use delete() method
+        fetchOptions.headers.delete('Content-Type');
+      } else if (Array.isArray(fetchOptions.headers)) {
+        // If it's a header array, filter out Content-Type entries
+        fetchOptions.headers = fetchOptions.headers.filter(
+          ([key]) => key.toLowerCase() !== 'content-type'
+        );
+      } else if (typeof fetchOptions.headers === 'object') {
+        // If it's a plain object, delete the property
+        delete fetchOptions.headers['Content-Type'];
       }
-
-      // Remove Content-Type header to let browser set it with boundary
-      delete fetchOptions.headers['Content-Type'];
-    }
-    // For URL-encoded form data
-    else if (contentType?.includes('application/x-www-form-urlencoded')) {
-      fetchOptions.body = new URLSearchParams(data).toString();
-    }
-    // Default to JSON
-    else {
-      fetchOptions.body = JSON.stringify(data);
     }
   }
+  // For URL-encoded form data
+  else if (contentType?.includes('application/x-www-form-urlencoded')) {
+    fetchOptions.body = new URLSearchParams(data).toString();
+  }
+  // Default to JSON
+  else {
+    fetchOptions.body = JSON.stringify(data);
+  }
+}
 
-  /**
-   * Apply request interceptors to modify request options
-   * @param {Object} requestConfig - Original request configuration
-   * @param {Object} fetchOptions - Original fetch options
-   * @returns {Promise<Object>} - Modified fetch options
-   */
+/**
+ * Apply request interceptors to modify request options
+ * @param {ApiConfig} requestConfig - Original request configuration
+ * @param {RequestInit} fetchOptions - Original fetch options
+ * @returns {Promise<{config: ApiConfig, options: RequestInit}>} - Modified configuration and fetch options
+ */
   async applyRequestInterceptors(requestConfig, fetchOptions) {
     let config = { ...requestConfig };
     let options = { ...fetchOptions };
 
     // Apply registered request interceptors in sequence
-    for (const interceptor of requestConfig.interceptors.request) {
-      try {
-        if (typeof interceptor.fulfilled === 'function') {
-          const result = await interceptor.fulfilled({ config, options });
-          if (result) {
-            config = result.config || config;
-            options = result.options || options;
+    let requestInterceptors = requestConfig?.interceptors?.request;
+
+    if(requestInterceptors) {
+      for (const interceptor of requestInterceptors) {
+        try {
+          if (typeof interceptor.fulfilled === 'function') {
+            const result = await interceptor.fulfilled({ config, options });
+            if (result) {
+              config = result.config || config;
+              options = result.options || options;
+            }
           }
+        } catch (error) {
+          if (typeof interceptor.rejected === 'function') {
+            await interceptor.rejected(error instanceof Error ? error : new Error(String(error)));
+          }
+          throw error;
         }
-      } catch (error) {
-        if (typeof interceptor.rejected === 'function') {
-          await interceptor.rejected(error);
-        }
-        throw error;
       }
     }
+
 
     return { config, options };
   }
 
   /**
    * Helper to determine if an object is an options object
-   * @param {Object} obj - Object to check
+   * @param {unknown} obj - Object to check
    * @returns {boolean} - True if the object appears to be options
    */
   static isOptionsObject(obj) {
-    // Check for common fetch/config options properties
-    return (
-      obj &&
-      (obj.headers ||
-        obj.method ||
-        obj.mode ||
-        obj.credentials ||
-        obj.signal ||
-        obj.config ||
-        obj.cache ||
-        obj.redirect)
+    if (!obj || typeof obj !== 'object') {
+      return false;
+    }
+    
+    // Check for common fetch/config options properties that are in RequestOptions
+    return !!(
+      'headers' in obj ||
+      'method' in obj ||
+      'mode' in obj ||
+      'credentials' in obj ||
+      'signal' in obj ||
+      'config' in obj ||
+      'cache' in obj ||
+      'redirect' in obj ||
+      'forceContentType' in obj
     );
   }
 
-  /**
-   * Helper method to normalize parameters for all request methods
-   * @param {string} method - HTTP method (GET, POST, PUT, etc.)
-   * @param {string} endpoint - API endpoint
-   * @param {Array} args - All arguments passed to the original method
-   * @returns {Object} - Normalized parameters
-   */
+/**
+ * Helper method to normalize parameters for all request methods
+ * @param {string} method - HTTP method (GET, POST, PUT, etc.)
+ * @param {string} endpoint - API endpoint
+ * @param {Array<any>} args - All arguments passed to the original method
+ * @returns {{
+ *   method: string,
+ *   endpoint: string,
+ *   params: Record<string, any>,
+ *   data: null|FormData|Record<string, any>,
+ *   options: RequestOptions
+ * }} - Normalized parameters
+ */
   static normalizeParams(method, endpoint, args) {
     // Default return structure
-    const result = {
+    const result = /** @type {{ method: string, endpoint: string, params: Record<string, any>, data: null|FormData|Record<string, any>, options: RequestOptions }} */ ({
       method,
       endpoint,
       params: {},
       data: null,
       options: {}
-    };
+    });
 
     // No arguments case
     if (args.length === 0) {

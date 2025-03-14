@@ -1,12 +1,22 @@
+/** @typedef {import('./types').ApiConfig} ApiConfig */
+/** @typedef {import('./types').ErrorResponse} ErrorResponse */
+/** @typedef {import('./types').RequestInfo} RequestInfo */
+/** @typedef {import('./types').ResponseInfo} ResponseInfo */
+
+/**
+ * @typedef {Object.<string, any>} JsonData
+ * Generic object with string keys and any values that we might get from API responses
+ */
+
 /**
  * Handles API error processing and callbacks
  */
 class ErrorHandler {
   /**
    * Create a new error handler
-   * @param {Object} config - Configuration with error callbacks
+   * @param {ApiConfig} config - Configuration with error callbacks
    * @param {boolean} debug - Whether to log debug information
-   * @param {Function} logger - Logger function for debug information
+   * @param {function(...*):void} logger - Logger function for debug information
    */
   constructor(config, debug = false, logger = console.log) {
     this.config = config;
@@ -15,33 +25,48 @@ class ErrorHandler {
   }
 
   /**
+   * Ensure the error object has an extras property
+   * @param {ErrorResponse} error - Error object to prepare
+   * @returns {ErrorResponse} Error object with extras property
+   * @private
+   */
+  _prepareError(error) {
+    // Initialize the extras object if it doesn't exist
+    if (!error.extras || typeof error.extras !== 'object') {
+      error.extras = {};
+    }
+    return error;
+  }
+
+  /**
    * Process a JSON error response
    * @param {Response} response - Fetch Response object
-   * @param {Object} data - Parsed response data
-   * @returns {Object} Standardized error object
+   * @param {JsonData} data - Parsed response data
+   * @returns {ErrorResponse} Standardized error object
    */
   processJsonErrorResponse(response, data) {
-    const { jsonErrorResponse } = this.config;
-    
-    const appError = {
-      message: data[jsonErrorResponse.messageKey] || 'Unknown error',
-      code: data[jsonErrorResponse.codeKey] || 'UNKNOWN_ERROR',
+  // Use default values if jsonErrorResponse is undefined
+  const messageKey = this.config.jsonErrorResponse?.messageKey || 'message';
+  const codeKey = this.config.jsonErrorResponse?.codeKey || 'code';
+  
+  /** @type {ErrorResponse} */
+  const appError = this._prepareError({
+    message: data[messageKey] || 'Unknown error',
+    code: data[codeKey] || 'UNKNOWN_ERROR',
+    status: response.status,
+    type: 'application',
+    timestamp: new Date().toISOString(),
+    handledByClient: true,
+    requestUrl: response.url,
+    response: {
       status: response.status,
-      type: 'application',
-      timestamp: new Date().toISOString(),
-      handledByClient: true,
-      request: {
-        url: response.url,
-        method: response.method
-      },
-      response: {
-        status: response.status,
-        statusText: response.statusText,
-        headers: Object.fromEntries([...response.headers.entries()]),
-        data: data
-      }
-    };
-
+      statusText: response.statusText,
+      headers: Object.fromEntries([...response.headers.entries()]),
+      data: data
+    },
+    extras: {}
+  });
+  
     this.logError('APPLICATION ERROR', appError);
     
     // Apply error interceptor if provided
@@ -50,6 +75,8 @@ class ErrorHandler {
         this.config.errorInterceptor.toString() !== '() => {}') {
       interceptedError = this.config.errorInterceptor(appError);
       interceptedError.handledByClient = true;
+      // Make sure extras exists even after interceptor
+      this._prepareError(interceptedError);
     }
     
     // Call application error handler if provided
@@ -67,19 +94,19 @@ class ErrorHandler {
   /**
    * Process HTTP error responses
    * @param {Response} response - Fetch Response object
-   * @param {any} data - Parsed response data
-   * @returns {Object} Standardized error object
+   * @param {JsonData} data - Parsed response data
+   * @returns {ErrorResponse} Standardized error object
    */
   processHttpError(response, data) {
     let errorData = data;
-
+  
     if (!errorData) {
       errorData = {
         status: response.status,
         statusText: response.statusText
       };
     }
-
+  
     // Extract a message from the error data if possible
     let errorMessage = '';
     if (errorData && typeof errorData === 'object') {
@@ -89,51 +116,52 @@ class ErrorHandler {
         errorMessage = errorData.error;
       }
     }
-
+  
     if (!errorMessage) {
       errorMessage = `HTTP Error: ${response.status} ${response.statusText}`;
     }
-
+  
     // Create a standardized error object with more detail
-    const error = {
+    /** @type {ErrorResponse} */
+    const error = this._prepareError({
       message: errorMessage,
+      extras: {},
       status: response.status,
       data: errorData,
       type: 'http',
       timestamp: new Date().toISOString(),
       handledByClient: true,
-      request: {
-        url: response.url,
-        method: response.method
-      },
+      requestUrl: response.url,
       response: {
         status: response.status,
         statusText: response.statusText,
         headers: Object.fromEntries([...response.headers.entries()]),
         data: errorData
       }
-    };
-
+    });
+  
     this.logError('HTTP ERROR', error);
-
+  
     // Call specific error handlers based on status code
     let handledBySpecificHandler = this.callSpecificErrorHandler(error);
-
+  
     // Apply error interceptor if provided
     let interceptedError = error;
     if (typeof this.config.errorInterceptor === 'function' && 
         this.config.errorInterceptor.toString() !== '() => {}') {
       interceptedError = this.config.errorInterceptor(error);
       interceptedError.handledByClient = true;
+      // Make sure extras exists even after interceptor
+      this._prepareError(interceptedError);
     }
-
+  
     // Only call general error handler if no specific handler was called
     if (!handledBySpecificHandler && 
         typeof this.config.onError === 'function' && 
         this.config.onError.toString() !== '() => {}') {
       this.config.onError(interceptedError);
     }
-
+  
     return interceptedError;
   }
 
@@ -144,44 +172,59 @@ class ErrorHandler {
    * @param {string} method - Request method
    * @param {Object} params - Request params
    * @param {Object} headers - Request headers
-   * @returns {Object} Standardized error object
+   * @returns {ErrorResponse} Standardized error object
    */
   processNetworkError(error, url, method, params, headers) {
-    const networkError = {
+    /** @type {ErrorResponse} */
+    const networkError = this._prepareError({
       message: 'Network error: ' + error.message,
       originalError: error,
       type: 'network',
       timestamp: new Date().toISOString(),
       url: url,
-      method: method,
       status: 0,
       handledByClient: true,
+      extras: {}, // Add the extras property here
       request: {
         url,
-        method,
+        method, 
+        endpoint: url.split('/').pop() || '', // Extract endpoint from URL
         params: Object.keys(params).length > 0 ? params : undefined,
         headers
       }
-    };
-
+    });
+  
     this.logError('NETWORK ERROR', networkError);
+  
+    // Rest of the method...
 
+  
+    // Apply error interceptor if provided
+    let interceptedError = networkError;
+    if (typeof this.config.errorInterceptor === 'function' && 
+        this.config.errorInterceptor.toString() !== '() => {}') {
+      interceptedError = this.config.errorInterceptor(networkError);
+      interceptedError.handledByClient = true;
+      // Make sure extras exists even after interceptor
+      this._prepareError(interceptedError);
+    }
+  
     // Call the network error handler specifically
     if (typeof this.config.onNetworkError === 'function' && 
         this.config.onNetworkError.toString() !== '() => {}') {
-      this.config.onNetworkError(networkError);
+      this.config.onNetworkError(interceptedError);
     } else if (typeof this.config.onError === 'function' && 
               this.config.onError.toString() !== '() => {}') {
-      this.config.onError(networkError);
+      this.config.onError(interceptedError);
     }
-
-    return networkError;
+  
+    return interceptedError;
   }
 
   /**
    * Process abort errors
-   * @param {Error} error - Abort error
-   * @returns {Object} Standardized error object
+   * @param {ErrorResponse} error - Abort error
+   * @returns {ErrorResponse} Standardized error object
    */
   processAbortError(error) {
     if (typeof this.config.onAbort === 'function' && 
@@ -194,7 +237,7 @@ class ErrorHandler {
 
   /**
    * Call specific error handlers based on HTTP status code
-   * @param {Object} error - Error object
+   * @param {ErrorResponse} error - Error object
    * @returns {boolean} Whether a specific handler was called
    */
   callSpecificErrorHandler(error) {
@@ -233,7 +276,7 @@ class ErrorHandler {
 
   /**
    * Create a throwable error from an error object
-   * @param {Object} errorObj - Error object
+   * @param {ErrorResponse} errorObj - Error object
    * @returns {Error} Throwable error
    */
   createThrowableError(errorObj) {
@@ -245,7 +288,7 @@ class ErrorHandler {
   /**
    * Log an error with a unique identifier
    * @param {string} type - Error type
-   * @param {Object} error - Error details
+   * @param {ErrorResponse} error - Error details
    */
   logError(type, error) {
     if (this.debug) {
@@ -258,7 +301,7 @@ class ErrorHandler {
 
   /**
    * Handle any error by returning or throwing based on configuration
-   * @param {Object} errorObj - Error object
+   * @param {ErrorResponse} errorObj - Error object
    * @throws {Error} If suppressErrors is false
    * @returns {Object} Error object if suppressErrors is true
    */

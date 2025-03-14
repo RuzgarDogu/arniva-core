@@ -3,15 +3,21 @@ import RequestProcessor from './requestProcessor.js';
 import ResponseProcessor from './responseProcessor.js';
 import ErrorHandler from './errorHandler.js';
 
+/** @typedef {import('./types').ApiConfig} ApiConfig */
+/** @typedef {import('./types').RequestOptions} RequestOptions */
+/** @typedef {import('./types').ErrorResponse} ErrorResponse */
+/** @typedef {import('./types').ParamsObject} ParamsObject */
+
 /**
  * API Client for making HTTP requests
  */
 class ApiClient {
     /**
      * Create a new API client instance
-     * @param {Object} config - Configuration options to override defaults
+     * @param {Partial<ApiConfig>} config - Configuration options to override defaults
      */
     constructor(config = {}) {
+        /** @type {ApiConfig} */
         this.config = { ...defaultConfig, ...config };
         this.abortControllers = new Map();
         
@@ -27,31 +33,63 @@ class ApiClient {
         // Initialize interceptors
         this.interceptors = {
             request: {
+                /**
+                 * Add a request interceptor
+                 * @param {(config: {config: ApiConfig, options: RequestInit}) => Promise<{config?: ApiConfig, options?: RequestInit}>} fulfilled - Function to process request
+                 * @param {(error: Error) => Promise<any>} rejected - Function to handle errors
+                 * @returns {number} - ID to use when removing the interceptor
+                 */
                 use: (fulfilled, rejected) => {
-                    this.config.interceptors.request.push({ fulfilled, rejected });
-                    return this.config.interceptors.request.length - 1;
+                    if(this.config?.interceptors?.request) {
+                        this.config.interceptors.request.push({ fulfilled, rejected });
+                        return this.config.interceptors.request.length - 1;
+                    }
+                    return -1;
                 },
+                /**
+                 * Remove a request interceptor
+                 * @param {number} id - ID of the interceptor to remove
+                 */
                 eject: (id) => {
-                    if (id !== undefined) {
+                    if (id !== undefined && this.config?.interceptors?.request) {
                         this.config.interceptors.request.splice(id, 1);
                     }
                 },
+                /**
+                 * Remove all request interceptors
+                 */
                 clear: () => {
-                    this.config.interceptors.request = [];
+                    if(this.config?.interceptors?.request) this.config.interceptors.request = [];
                 }
             },
             response: {
+                /**
+                 * Add a response interceptor
+                 * @param {(response: {data: any, response: Response, config: ApiConfig}) => Promise<{data?: any, response?: Response}>} fulfilled - Function to process response
+                 * @param {(error: Error) => Promise<any>} rejected - Function to handle errors
+                 * @returns {number} - ID to use when removing the interceptor
+                 */
                 use: (fulfilled, rejected) => {
-                    this.config.interceptors.response.push({ fulfilled, rejected });
-                    return this.config.interceptors.response.length - 1;
+                    if (this.config?.interceptors?.response) {
+                        this.config.interceptors.response.push({ fulfilled, rejected });
+                        return this.config.interceptors.response.length - 1;
+                    }
+                    return -1;
                 },
+                /**
+                 * Remove a response interceptor
+                 * @param {number} id - ID of the interceptor to remove
+                 */
                 eject: (id) => {
-                    if (id !== undefined) {
+                    if (id !== undefined && this.config?.interceptors?.response) {
                         this.config.interceptors.response.splice(id, 1);
                     }
                 },
+                /**
+                 * Remove all response interceptors
+                 */
                 clear: () => {
-                    this.config.interceptors.response = [];
+                    if(this.config?.interceptors?.response) this.config.interceptors.response = [];
                 }
             }
         };
@@ -60,8 +98,8 @@ class ApiClient {
     /**
      * Execute a request with retry mechanism
      * @private
-     * @param {Function} requestFn - Function that performs the request
-     * @param {Object} requestConfig - Request configuration
+     * @param {() => Promise<any>} requestFn - Function that performs the request
+     * @param {ApiConfig} requestConfig - Request configuration
      * @param {number} retries - Number of retries remaining
      * @returns {Promise<any>} - Response data
      */
@@ -70,20 +108,31 @@ class ApiClient {
             return await requestFn();
         } catch (error) {
             const { retry, retryDelay, retryCondition, debug, logger } = requestConfig;
-
+    
+            // Convert error to ErrorResponse if needed
+            const errorToPass = error && typeof error === 'object' && 'status' in error 
+                ? /** @type {ErrorResponse} */ (error) 
+                : this.errorHandler.processNetworkError(
+                    error instanceof Error ? error : new Error(String(error)), // Convert to Error if needed
+                    '', // URL not available here
+                    '', // Method not available here
+                    {}, 
+                    {}
+                );
+    
             // Check if we should retry
-            if (retries > 0 && retryCondition(error)) {
+            if (retries > 0 && retryCondition(errorToPass)) {
                 if (debug) {
                     logger(`Retrying request (${retry - retries + 1}/${retry}). Waiting ${retryDelay}ms...`);
                 }
-
+    
                 // Wait for the specified delay
                 await new Promise((resolve) => setTimeout(resolve, retryDelay));
-
+    
                 // Try again with one less retry
                 return this._executeWithRetry(requestFn, requestConfig, retries - 1);
             }
-
+    
             // No more retries or condition not met - propagate the error
             throw error;
         }
@@ -94,9 +143,9 @@ class ApiClient {
      * @private
      * @param {string} method - HTTP method (GET, POST, PUT, DELETE)
      * @param {string} endpoint - API endpoint
-     * @param {Object} params - URL parameters
-     * @param {Object} data - Request body data
-     * @param {Object} options - Additional fetch options
+     * @param {ParamsObject} params - URL parameters
+     * @param {any} data - Request body data
+     * @param {RequestOptions} options - Additional fetch options
      * @returns {Promise<any>} - Response data
      */
     async _request(method, endpoint, params = {}, data = null, options = {}) {
@@ -138,18 +187,25 @@ class ApiClient {
                     return await this.responseProcessor.process(response, finalRequestConfig);
                 } catch (error) {
                     // Check if this is a network error or an error already handled by _processResponse
-                    if (error.handledByClient) {
+                    if (error instanceof Error && 'handledByClient' in error && error.handledByClient) {
                         // This error was already handled, just rethrow it
                         throw error;
                     }
 
                     // This is a TRUE network error (not an HTTP status error)
                     const networkError = this.errorHandler.processNetworkError(
-                        error,
+                        error instanceof Error ? error : new Error(String(error)),
                         url,
                         method,
                         params,
-                        finalFetchOptions.headers
+                        // Convert headers to plain object or use empty object if undefined
+                        finalFetchOptions.headers ? Object.fromEntries(
+                            finalFetchOptions.headers instanceof Headers 
+                                ? finalFetchOptions.headers.entries() 
+                                : Array.isArray(finalFetchOptions.headers)
+                                    ? finalFetchOptions.headers
+                                    : Object.entries(finalFetchOptions.headers)
+                        ) : {}
                     );
 
                     return this.errorHandler.handleError(networkError);
@@ -169,18 +225,53 @@ class ApiClient {
             return result;
         } catch (error) {
             // If the error has already been handled, just re-throw
-            if (!error || error.handledByClient) {
+            if (!error || (error instanceof Error && 'handledByClient' in error && error.handledByClient)) {
                 throw error;
             }
 
             // Handle aborted requests
-            if (error && error.name === 'AbortError') {
-                this.errorHandler.processAbortError(error);
+            if (error && error instanceof Error && error.name === 'AbortError') {
+                // Convert AbortError to ErrorResponse before processing
+                const abortErrorResponse = /** @type {ErrorResponse} */ ({
+                    status: 499, // Custom status for canceled requests
+                    message: error.message || 'Request aborted',
+                    type: 'abort',
+                    code: 'ABORT',
+                    handledByClient: true,
+                    timestamp: new Date().toISOString(),
+                    originalError: error
+                });
+                this.errorHandler.processAbortError(abortErrorResponse);
             }
             // For any errors that haven't been handled yet
             else if (typeof requestConfig.onError === 'function') {
-                error.handledByClient = true;
-                requestConfig.onError(error);
+                // If it's an Error object with a handledByClient property
+                if (error instanceof Error) {
+                    // Create a proper ErrorResponse from the Error
+                    const errorResponse = /** @type {ErrorResponse} */ ({
+                        status: 0, // Unknown status
+                        message: error.message,
+                        type: 'network', // Default type for unknown errors
+                        code: 'UNKNOWN_ERROR',
+                        handledByClient: true,
+                        timestamp: new Date().toISOString(),
+                        originalError: error
+                    });
+                    requestConfig.onError(errorResponse);
+                }
+                // Otherwise pass the error as is - should be rare but handle it to be safe
+                else {
+                    // Create a generic ErrorResponse for non-Error objects
+                    const errorResponse = /** @type {ErrorResponse} */ ({
+                        status: 0,
+                        message: String(error),
+                        type: 'network',
+                        code: 'UNKNOWN_ERROR',
+                        handledByClient: true,
+                        timestamp: new Date().toISOString()
+                    });
+                    requestConfig.onError(errorResponse);
+                }
             }
 
             throw error;
@@ -194,8 +285,8 @@ class ApiClient {
     /**
      * Execute a hook function if it's not empty
      * @private
-     * @param {Function} hook - Hook function
-     * @param {*} args - Arguments to pass to hook
+     * @param {Function|undefined} hook - Hook function
+     * @param {...any} args - Arguments to pass to hook
      */
     _executeHook(hook, ...args) {
         if (typeof hook === 'function' && hook.toString() !== '() => {}') {
@@ -207,12 +298,13 @@ class ApiClient {
      * Create an HTTP method function (GET, POST, etc.)
      * @private
      * @param {string} method - HTTP method to create
-     * @returns {Function} - Method function for the specified HTTP method
+     * @returns {function(this:ApiClient, string, ...Array<any>): Promise<any>} - Method function for the specified HTTP method
      */
     static _createMethod(method) {
-        return async function (endpoint, ...args) {
-            // Using instance method
-            const normalized = this.requestProcessor.constructor.normalizeParams(method, endpoint, args);
+        return async function(endpoint, ...args) {
+            // Using type assertion to tell TypeScript that constructor has normalizeParams
+            const constructorRef = /** @type {typeof RequestProcessor} */ (this.requestProcessor.constructor);
+            const normalized = constructorRef.normalizeParams(method, endpoint, args);
             return this._request(
                 normalized.method,
                 normalized.endpoint,
@@ -233,14 +325,15 @@ class ApiClient {
     /**
      * Upload a file or multiple files
      * @param {string} endpoint - API endpoint
-     * @param {Object} [files] - Object mapping field names to File objects or arrays of File objects
-     * @param {Object} [extraData] - Additional form data to include
-     * @param {Object|null} [paramsOrOptions] - URL parameters if object, or options if no params needed
-     * @param {Object} [options] - Additional fetch options (optional if paramsOrOptions contains options)
+     * @param {Record<string, File|File[]>} [files] - Object mapping field names to File objects or arrays of File objects
+     * @param {Record<string, any>} [extraData] - Additional form data to include
+     * @param {ParamsObject|RequestOptions} [paramsOrOptions] - URL parameters if object, or options if no params needed
+     * @param {RequestOptions} [options] - Additional fetch options (optional if paramsOrOptions contains options)
      * @returns {Promise<any>} - Response data
      */
-    async upload(endpoint, ...args) {
-        const normalized = this.requestProcessor.constructor.normalizeParams('UPLOAD', endpoint, args);
+    async upload(endpoint, files = {}, extraData = {}, paramsOrOptions = {}, options = {}) {
+        // Using direct reference to static method
+        const normalized = RequestProcessor.normalizeParams('UPLOAD', endpoint, [files, extraData, paramsOrOptions, options]);
         return this._request(
             normalized.method,
             normalized.endpoint,
@@ -252,16 +345,17 @@ class ApiClient {
 
     /**
      * Execute multiple API requests in parallel with named results
-     * @param {Object} requestsMap - Object mapping result names to API call promises
-     * @returns {Object} - Object containing results with the same keys as the input object
+     * @param {Record<string, Promise<any>>|Array<Promise<any>>} requestsMap - Object mapping result names to API call promises
+     * @returns {Promise<Record<string, any>>} - Object containing results with the same keys as the input object
      */
-    all(requestsMap) {
+    async all(requestsMap) {
         // Handle both array and object inputs
         if (Array.isArray(requestsMap)) {
             // Array input - use numbered properties
             const promises = requestsMap;
             return Promise.all(promises)
                 .then((responses) => {
+                    /** @type {Record<string, any>} */
                     const results = {};
                     responses.forEach((response, index) => {
                         results[`result${index + 1}`] = response;
@@ -275,9 +369,10 @@ class ApiClient {
             // Object input - preserve property names
             const keys = Object.keys(requestsMap);
             const promises = Object.values(requestsMap);
-
+    
             return Promise.all(promises)
                 .then((responses) => {
+                    /** @type {Record<string, any>} */
                     const results = {};
                     keys.forEach((key, index) => {
                         results[key] = responses[index];

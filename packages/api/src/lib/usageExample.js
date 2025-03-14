@@ -1,5 +1,6 @@
 import { ApiClient } from '$lib';
 import { toast } from '@ruzgardogu/utils';
+
 export const Api = new ApiClient({
 	baseUrl: 'https://jsonplaceholder.typicode.com',
 	suppressErrors: false, // Set to true if you don't want errors to throw,
@@ -38,42 +39,43 @@ export const Api = new ApiClient({
 		toast.danger('Error: ' + error.message);
 	},
 	onBefore: (requestInfo) => {
-		// console.log('Before request:', requestInfo.endpoint);
+		console.log('Before request:', requestInfo.endpoint);
 		// You can modify headers or other request properties here
 	},
 	onAfter: (result) => {
-		// console.log('After request:', result);
+		console.log('After request:', result);
 		// Process successful results
 	},
 	onFinally: () => {
-		// console.log('Request complete');
+		console.log('Request complete');
 		// Cleanup operations, hide loading spinners, etc.
 	},
 	onLoading: (isLoading) => {
-		// console.log('Loading:', isLoading);
+		console.log('Loading:', isLoading);
 		// Show/hide loading spinners or other UI elements
 	},
 	errorInterceptor: (error) => {
         // Add a human-friendly message based on the error type
+		console.log("errorInterceptor", error);
         if (error.status === 401) {
-            error.friendlyMessage = 'Your session has expired. Please log in again.';
+            error.extras.friendlyMessage = 'Your session has expired. Please log in again.';
         } else if (error.status === 403) {
-            error.friendlyMessage = 'You don\'t have permission to access this resource.';
+            error.extras.friendlyMessage = 'You don\'t have permission to access this resource.';
         } else if (error.status === 404) {
-            error.friendlyMessage = 'We couldn\'t find what you\'re looking for.';
+            error.extras.friendlyMessage = 'We couldn\'t find what you\'re looking for.';
         } else if (error.status >= 500) {
-            error.friendlyMessage = 'Something went wrong on our server. Please try again later.';
+            error.extras.friendlyMessage = 'Something went wrong on our server. Please try again later.';
         } else if (error.type === 'network') {
-            error.friendlyMessage = 'Connection problem. Please check your internet connection.';
+            error.extras.friendlyMessage = 'Connection problem. Please check your internet connection.';
         } else {
-            error.friendlyMessage = 'An unexpected error occurred.';
+            error.extras.friendlyMessage = 'An unexpected error occurred.';
         }
         
         // Add a timestamp to all errors
-        error.interceptedAt = new Date().toISOString();
+        error.extras.interceptedAt = new Date().toISOString();
         
         // You could also log to an external service here
-        console.log('Error intercepted:', error.friendlyMessage);
+        console.error('Error intercepted:', error.extras.friendlyMessage);
         
         return error;
     },
@@ -82,12 +84,9 @@ export const Api = new ApiClient({
 Api.interceptors.request.use(
 	async ({ config, options }) => {
 		console.log('Request interceptor running...');
-
-		// Example: Add a timestamp to all requests
-		const timestamp = new Date().toISOString();
 		options.headers = {
 			...options.headers,
-			'X-Request-Timestamp': timestamp
+			'Accept': '*',
 		};
 
 		return { config, options };

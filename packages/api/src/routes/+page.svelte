@@ -107,20 +107,30 @@
 		// 	}
 		// })
 		// .catch(error => console.log("_____Error:", error.message));
-		// const test3 = await Api.get(
-		// 	'forecast',
-		// 	{
-		// 		config: {
-		// 			baseUrl: 'https://api.open-meteo.com/v1'
-		// 		}
-		// 	},
-		// 	{
-		// 		latitude: 51.5074,
-		// 		longitude: -0.1278,
-		// 		current_weather: true
-		// 	}
-		// );
-		// console.log('test3', test3);
+
+
+
+
+
+		const test3 = await Api.get(
+			'forecast',
+			{
+				config: {
+					baseUrl: 'https://api.open-meteo.com/v1'
+				}
+			},
+			{
+				latitude: 51.5074,
+				longitude: -0.1278,
+				current_weather: true
+			}
+		);
+		console.log('test3', test3);
+
+
+
+
+		
 		// const test4 = await Api.get(
 		// 	'forecast',
 		// 	{
