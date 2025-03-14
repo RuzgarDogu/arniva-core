@@ -1,0 +1,153 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Api/Advanced Configuration" />
+
+# Advanced Configuration
+
+In this section, we will cover some advanced configuration options that you might encounter while working with the API client.
+
+## Authentication
+
+You can set authentication details by providing a `token` object in the configuration object.
+
+```ts
+// Adding authentication token
+const api = new ApiClient({
+  token: {
+    key: 'Authorization', // Header key
+    value: 'your-token-value',
+    type: 'Bearer' // Results in "Bearer your-token-value"
+  }
+});
+```
+
+## Response Object Extraction
+
+You can extract specific data from API responses by providing a `dataKey`, `messageKey` or `codeKey` in the configuration object.
+
+### Data Extraction
+
+You can extract specific data from API responses by providing a `dataKey` in the configuration object.
+
+```ts
+// Extracting data from API response
+const api = new ApiClient({
+  dataKey: 'data'
+});
+```
+
+### Message Extraction
+
+You can extract error messages from API responses by providing a `messageKey` in the configuration object.
+
+```ts
+// Extracting error message from API response
+const api = new ApiClient({
+  jsonErrorResponse: {
+    messageKey: 'message',
+    codeKey: 'code'
+  }
+});
+```
+
+## Callbacks
+
+There are several callbacks available to handle different scenarios. You can provide a callback function in the configuration object to handle these scenarios.
+
+Available callbacks:
+
+* Request Lifecycle Callback
+    - `onBefore()` : Before a request is sent
+    - `onAfter()` : After a successful response
+    - `onFinally()` : When a request finishes (success or error)
+    - `onLoading()` : Loading state changes
+* Error Handling Callback
+    - `onError()` : General error handler
+    - `onNetworkError()` : Network error handler
+    - `onUnauthorized()` : Unauthorized error handler
+    - `onServerError()` : Server error handler
+    - `onClientError()` : Client error handler
+    - `onRateLimit()` : Rate limit error handler
+    - `onNotFound()` : Not found error handler
+    - `onAbort()` : Aborted request handler
+    - `onTimeout()` : Timeout handler
+    - `onApplicationError()` : Application error handler
+
+
+### Request Lifecycle Callbacks
+
+```ts
+const api = new ApiClient({
+  // Before a request is sent
+  onBefore: (requestInfo) => {
+    console.log('Starting request to:', requestInfo.endpoint);
+  },
+  
+  // After a successful response
+  onAfter: (result) => {
+    console.log('Received response:', result);
+  },
+  
+  // When a request finishes (success or error)
+  onFinally: () => {
+    console.log('Request completed');
+  },
+  
+  // Loading state changes
+  onLoading: (isLoading) => {
+    showLoadingSpinner(isLoading);
+  }
+});
+```
+
+### Error Handling Callback
+
+```ts
+const api = new ApiClient({
+  // General error handler
+  onError: (error) => {
+    console.error('Request failed:', error.message);
+  },
+  
+  // Specific error handlers
+  onNetworkError: (error) => {
+    showOfflineNotification();
+  },
+  
+  onUnauthorized: (error) => {
+    redirectToLogin();
+  },
+  
+  onServerError: (error) => {
+    showServiceDownNotification();
+  },
+  
+  onClientError: (error) => {
+    showValidationError(error);
+  },
+  
+  onRateLimit: (error) => {
+    showTooManyRequestsMessage();
+  },
+  
+  onNotFound: (error) => {
+    showResourceNotFoundMessage();
+  },
+  
+  onAbort: (error) => {
+    console.log('Request was cancelled');
+  },
+  
+  onTimeout: () => {
+    showTimeoutMessage();
+  },
+  
+  // Application errors (when API returns an error with 200 status)
+  onApplicationError: (error) => {
+    handleBusinessLogicError(error);
+  }
+});
+```
+
+---
+Next: [Best Practices](/docs/api-best-practices--docs) →

@@ -1,0 +1,242 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Api/Configuration" />
+
+# Configuration
+
+The API client allows flexible configuration to fit different use cases. You can customize headers, error handling, retries, and more.
+
+## Basic Configuration
+
+To configure the API client, pass a configuration object when initializing it. The most basic configuration is setting the `baseUrl`.
+
+```js
+import ApiClient from '@arniverse/api-client';
+
+const api = new ApiClient({
+    baseUrl: 'https://api.example.com'
+});
+```
+
+## Configuration Options
+
+Below is a list of all available configuration options:
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Default Value</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>baseUrl</td>
+      <td>''</td>
+      <td>Base URL for API requests</td>
+    </tr>
+    <tr>
+      <td>token</td>
+      <td>null</td>
+      <td>Authentication token details</td>
+    </tr>
+    <tr>
+      <td>dataKey</td>
+      <td>''</td>
+      <td>Key to extract specific data from API responses</td>
+    </tr>
+    <tr>
+      <td>jsonErrorResponse</td>
+      <td>\{ messageKey: 'message', codeKey: 'code' \}</td>
+      <td>Get error details from JSON response</td>
+    </tr>
+    <tr>
+      <td>suppressErrors</td>
+      <td>false</td>
+      <td>Set to true to prevent errors from blocking execution</td>
+    </tr>
+    <tr>
+      <td>onError</td>
+      <td>() => \{\}</td>
+      <td>Callback for error handling</td>
+    </tr>
+    <tr>
+      <td>onBefore</td>
+      <td>() => \{\}</td>
+      <td>Callback before request is sent</td>
+    </tr>
+    <tr>
+      <td>onAfter</td>
+      <td>() => \{\}</td>
+      <td>Callback after response is received</td>
+    </tr>
+    <tr>
+      <td>onFinally</td>
+      <td>() => \{\}</td>
+      <td>Callback that runs regardless of success or failure</td>
+    </tr>
+    <tr>
+      <td>onAbort</td>
+      <td>() => \{\}</td>
+      <td>Callback for aborted requests</td>
+    </tr>
+    <tr>
+      <td>onTimeout</td>
+      <td>() => \{\}</td>
+      <td>Callback for request timeouts</td>
+    </tr>
+    <tr>
+      <td>onNetworkError</td>
+      <td>() => \{\}</td>
+      <td>Callback for network errors</td>
+    </tr>
+    <tr>
+      <td>onServerError</td>
+      <td>() => \{\}</td>
+      <td>Callback for server-side errors</td>
+    </tr>
+    <tr>
+      <td>onClientError</td>
+      <td>() => \{\}</td>
+      <td>Callback for client-side errors</td>
+    </tr>
+    <tr>
+      <td>onUnauthorized</td>
+      <td>() => \{\}</td>
+      <td>Callback for unauthorized responses</td>
+    </tr>
+    <tr>
+      <td>onRateLimit</td>
+      <td>() => \{\}</td>
+      <td>Callback for rate limit errors</td>
+    </tr>
+    <tr>
+      <td>onLoading</td>
+      <td>() => \{\}</td>
+      <td>Callback during loading state</td>
+    </tr>
+    <tr>
+      <td>onNotFound</td>
+      <td>() => \{\}</td>
+      <td>Callback for 404 responses</td>
+    </tr>
+    <tr>
+      <td>interceptors</td>
+      <td>\{ request: [], response: [] \}</td>
+      <td>Request and response interceptors</td>
+    </tr>
+    <tr>
+      <td>onApplicationError</td>
+      <td>() => \{\}</td>
+      <td>Handler for application errors (API returns error with 200 status)</td>
+    </tr>
+    <tr>
+      <td>timeout</td>
+      <td>5000</td>
+      <td>Timeout for requests in milliseconds</td>
+    </tr>
+    <tr>
+      <td>headers</td>
+      <td>\{ 'Content-Type': 'application/json' \}</td>
+      <td>Default request headers</td>
+    </tr>
+    <tr>
+      <td>forceContentType</td>
+      <td>false</td>
+      <td>Force content type for requests</td>
+    </tr>
+    <tr>
+      <td>paramsSerializer</td>
+      <td>(params) => \{...URLSearchParams logic...\}</td>
+      <td>Function to serialize parameters into URL query string</td>
+    </tr>
+    <tr>
+      <td>responseType</td>
+      <td>'json'</td>
+      <td>Expected response type</td>
+    </tr>
+    <tr>
+      <td>retry</td>
+      <td>0</td>
+      <td>Number of retries on failure (0 means no retry)</td>
+    </tr>
+    <tr>
+      <td>retryDelay</td>
+      <td>1000</td>
+      <td>Milliseconds between retries</td>
+    </tr>
+    <tr>
+      <td>retryCondition</td>
+      <td>(error) => error.status >= 500</td>
+      <td>Condition to determine if a request should be retried</td>
+    </tr>
+    <tr>
+      <td>cache</td>
+      <td>'no-cache'</td>
+      <td>Cache mode ('default', 'no-cache', etc.)</td>
+    </tr>
+    <tr>
+      <td>staleWhileRevalidate</td>
+      <td>false</td>
+      <td>Enable/disable stale-while-revalidate caching</td>
+    </tr>
+    <tr>
+      <td>signal</td>
+      <td>null</td>
+      <td>Optional AbortSignal for canceling requests</td>
+    </tr>
+    <tr>
+      <td>cancelToken</td>
+      <td>null</td>
+      <td>Custom cancellation token implementation</td>
+    </tr>
+    <tr>
+      <td>debug</td>
+      <td>false</td>
+      <td>Enable detailed logging for debugging</td>
+    </tr>
+    <tr>
+      <td>logger</td>
+      <td>console.log</td>
+      <td>Custom logger function</td>
+    </tr>
+    <tr>
+      <td>errorInterceptor</td>
+      <td>(error) => error</td>
+      <td>Function to transform or log errors before handling</td>
+    </tr>
+  </tbody>
+</table>
+
+## Example Usage
+
+Here's an example using a more advanced configuration:
+
+```js
+const api = new ApiClient({
+    baseUrl: 'https://api.example.com',
+    token: 'my-secret-token',
+    timeout: 7000,
+    retry: 2,
+    retryCondition: (error) => error.status === 429, // Retry only on rate limits
+    onUnauthorized: () => console.warn('Unauthorized request!'),
+});
+```
+
+This setup ensures that:
+- The API client connects to `https://api.example.com`
+- Requests include an authentication token
+- Requests timeout after 7 seconds
+- Failed requests retry up to 2 times if the server responds with a `429 Too Many Requests` error
+- Unauthorized responses trigger a warning in the console
+
+---
+
+For more details on interceptors and error handling, check their respective sections in this documentation.
+
+
+
+---
+Next: [Advanced Configuration](/docs/api-advanced-configuration--docs) →

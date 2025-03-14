@@ -1,0 +1,65 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Api/Best Practices" />
+
+
+# Best Practices
+
+When using the API client, there are some best practices you should follow to ensure your code is clean, maintainable, and efficient.
+
+## Sveltekit Usage
+
+When using the API client with SvelteKit, you should create the instance inside `$lib`which is inside `src > lib` folder.
+
+<div class="card alert">
+    It is recommended that you create a separate file for the API client, such as `api.ts` or `apiClient.ts` inside the `$lib` folder.
+</div>
+
+```ts
+// src/lib/api.ts
+import { ApiClient } from '@ruzgardogu/api';
+
+export const Api = new ApiClient({
+	baseUrl: 'https://jsonplaceholder.typicode.com',
+	onError: (error) => {
+		console.log('GENERAL ERROR:', error);
+		toast.danger('Error: ' + error.message);
+	}
+});
+```
+
+Then you can import the API client in your components or pages.
+
+```ts
+// src/routes/+page.server.ts
+/** @type {import('./$types').PageServerLoad} */
+import { Api } from '$lib/usageExample';
+
+export async function load() {
+    const comments = await Api.get('/comments?postId=1');
+    return {
+        comments
+    };
+};
+```
+
+Or you can use it on client side.
+
+```ts
+// src/routes/+page.svelte
+<script lang="ts">
+    import { Api } from '$lib/api';
+    import { onMount } from 'svelte';
+
+    let comments = $state([])
+    onMount(async () => {
+        comments = await Api.get('/comments?postId=1');
+    });
+</script>
+```
+
+
+
+
+---
+Next: [Error Handling](/docs/api-error-handling--docs) →

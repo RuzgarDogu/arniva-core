@@ -27,7 +27,8 @@ const preview = {
 					'Welcome',
 					'UI',
 					['Layout', ['Layout', 'Aside', 'Main', 'Content'], 'Nav', 'General', 'Forms'],
-					'Utils'
+					'Utils',
+					'Api', ['Intro', 'Core Features', 'Install & Import', 'Request Types', 'Basic Usage', 'Advanced Usage', 'Configuration', 'Advanced Configuration', 'Best Practices', 'Error Handling', 'Interceptors', 'Typescript', 'Browser Compatibility']
 				]
 			}
 		},

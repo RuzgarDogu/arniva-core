@@ -10,6 +10,7 @@
 	async function getBankData() {
 		try {
 			const arnivaTest = await Api.get('https://test-api.arniva.cloud/v1/banka', {
+
 				config: {
 					dataKey: 'data',
 					onAfter: (response) => {
@@ -33,6 +34,9 @@
 	async function getSingleBankData(id) {
 		try {
 			const arnivaTest = await Api.get(`/banka/${id}`, {
+				headers: {
+					'Content-Type': 'text/plain',
+				},
 				config: {
 					baseUrl: 'https://test-api.arniva.cloud/v1',
 					dataKey: 'data',
@@ -64,6 +68,15 @@
 		// } catch (error) {
 		// 	console.error('******error', error);
 		// }
+
+		// Api.get('https://test-api.arniva.cloud/v1/banka')
+		// 	.then((response) => {
+		// 		console.log('123-response', response);
+		// 	})
+		// 	.catch((error) => {
+		// 		console.error('error', error);
+		// 	});
+
 		try {
 		    const test500 = await Api.get('/500', {
 		        config: {
@@ -115,14 +128,14 @@
 		const test3 = await Api.get(
 			'forecast',
 			{
-				config: {
-					baseUrl: 'https://api.open-meteo.com/v1'
-				}
-			},
-			{
 				latitude: 51.5074,
 				longitude: -0.1278,
 				current_weather: true
+			},
+			{
+				config: {
+					baseUrl: 'https://api.open-meteo.com/v1'
+				}
 			}
 		);
 		console.log('test3', test3);
@@ -150,29 +163,46 @@
 		// );
 		// console.log('test5', test5);
 		// Example usage with named results
-		// const { comments, forecast } = await Api.all({
-		// 	comments: Api.get('/comments?postId=1', {
-		// 		config: {
-		// 			dataKey: ''
-		// 		}
-		// 	}),
-		// 	forecast: Api.get(
-		// 		'forecast',
-		// 		{
-		// 			config: {
-		// 				baseUrl: 'https://api.open-meteo.com/v1'
-		// 			}
-		// 		},
-		// 		{
-		// 			latitude: 51.5074,
-		// 			longitude: -0.1278,
-		// 			current_weather: true
-		// 		}
-		// 	)
-		// });
-		// // Access results using the property names
-		// console.log("comments", comments);  // comments data
-		// console.log("forecast", forecast);  // forecast data
+		const { comments, forecast } = await Api.all({
+			comments: Api.get('/comments?postId=1', {
+				config: {
+					dataKey: ''
+				}
+			}),
+			forecast: Api.get(
+				'forecast',
+				{
+					config: {
+						baseUrl: 'https://api.open-meteo.com/v1'
+					}
+				},
+				{
+					latitude: 51.5074,
+					longitude: -0.1278,
+					current_weather: true
+				}
+			)
+		});
+		// Access results using the property names
+		console.log("comments", comments);  // comments data
+		console.log("forecast", forecast);  // forecast data
+
+
+
+
+// Execute multiple requests in parallel
+Api.all({
+  users: Api.get('/users'),
+  posts: Api.get('/posts'),
+  comments: Api.get('/comments')
+})
+  .then(results => {
+    console.log('Users:', results.users);
+    console.log('Posts:', results.posts);
+    console.log('Comments:', results.comments);
+  });
+
+
 	});
 </script>
 

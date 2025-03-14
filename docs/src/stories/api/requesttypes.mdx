@@ -1,0 +1,46 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Api/Request Types" />
+
+
+## Request Types
+
+The API client supports all common HTTP request types with a simple and consistent interface.
+
+### GET
+Fetch data from an API endpoint.
+```ts
+const response = await apiClient.get('/users');
+```
+
+### POST
+Send data to an API endpoint.
+```ts
+const response = await apiClient.post('/users', { name: 'John Doe' });
+```
+
+### PUT
+Update an existing resource.
+```ts
+const response = await apiClient.put('/users/1', { name: 'John Updated' });
+```
+
+### PATCH
+Partially update an existing resource.
+```ts
+const response = await apiClient.patch('/users/1', { age: 30 });
+```
+
+### DELETE
+Remove a resource from the API.
+```ts
+const response = await apiClient.delete('/users/1');
+```
+
+These methods provide a clean and intuitive way to interact with APIs. 🚀
+
+
+
+
+---
+Next: [Basic Usage](/docs/api-basic-usage--docs) →

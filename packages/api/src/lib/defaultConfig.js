@@ -21,9 +21,6 @@ const defaultConfig = {
         messageKey: 'message',
         codeKey: 'code',
     },
-    // Toast notifications and SvelteKit-specific options
-    useDefaultToast: false,
-    useSveltekitFetch: false,
 
     // Error handling and suppression
     suppressErrors: false, // Set to true if you don't want errors to block execution

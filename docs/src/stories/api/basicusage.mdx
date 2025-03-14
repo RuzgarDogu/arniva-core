@@ -1,0 +1,71 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Api/Basic Usage" />
+
+
+# Basic Usage
+
+In order to use the API client, you need to create an instance of the client and configure it with your API base URL.
+
+## Creating an instance
+You can create an instance of the API client by providing a configuration object with the `baseURL` property.
+> `config` parameter has several properties that you can set to customize the client behavior. You can find more information about the configuration options in the [Configuration](/docs/api-configuration--docs) section.
+
+```ts
+import { ApiClient } from '@ruzgardogu/api';
+
+const config = {
+  baseURL: 'https://jsonplaceholder.typicode.com',
+};
+
+const Api = new ApiClient(config);
+```
+
+<div class="card alert mb-4">
+  `baseURL` is the only required configuration option. If you don't provide a `baseURL`, the client will throw an error.
+</div>
+
+## Making requests
+Once you have created an instance of the client, you can start making requests to your API.
+
+**GET**
+```ts
+Api.get('/posts').then((response) => {
+  console.log(response.data);
+});
+```
+
+**POST**
+```ts
+Api.post('/posts', {
+  title: 'foo',
+  body: 'bar',
+  userId: 1,
+}).then((response) => {
+  console.log(response.data);
+});
+```
+
+## Async, Await
+Also, you can use the `async` and `await` keywords to make your code more readable and easier to maintain.
+
+
+```ts
+const fetchPosts = async () => {
+  try {
+    const response = await Api.get('/posts');
+    console.log(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+````
+
+
+<div class="card alert mb-4">
+  The `await` keyword can only be used inside an `async` function. If you try to use `await` outside of an `async` function, you will get a syntax error. For more information, check out the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await" target="_blank">MDN Web Docs</a>.
+</div>
+
+---
+Next: [Advanced Usage](/docs/api-advanced-usage--docs) →
+

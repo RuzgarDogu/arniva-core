@@ -1,0 +1,115 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Api/Core Features" />
+
+### Core Features
+
+The Arniva API Client is designed to be a lightweight yet powerful HTTP client, offering a seamless experience for making API requests. Below are its core features:
+
+#### ✅ Simple Interface
+Provides a clean and intuitive API with straightforward methods for making HTTP requests:
+```ts
+apiClient.get('/users');
+apiClient.post('/users', { name: 'John Doe' });
+```
+
+#### 🔄 Interceptors
+Modify requests and responses globally, enabling logging, authentication, and transformation before sending or after receiving data.
+```ts
+Api.interceptors.request.use(
+	async ({ config, options }) => {
+		console.log('Request interceptor running...');
+		options.headers = {
+			...options.headers,
+			'Accept': '*',
+		};
+
+		return { config, options };
+	},
+	(error) => {
+		console.error('Request interceptor error:', error);
+		return Promise.reject(error);
+	}
+);
+```
+
+#### ⚠️ Robust Error Handling
+Provides detailed error objects, including HTTP status codes, messages, and response data, allowing precise debugging and handling.
+```ts
+	// Network errors (CORS, no connection, etc)
+	onNetworkError: (error) => {
+		console.log('NETWORK ERROR:', error);
+		toast.danger('Connection error: ' + error.message);
+	},
+
+	// Not found errors (404)
+	onNotFound: (error) => {
+		console.log('NOT FOUND:', error);
+		toast.warning('Resource not found: ' + error.message);
+	},
+
+	// Other client errors (400-499 except those with specific handlers)
+	onClientError: (error) => {
+		console.log('CLIENT ERROR:', error);
+		toast.warning('Request error: ' + error.message);
+	},
+```
+
+#### ❌ Request Cancellation
+Supports request abortion using the `AbortController` to prevent unnecessary network usage.
+```ts
+const controller = new AbortController();
+apiClient.get('/data', { signal: controller.signal });
+controller.abort();
+```
+
+#### 🔁 Automatic Retry
+Configurable retry attempts for failed requests, helping with network instability.
+```ts
+apiClient.get('/unstable-endpoint', { retry: 3 });
+```
+
+#### 🔄 Response Transformation
+Allows automatic extraction of specific data fields from API responses.
+```ts
+Api.interceptors.response.use(
+	async ({ data, response, config }) => {
+		console.log('Response interceptor running...');
+
+		// Example: Add metadata to all responses
+		if (typeof data === 'object' && data !== null) {
+			data._metadata = {
+				timestamp: new Date().toISOString(),
+				responseTime: response.headers.get('X-Response-Time'),
+				endpoint: response.url
+			};
+		}
+
+		return { data, response, config };
+	},
+	(error) => {
+		console.error('Response interceptor error:', error);
+		return Promise.reject(error);
+	}
+);
+```
+
+#### 📂 File Uploads
+Supports file uploads with built-in handling for `FormData`.
+```ts
+const formData = new FormData();
+formData.append('file', file);
+apiClient.post('/upload', formData);
+```
+
+#### 🛠 TypeScript Support
+Full type definitions for enhanced developer experience and autocompletion.
+```ts
+type User = { id: string; name: string };
+const user: User = await apiClient.get<User>('/users/1');
+```
+
+Each of these features will be explored in detail in their respective sections.
+
+---
+Next: [Install & Import](/docs/api-install-import--docs) →

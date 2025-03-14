@@ -120,8 +120,6 @@
  * @property {ApiToken|null} [token] - Authentication token details
  * @property {string} [dataKey] - Key to extract specific data from API responses
  * @property {JsonErrorResponse} [jsonErrorResponse] - Keys to extract error details from JSON response
- * @property {boolean} [useDefaultToast] - Whether to use default toast notifications
- * @property {boolean} [useSveltekitFetch] - Whether to use SvelteKit's fetch function
  * @property {boolean} [suppressErrors] - Whether to suppress errors (return instead of throw)
  * 
  * @property {ErrorCallback} [onError] - Handler for all errors
