@@ -1,0 +1,34 @@
+import { Canvas, Meta, Controls } from '@storybook/blocks';
+
+import * as SpinnerStories from './Spinner.stories.svelte';
+
+<Meta of={SpinnerStories} />
+
+# Spinner
+
+This utility is used to show a loading spinner to the user. It is usually used to show the user that the application is loading data.
+
+
+<div class="card alert">
+ **Note:** This is a `UTILITY COMPONENT` and should not be used as a `standalone component`.
+ <p>If you would like to use Svelte component please refer to this link: [SpinnerComponent](/docs/ui-general-spinner-component--docs) →</p>
+</div>
+<Canvas of={SpinnerStories.Default} />
+<Controls of={SpinnerStories.Default} />
+
+## Spinner Types
+
+There are three types of spinners:
+- **Default Spinner**: This is the default spinner that is used in the application, and uses `relative` positioning.
+- **Absolute Spinner**: This spinner uses `absolute` positioning.
+- **Fixed Spinner**: This spinner uses `fixed` positioning.
+
+### Absolute Spinner
+<Canvas of={SpinnerStories.Absolute} />
+
+
+### Fixed Spinner
+<Canvas of={SpinnerStories.Fixed} />
+
+### Button Spinner
+<Canvas of={SpinnerStories.ButtonSpinner} />

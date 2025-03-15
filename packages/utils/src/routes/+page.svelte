@@ -1,5 +1,6 @@
 <script>
 	import { hello, toast, spinner } from '$lib';
+
 	// hello('emre');
 
 	function testSpinner() {
@@ -37,9 +38,11 @@
 		setTimeout(() => {
 			spinner.hide('bodySpinner');
 			spinner.hide('buttonSpinner');
+			spinner.hide('divSpinner');
 		}, 3000);
 	}
 </script>
+
 
 <div id="container">
 	<h1>Welcome to your library project</h1>

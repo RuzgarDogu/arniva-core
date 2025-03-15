@@ -15,6 +15,7 @@
 	 * @property {boolean} [thin] Should the button be thin?
 	 * @property {any} [children] The button contents
 	 * @property {string} [class] The class to add to the button
+	 * @property {string} [id] The class to add to the button
 	 * @property {string} [style] The style to add to the button
 	 * @property {string} [modal] The modal to open
 	 * @property {boolean} [modalEnlarge] Should the modal be enlarged?
@@ -27,6 +28,7 @@
 		children,
 		style = '',
 		class: cls = '',
+		id = '',
 		link = false,
 		thin = false,
 		url = '#',
@@ -48,6 +50,7 @@
 
 {#if link}
 	<a
+		id={id}
 		href={url}
 		class:button--link={link}
 		class={['button', `${cls}`, `button--${size}`, `button--${color}`].join(' ')}
@@ -67,6 +70,7 @@
 	</a>
 {:else}
 	<button
+		id={id}
 		{type}
 		class={['button', `${cls}`, `button--${size}`, `button--${color}`].join(' ')}
 		class:button--dropdown={dropdown}
