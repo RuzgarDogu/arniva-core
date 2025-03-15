@@ -54,6 +54,9 @@ export const Api = new ApiClient({
 		console.log('Loading:', isLoading);
 		// Show/hide loading spinners or other UI elements
 	},
+	logger: (a,b) => {
+		console.log("@@@@@@@@@@@@@@@@@@@@@@@@----", a,b);
+	}, // Custom logger function
 	errorInterceptor: (error) => {
         // Add a human-friendly message based on the error type
 		console.log("errorInterceptor", error);

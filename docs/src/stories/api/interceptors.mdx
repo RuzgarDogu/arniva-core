@@ -2,9 +2,530 @@ import { Meta } from '@storybook/blocks';
 
 <Meta title="Api/Interceptors" />
 
+# Interceptors
+
+Interceptors provide a powerful mechanism to globally transform API requests and responses. They allow you to add custom behavior that applies consistently across all (or selected) API calls.
+
+## What are Interceptors?
+
+Interceptors are middleware functions that intercept HTTP requests or responses before they are processed by the API client. They enable you to:
+
+- Modify request configuration before a request is sent
+- Transform response data before it's delivered to your application
+- Handle errors in a centralized way
+- Add global functionality like logging, authentication, or caching
+
+## Types of Interceptors
+
+The Arniva API Client provides two types of interceptors:
+
+### 1. Request Interceptors
+
+Request interceptors run before a request is sent to the server. They receive the request configuration and options, and can modify these before the actual HTTP request is made.
+
+### 2. Response Interceptors
+
+Response interceptors run after receiving a response from the server, but before the data is returned to your code. They can transform the response data or perform actions based on the response.
+
+## Interceptors vs. Request Lifecycle Callbacks
+
+While both interceptors and lifecycle callbacks (like `onBefore`, `onAfter`) allow you to hook into the request process, they serve different purposes:
+
+<table class="table">
+    <thead>
+        <tr>
+        <th>Feature</th>
+        <th>Interceptors</th>
+        <th>Lifecycle Callbacks</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+        <td><strong>Purpose</strong></td>
+        <td>Transform requests/responses</td>
+        <td>React to request lifecycle events</td>
+        </tr>
+        <tr>
+        <td><strong>Return Value</strong></td>
+        <td>Must return modified request/response</td>
+        <td>Return value is ignored</td>
+        </tr>
+        <tr>
+        <td><strong>Async Support</strong></td>
+        <td>Fully async (returns Promise)</td>
+        <td>Synchronous only</td>
+        </tr>
+        <tr>
+        <td><strong>Chaining</strong></td>
+        <td>Multiple interceptors form a chain</td>
+        <td>Independent callbacks</td>
+        </tr>
+        <tr>
+        <td><strong>Modification</strong></td>
+        <td>Can modify request/response</td>
+        <td>Read-only access</td>
+        </tr>
+        <tr>
+        <td><strong>Rejection</strong></td>
+        <td>Can reject requests/responses</td>
+        <td>Cannot prevent requests</td>
+        </tr>
+        <tr>
+        <td><strong>Registration</strong></td>
+        <td>Dynamic - can be added/removed</td>
+        <td>Static - defined at creation</td>
+        </tr>
+    </tbody>
+</table>
+
+## Using Interceptors
+
+### Adding Request Interceptors
+
+Request interceptors can modify the request configuration before it's sent:
+
+```javascript
+const api = new ApiClient({
+  baseUrl: 'https://api.example.com'
+});
+
+// Add a request interceptor
+const interceptorId = api.interceptors.request.use(
+  // Success handler
+  async ({ config, options }) => {
+    // Modify request before it is sent
+    
+    // Add authentication token
+    const token = await getAuthToken();
+    const modifiedOptions = {
+      ...options,
+      headers: {
+        ...options.headers,
+        'Authorization': `Bearer ${token}`
+      }
+    };
+    
+    // Return modified config and options
+    return {
+      config,
+      options: modifiedOptions
+    };
+  },
+  // Error handler (optional)
+  (error) => {
+    // Handle request preparation errors
+    console.error('Error in request interceptor:', error);
+    return Promise.reject(error);
+  }
+);
+```
+
+### Adding Response Interceptors
+
+Response interceptors can transform the data received from the server:
+
+```ts
+// Add a response interceptor
+const interceptorId = api.interceptors.response.use(
+  // Success handler
+  async ({ data, response, config }) => {
+    // Transform or process the response data
+    
+    // Example: Extract nested data
+    const transformedData = data.results || data;
+    
+    // Format dates in the response
+    if (Array.isArray(transformedData)) {
+      transformedData.forEach(item => {
+        if (item.createdAt) {
+          item.createdAt = new Date(item.createdAt).toLocaleDateString();
+        }
+      });
+    }
+    
+    // Return modified data and response
+    return {
+      data: transformedData,
+      response
+    };
+  },
+  // Error handler (optional)
+  (error) => {
+    // Handle response processing errors
+    console.error('Error in response interceptor:', error);
+    return Promise.reject(error);
+  }
+);
+```
+
+### Removing Interceptors
+
+You can remove interceptors when they are no longer needed:
+
+```ts
+// Remove a specific interceptor using its ID
+api.interceptors.request.eject(interceptorId);
+
+// Clear all request interceptors
+api.interceptors.request.clear();
+
+// Clear all response interceptors
+api.interceptors.response.clear();
+```
+
+## Interceptor Flow
+
+When you make an API request, interceptors are executed in this order:
+
+- ```Request interceptors``` (in the order they were added)
+- The ```HTTP request``` is sent to the server
+- Server processes the ```request``` and sends a ```response```
+- ```Response interceptors``` (in the order they were added)
+- The final processed ```response``` is returned to your code
+
+> If any interceptor rejects the ```request``` or ```response``` (by returning a Promise.reject), the flow stops and the error is propagated to your code.
 
 
+## Use Cases for Interceptors
 
+### Authentication
+
+Automatically attach authentication tokens to all requests:
+
+```ts
+api.interceptors.request.use(async ({ config, options }) => {
+  // Get fresh token from your auth service
+  const token = await authService.getAccessToken();
+  
+  // Create a new headers object with the token
+  const headers = {
+    ...options.headers,
+    'Authorization': `Bearer ${token}`
+  };
+  
+  return { 
+    config, 
+    options: { ...options, headers } 
+  };
+});
+```
+
+
+### Token Refresh
+
+Automatically refresh expired tokens and retry requests:
+
+```ts
+api.interceptors.response.use(
+  // Success handler just passes through
+  ({ data, response }) => ({ data, response }),
+  
+  // Error handler for expired tokens
+  async (error) => {
+    // Check if error is due to expired token
+    if (error.status === 401 && error.code === 'TOKEN_EXPIRED') {
+      try {
+        // Try to refresh the token
+        await authService.refreshToken();
+        
+        // Retry the original request with a fresh token
+        const freshToken = authService.getAccessToken();
+        
+        // Recreate the original request with the new token
+        const originalRequest = error.request;
+        originalRequest.headers['Authorization'] = `Bearer ${freshToken}`;
+        
+        // Make a new request with the same parameters
+        return api._request(
+          originalRequest.method,
+          originalRequest.url,
+          originalRequest.params,
+          originalRequest.data,
+          { headers: originalRequest.headers }
+        );
+      } catch (refreshError) {
+        // If token refresh fails, redirect to login
+        authService.logout();
+        window.location = '/login';
+        return Promise.reject(refreshError);
+      }
+    }
+    
+    // For other errors, just pass through
+    return Promise.reject(error);
+  }
+);
+```
+
+### Logging
+
+Log all API communications for debugging:
+
+```ts
+// Request logging
+api.interceptors.request.use(({ config, options }) => {
+  console.log(`🚀 REQUEST: ${options.method} ${options.url}`, {
+    headers: options.headers,
+    body: options.body
+  });
+  return { config, options };
+});
+
+// Response logging
+api.interceptors.response.use(({ data, response, config }) => {
+  console.log(`✅ RESPONSE: ${response.status} ${response.url}`, {
+    data,
+    headers: Object.fromEntries([...response.headers.entries()])
+  });
+  return { data, response };
+});
+```
+
+### Data Transformation
+
+Apply consistent transformations to your API data:
+
+```ts
+api.interceptors.response.use(({ data, response }) => {
+  // Convert snake_case to camelCase in all responses
+  const camelCaseData = convertKeysToCamelCase(data);
+  
+  // Format dates
+  const formattedData = formatDates(camelCaseData, ['createdAt', 'updatedAt']);
+  
+  return { data: formattedData, response };
+});
+```
+
+### Error Translation
+
+Translate error messages for better user experience:
+
+```ts
+api.interceptors.response.use(
+  ({ data, response }) => ({ data, response }),
+  (error) => {
+    // Translate error messages
+    if (error && error.message) {
+      error.message = translateErrorMessage(error.message, getCurrentLocale());
+    }
+    
+    return Promise.reject(error);
+  }
+);
+```
+
+### Request Cancellation on Navigation
+
+Cancel pending requests when navigating between pages:
+
+```ts
+// Setup interceptor to track pending requests
+const pendingRequests = new Map();
+
+api.interceptors.request.use(({ config, options }) => {
+  // Create identifier for this request
+  const requestId = generateRequestId(options.method, options.url);
+  
+  // Cancel previous request with same ID if it exists
+  if (pendingRequests.has(requestId)) {
+    const controller = pendingRequests.get(requestId);
+    controller.abort('Superseded by newer request');
+    pendingRequests.delete(requestId);
+  }
+  
+  // Create new controller for this request
+  const controller = new AbortController();
+  pendingRequests.set(requestId, controller);
+  
+  // Add signal to request
+  return {
+    config,
+    options: {
+      ...options,
+      signal: controller.signal
+    }
+  };
+});
+
+// Clean up completed requests
+api.interceptors.response.use(
+  ({ data, response }) => {
+    // Remove from pending requests
+    const requestId = generateRequestId(
+      response.request?.method,
+      response.request?.url
+    );
+    pendingRequests.delete(requestId);
+    return { data, response };
+  },
+  (error) => {
+    // Also remove failed requests
+    if (error && error.request) {
+      const requestId = generateRequestId(
+        error.request.method,
+        error.request.url
+      );
+      pendingRequests.delete(requestId);
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Then in your router
+router.beforeEach(() => {
+  // Cancel all pending requests when navigating
+  pendingRequests.forEach(controller => {
+    controller.abort('Navigation canceled request');
+  });
+  pendingRequests.clear();
+});
+```
+
+### Caching
+
+Implement simple response caching:
+
+```ts
+const cache = new Map();
+
+api.interceptors.request.use(async ({ config, options }) => {
+  // Only cache GET requests
+  if (options.method !== 'GET' || !config.useCache) {
+    return { config, options };
+  }
+  
+  const cacheKey = `${options.method}:${options.url}`;
+  const cachedResponse = cache.get(cacheKey);
+  
+  if (cachedResponse) {
+    const { data, timestamp, maxAge } = cachedResponse;
+    const ageInMs = Date.now() - timestamp;
+    
+    // Return cached data if within maxAge
+    if (ageInMs < maxAge) {
+      // This will skip the actual request
+      throw {
+        handledByClient: true,
+        __fromCache: true,
+        data
+      };
+    }
+  }
+  
+  return { config, options };
+});
+
+api.interceptors.response.use(({ data, response, config }) => {
+  // Only cache GET requests
+  if (response.request?.method === 'GET' && config.useCache) {
+    const cacheKey = `${response.request.method}:${response.url}`;
+    
+    // Store in cache with timestamp
+    cache.set(cacheKey, {
+      data,
+      timestamp: Date.now(),
+      maxAge: config.cacheMaxAge || 60000 // Default 1 minute
+    });
+  }
+  
+  return { data, response };
+});
+
+// Then modify your error handler to check for cache responses
+const originalRequestMethod = api._request;
+api._request = async function(...args) {
+  try {
+    return await originalRequestMethod.apply(this, args);
+  } catch (error) {
+    if (error && error.__fromCache) {
+      return error.data; // Return cached data
+    }
+    throw error; // Re-throw other errors
+  }
+};
+```
+
+---
+### Advanced Patterns
+
+### Request Queuing
+
+Queue requests that depend on authentication until a token is available:
+
+```ts
+const requestQueue = [];
+let isRefreshing = false;
+
+api.interceptors.request.use(
+  async ({ config, options }) => {
+    // If we need auth but don't have a token yet
+    if (config.requiresAuth && !authService.hasToken()) {
+      if (!isRefreshing) {
+        isRefreshing = true;
+        // Start token acquisition
+        authService.acquireToken()
+          .then(() => {
+            // Process queued requests
+            requestQueue.forEach(resolve => resolve());
+            requestQueue.length = 0;
+          })
+          .finally(() => {
+            isRefreshing = false;
+          });
+      }
+      
+      // Queue this request
+      await new Promise(resolve => requestQueue.push(resolve));
+      
+      // Now we should have a token, so add it
+      const token = authService.getToken();
+      return {
+        config,
+        options: {
+          ...options,
+          headers: {
+            ...options.headers,
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      };
+    }
+    
+    return { config, options };
+  }
+);
+```
+
+### Feature Flags in Interceptors
+
+Use feature flags to conditionally enable certain API behaviors:
+
+```ts
+api.interceptors.request.use(({ config, options }) => {
+  // Apply feature-specific handling
+  if (featureFlags.isEnabled('NEW_API_VERSION')) {
+    return {
+      config,
+      options: {
+        ...options,
+        headers: {
+          ...options.headers,
+          'API-Version': '2.0'
+        }
+      }
+    };
+  }
+  
+  return { config, options };
+});
+```
+
+## Conclusion
+
+Interceptors are a powerful feature of the Arniva API Client that allow you to extend and customize the behavior of API calls throughout your application. They provide a clean separation of concerns by handling cross-cutting functionality like authentication, logging, and data transformation in a centralized way.
+
+By using interceptors effectively, you can keep your application code cleaner and more maintainable while ensuring consistent behavior across all API interactions.
 
 
 ---

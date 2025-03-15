@@ -115,6 +115,13 @@
  */
 
 /**
+ * @callback LoggerFunction
+ * @param {string} level - Log level (debug, info, warn, error)
+ * @param {string} [message] - Log message
+ * @returns {void}
+ */
+
+/**
  * @typedef {Object} ApiConfig
  * @property {string} [baseUrl] - Base URL for API requests
  * @property {ApiToken|null} [token] - Authentication token details
@@ -155,7 +162,7 @@
  * @property {Object|null} cancelToken - Custom cancellation token
  * 
  * @property {boolean} debug - Whether to enable debug logging
- * @property {function(...*):void} logger - Logger function
+ * @property {LoggerFunction} logger - Logger function
  * 
  * @property {ErrorInterceptorCallback} [errorInterceptor] - Function to transform errors before handling
  */

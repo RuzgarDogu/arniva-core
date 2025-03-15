@@ -2,10 +2,340 @@ import { Meta } from '@storybook/blocks';
 
 <Meta title="Api/Error Handling" />
 
+# Error Handling
+
+The Arniva API Client provides a robust error handling system that helps you manage different types of errors that can occur during API requests. This includes network errors, HTTP status errors, application errors, and more.
+
+## Error Types
+
+The client categorizes errors into the following types:
+
+<table class="table">
+    <tr>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Status Code</th>
+    </tr>
+    <tr>
+        <td><code>network</code></td>
+        <td>Connection issues, offline status, DNS failures</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td><code>http</code></td>
+        <td>HTTP status error responses from server</td>
+        <td>400-599</td>
+    </tr>
+    <tr>
+        <td><code>application</code></td>
+        <td>Business logic errors from the API</td>
+        <td>Any (typically 200)</td>
+    </tr>
+    <tr>
+        <td><code>abort</code></td>
+        <td>Request was cancelled or timed out</td>
+        <td>N/A</td>
+    </tr>
+</table>
+
+## The Error Object
+
+All errors include a standardized `ErrorResponse` object with the following properties:
+
+```ts
+{
+  message: string;         // Human-readable error message
+  code?: string;           // Error code (if provided by API)
+  status: number;          // HTTP status code (0 for network errors)
+  type: 'application'|'http'|'network'|'abort'; // Error category
+  timestamp: string;       // When the error occurred
+  handledByClient: boolean; // Whether client handled the error
+  requestUrl?: string;     // URL of the failed request
+  request?: {              // Request details
+    url: string;
+    endpoint: string;
+    method: string;
+    params?: object;
+    data?: object;
+    options?: object;
+    headers?: object;
+  };
+  response?: {             // Response details (if available)
+    status: number;
+    statusText: string;
+    headers: object;
+    data: any;
+  };
+  originalError?: Error;   // Original error object
+  data?: object;           // Additional error data
+  extras: object;          // Custom properties for extensions
+}
+
+```
+
+## Error Callback Types
+
+The API client provides several types of error callbacks that you can use to handle errors in different ways:
+
+- General Error Handler: `onError()`
+- Special Error Handlers: `onNetworkError()`, `onServerError()`, `onClientError()`, `onApplicationError()`
+- Specific Status Code Handlers: `onUnauthorized()`, `onRateLimit()`, `onNotFound()`
+- Request Cancellation Handlers: `onAbort()`, `onTimeout()`
 
 
+**General Error Handler**
+
+```ts
+const api = new ApiClient({
+  // General handler for all errors
+  onError: (error) => {
+    console.error(`Error ${error.status}: ${error.message}`);
+    notifyUser(error.message);
+  }
+});
+```
+
+**Special Error Handlers**
+
+```ts
+const api = new ApiClient({
+  // Network connectivity issues
+  onNetworkError: (error) => {
+    showOfflineMessage();
+    console.error('Network error:', error.message);
+  },
+  
+  // Handles server errors (status 500-599)
+  onServerError: (error) => {
+    showServiceDownMessage();
+    console.error(`Server error ${error.status}:`, error.message);
+  },
+  
+  // Handles client errors (status 400-499)
+  onClientError: (error) => {
+    showValidationMessage(error.message);
+    console.error(`Client error ${error.status}:`, error.message);
+  },
+  
+  // Handles application logic errors
+  onApplicationError: (error) => {
+    showBusinessRuleMessage(error.message, error.code);
+    console.error(`Application error (code ${error.code}):`, error.message);
+  }
+});
+```
+
+**Specific Status Code Handlers**
+
+```ts
+const api = new ApiClient({
+  // Handles 401 Unauthorized responses
+  onUnauthorized: (error) => {
+    console.warn('Authentication required');
+    localStorage.removeItem('auth_token');
+    redirectToLogin();
+  },
+  
+  // Handles 404 Not Found responses
+  onNotFound: (error) => {
+    console.warn(`Resource not found: ${error.requestUrl}`);
+    showResourceNotFoundMessage();
+  },
+  
+  // Handles 429 Too Many Requests responses
+  onRateLimit: (error) => {
+    console.warn('Rate limit hit, backing off...');
+    showRateLimitMessage();
+  }
+});
+```
+
+**Request Cancellation Handlers**
+
+```ts
+const api = new ApiClient({
+  // Handles aborted requests
+  onAbort: (error) => {
+    console.log('Request was cancelled:', error.message);
+  },
+  
+  // Handles request timeouts
+  onTimeout: () => {
+    console.log('Request timed out');
+    showTimeoutMessage();
+  }
+});
+```
+
+## Configuring Error Responses
+
+You can customize how errors are extracted from JSON responses:
+
+```ts
+const api = new ApiClient({
+  // Configure keys to extract error message and code from JSON
+  jsonErrorResponse: {
+    messageKey: 'errorMessage',  // Default is 'message'
+    codeKey: 'errorCode'         // Default is 'code'
+  }
+});
+```
+
+> This is useful when your API returns error details in a custom format:
+
+```ts
+// If your API returns:
+{
+  "success": false,
+  "errorMessage": "Invalid credentials",
+  "errorCode": "AUTH_FAILED"
+}
+
+// The client will extract:
+error.message = "Invalid credentials"
+error.code = "AUTH_FAILED"
+```
 
 
+## Error Interception
+
+You can intercept and transform all errors before they're handled:
+
+<div class="card alert">
+    This is an `Error Interceptor` and **NOT** a `Request Interceptor` or `Response Interceptor`. These kind of interceptors will be covered in the next section. To learn more about these interceptors, see the [Interceptors](/docs/api-interceptors--docs) → section.
+</div>
+
+```ts
+const api = new ApiClient({
+  // Add application context to all errors
+  errorInterceptor: (error) => {
+    // Add context information
+    error.extras = {
+      ...error.extras,
+      appVersion: APP_VERSION,
+      environment: process.env.NODE_ENV,
+      userId: authStore.getUserId(),
+      route: router.currentRoute.value.path,
+      timestamp: new Date().toISOString()
+    };
+    
+    // Don't log 401s for privacy reasons
+    if (error.status !== 401) {
+      errorLoggingService.captureError(error);
+    }
+    
+    return error;
+  }
+});
+```
+
+### Difference Between errorInterceptor and onError()
+
+> Both `errorInterceptor` and `onError()` are mechanisms for handling errors in the Arniva API Client, but they serve different purposes in the error handling flow:
+
+**Purpose and Characteristics:**
+
+- **Transformation:** Primary purpose is to transform or enrich the error object before any handling occurs
+- **Return Value Matters:** Must return the error object (modified or unmodified)
+- **Execution Time:** Runs early in the error handling process, before any specific handlers
+- **Single Point of Processing:** Processes all errors regardless of type
+- **Access to Error Object:** Can modify the error object's properties directly
+- **Use Case:** Adding metadata, logging to external services, or standardizing error formats
+
+## Suppressing Errors
+
+By default, the API client throws errors when they occur. You can change this behavior to return errors instead:
+
+```ts
+const api = new ApiClient({
+  suppressErrors: true
+});
+
+// With suppressErrors: false (default)
+try {
+  const data = await api.get('/users/123');
+  // Only runs if successful
+} catch (error) {
+  // Handle error
+}
+
+// With suppressErrors: true
+const result = await api.get('/users/123');
+if (result.error) {
+  // Handle error
+} else {
+  // Process result
+}
+```
+
+> This can be useful when you want to handle errors in a different way or when you need to process the error response.
+
+## Automatic Retry
+
+You can configure the client to automatically retry failed requests:
+
+```ts
+const api = new ApiClient({
+  // Retry configuration
+  retry: 3,                // Number of retry attempts
+  retryDelay: 1000,        // Wait 1 second between retries
+  retryCondition: (error) => {
+    // Only retry on server errors or network issues
+    return error.status >= 500 || error.type === 'network';
+  }
+});
+```
+
+## Custom Error Logging
+
+You can use your own logging system to log errors:
+
+```ts
+const api = new ApiClient({
+  // Custom logger function
+  logger: (level, message) => {
+    const timestamp = new Date().toISOString();
+    console.log(`[${timestamp}] [${level.toUpperCase()}] ${message}`);
+  }
+});
+```
+
+### typescript
+
+> If you want to create an outside function and give reference like below, you should set types for both parameters as `string` and `string` respectively.
+
+```typescript
+// Method 1: Type parameters directly
+const myCustomLogger = (level: string, message: string) => {
+    const timestamp = new Date().toISOString();
+    console.log(`[${timestamp}] [${level.toUpperCase()}] ${message}`);
+};
+
+// Method 2: Use type annotation for the whole function
+type LoggerFunction = (level: string, message: string) => void;
+
+const myCustomLogger: LoggerFunction = (level, message) => {
+    const timestamp = new Date().toISOString();
+    console.log(`[${timestamp}] [${level.toUpperCase()}] ${message}`);
+};
+```
+
+
+## Best Practices
+
+- **Use Specific Error Handlers:** Use dedicated handlers like onUnauthorized instead of checking status codes manually.
+
+- **Keep Error Messages User-Friendly:** Transform technical error messages into user-friendly ones.
+
+- **Log Errors for Debugging:** Use the debug option and errorInterceptor to log errors for troubleshooting.
+
+- **Add Context to Errors:** Use the extras property to attach additional context information.
+
+- **Handle Network Connectivity:** Always implement onNetworkError to handle offline scenarios.
+
+- **Don't Expose Sensitive Information:** Be careful not to display server errors directly to users.
+
+- **Clean Up Resources:** Use the onFinally callback to clean up resources regardless of success or failure.
 
 ---
 Next: [Interceptors](/docs/api-interceptors--docs) →

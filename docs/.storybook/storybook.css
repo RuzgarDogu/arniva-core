@@ -65,3 +65,10 @@
 .ml-4 {
 	margin-left: 1.5rem;
 }
+
+table.table {
+	width: 100%;
+	margin-bottom: 1rem;
+	color: #212529;
+	border-collapse: collapse;
+}

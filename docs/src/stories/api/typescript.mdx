@@ -1,9 +1,110 @@
 import { Meta } from '@storybook/blocks';
 
-<Meta title="Api/Typescript" />
+<Meta title="Api/TypeScript" />
 
+# TypeScript Support
 
+The Arniva API Client includes built-in TypeScript definitions, providing enhanced developer experience through code completion, type checking, and documentation.
 
+## Using the API Client with TypeScript
+
+The library exports all necessary types, so you don't need to define them yourself. TypeScript will automatically provide type information when you import and use the API client.
+
+### Basic Usage
+
+```typescript
+import { ApiClient } from '@ruzgardogu/api';
+
+// Create a client instance
+const api = new ApiClient({
+  baseUrl: 'https://api.example.com'
+});
+
+// TypeScript provides autocompletion for configuration options
+```
+
+### Type-Safe Requests
+
+TypeScript generics allow you to specify expected response types:
+
+```typescript
+// Define your data model interfaces
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+// Type-safe GET request
+api.get<User>('/users/123')
+  .then(user => {
+    // TypeScript knows 'user' has id, name, and email properties
+    console.log(user.name);
+  });
+
+// Type-safe POST request
+interface CreateUserRequest {
+  name: string;
+  email: string;
+}
+
+api.post<User, CreateUserRequest>('/users', {
+  name: 'John Doe',
+  email: 'john@example.com'
+})
+  .then(user => {
+    // TypeScript provides autocompletion and type checking
+    console.log(`Created user with ID: ${user.id}`);
+  });
+```
+
+## Importing Types
+
+If you need to reference the library's types in your own code, you can import them directly:
+
+```ts
+
+import type { 
+  ApiConfig, 
+  RequestOptions, 
+  ErrorResponse 
+} from '@ruzgardogu/api';
+
+// Now you can use these types in your code
+const handleApiError = (error: ErrorResponse) => {
+  console.error(`Error ${error.status}: ${error.message}`);
+};
+
+// Custom configuration with type checking
+const config: ApiConfig = {
+  baseUrl: 'https://api.example.com',
+  timeout: 10000,
+  retry: 3
+};
+```
+
+## Available Types
+
+The library includes TypeScript definitions for:
+
+- `ApiConfig`: Configuration options for the API client.
+- `RequestOptions`: Options for individual requests.
+- `ErrorResponse`: Error response object with status, message, and optional data.
+- `Interceptor`: Function signature for request/response interceptors.
+- `RequestInterceptor`: Function signature for request interceptors.
+- `ResponseInterceptor`: Function signature for response interceptors.
+- `Utility Types`: `ParamsObject` and other helper types
+
+## Note About JSDoc Comments
+
+You may notice that the library's source code includes JSDoc comments like:
+
+```ts
+/** @typedef {import('./types').ApiConfig} ApiConfig */
+/** @typedef {import('./types').RequestOptions} RequestOptions */
+```
+
+These are for development purposes and to support editors when working with the JavaScript source files. When using the library with TypeScript, you don't need to write these imports - just use the types directly as shown in the examples above.
 
 
 

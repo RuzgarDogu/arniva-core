@@ -2,6 +2,7 @@
 /** @typedef {import('./types').ApiConfig} ApiConfig */
 /** @typedef {import('./types').ParamsObject} ParamsObject */
 /** @typedef {import('./types').ErrorResponse} ErrorResponse */
+/** @typedef {import('./types').LoggerFunction} LoggerFunction */
 
 /**
  * Default configuration for API client

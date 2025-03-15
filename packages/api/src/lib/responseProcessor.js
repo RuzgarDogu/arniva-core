@@ -33,7 +33,7 @@ class ResponseProcessor {
 
     // Debug logging
     if (debug) {
-      requestConfig.logger('Response:', response);
+      requestConfig.logger('Response:', JSON.stringify(response));
     }
 
     // Extract data based on specified response type

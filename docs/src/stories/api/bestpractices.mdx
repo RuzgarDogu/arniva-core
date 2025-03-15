@@ -58,6 +58,25 @@ Or you can use it on client side.
 </script>
 ```
 
+> You can also use `onAfter()` lifecycle method to assign data to a variable.
+> This code below is equivalent to the code above.
+
+```ts
+// src/routes/+page.svelte
+<script lang="ts">
+    import { Api } from '$lib/api';
+    import { onMount } from 'svelte';
+
+    let comments = $state([])
+    onMount(async () => {
+        await Api.get('/comments?postId=1', {
+            onAfter: (data) => {
+                comments = data;
+            }
+        });
+    });
+</script>
+```
 
 
 

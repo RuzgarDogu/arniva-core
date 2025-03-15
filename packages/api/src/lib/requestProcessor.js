@@ -96,7 +96,7 @@ class RequestProcessor {
 
     // Debug logging
     if (debug) {
-      config.logger('Request options:', fetchOptions);
+      config.logger('Request options:', JSON.stringify(fetchOptions));
     }
 
     return { fetchOptions, abortController };
