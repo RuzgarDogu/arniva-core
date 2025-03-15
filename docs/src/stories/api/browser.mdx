@@ -2,7 +2,118 @@ import { Meta } from '@storybook/blocks';
 
 <Meta title="Api/Browser Compatibility" />
 
+# Browser Compatibility
+
+The Arniva API Client is built on modern web standards while maintaining broad compatibility with different browsers and environments.
+
+## Core Technology
+
+This library uses the native [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) as its foundation, providing a modern approach to making HTTP requests with excellent performance characteristics.
+
+## Browser Support
+
+### Modern Browsers
+
+The API client works out-of-the-box with all modern browsers, including:
 
 
+<table>
+    <thead>
+        <tr>
+        <th>Browser</th>
+        <th>Supported Versions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+        <td>Chrome</td>
+        <td>42+</td>
+        </tr>
+        <tr>
+        <td>Firefox</td>
+        <td>39+</td>
+        </tr>
+        <tr>
+        <td>Safari</td>
+        <td>10.1+</td>
+        </tr>
+        <tr>
+        <td>Edge</td>
+        <td>14+</td>
+        </tr>
+        <tr>
+        <td>Opera</td>
+        <td>29+</td>
+        </tr>
+        <tr>
+        <td>Chrome for Android</td>
+        <td>93+</td>
+        </tr>
+        <tr>
+        <td>Safari on iOS</td>
+        <td>10.3+</td>
+        </tr>
+    </tbody>
+</table>
 
+### Legacy Browser Support
 
+For older browsers that don't support the Fetch API natively, you'll need to include a polyfill. We recommend one of the following:
+
+- [whatwg-fetch](https://github.com/whatwg/fetch) - A lightweight polyfill focused only on the Fetch API
+- [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) - A polyfill that works in both browser and Node.js environments
+
+```javascript
+// To use with a polyfill in older browsers, simply include it before your code:
+import 'whatwg-fetch';
+import { ApiClient } from '@ruzgardogu/api';
+
+const api = new ApiClient({
+  baseUrl: 'https://api.example.com'
+});
+```
+
+## Node.js Compatibility
+
+While primarily designed for browser environments, the API client can also be used in Node.js applications with the appropriate fetch polyfill:
+
+```javascript
+// For Node.js prior to v18
+import fetch from 'node-fetch';
+import { AbortController } from 'abort-controller';
+
+// Make fetch and AbortController available globally
+globalThis.fetch = fetch;
+globalThis.AbortController = AbortController;
+
+import { ApiClient } from '@ruzgardogu/api';
+```
+
+> **Note**: Node.js v18+ includes native fetch support, so no polyfill is required.
+
+## Feature Detection
+
+The API client performs feature detection for advanced capabilities like AbortController (for request cancellation) and automatically provides fallbacks when needed.
+
+## Performance Considerations
+
+### Connection Limits
+Most browsers limit the number of concurrent connections to the same domain (typically 6-8). For applications making many simultaneous requests, consider:
+
+- Using request batching with the ```api.all()``` method
+- Implementing request queuing for non-critical requests
+- Using multiple subdomains for API endpoints to bypass connection limits
+
+## Common Issues and Solutions
+
+### CORS Restrictions
+The API client respects browser security policies. If you encounter CORS-related errors, ensure your server is correctly configured to allow cross-origin requests.
+
+### Mixed Content Warnings
+When using the API client on an HTTPS site to make requests to HTTP endpoints, browsers will block these requests as mixed content. Ensure all your API endpoints use HTTPS.
+
+### Local File Access
+Due to browser security restrictions, the Fetch API cannot access local files (file://) directly. For local development with local files, consider using a development server.
+
+### Testing
+We recommend testing your API integration across multiple browsers, especially if you're supporting older browsers. The API client is regularly tested against the current and previous versions of major browsers.
