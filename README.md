@@ -78,6 +78,18 @@ pnpm build:utils
 !IMPORTANT Change css to scss again
 AND DELETE css if you like.
 
+### Publishing Api
+
+#### IMPORTANT - Change Version Number inside package.json file
+
+- COMMIT CHANGES TO GIT
+
+then publish it by:
+
+```bash
+pnpm build:utils
+```
+
 ### IMPORTANT
 
 DO NOT FORGET TO CHANGE `css`to `scss`BACK AGAIN.
