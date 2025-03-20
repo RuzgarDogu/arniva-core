@@ -87,7 +87,7 @@ AND DELETE css if you like.
 then publish it by:
 
 ```bash
-pnpm build:utils
+pnpm build:api
 ```
 
 ### IMPORTANT
