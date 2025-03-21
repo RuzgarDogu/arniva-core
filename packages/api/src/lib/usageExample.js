@@ -28,10 +28,10 @@ export const Api = new ApiClient({
 	},
 
 	// Server errors (500+)
-	onServerError: (error) => {
-		console.log('SERVER ERROR:', error);
-		toast.danger('Server error: ' + error.message);
-	},
+	// onServerError: (error) => {
+	// 	console.log('SERVER ERROR:', error);
+	// 	toast.danger('Server error: ' + error.message);
+	// },
 
 	// General fallback (will not be called if any specific handler above is used)
 	onError: (error) => {
@@ -57,31 +57,31 @@ export const Api = new ApiClient({
 	logger: (a,b) => {
 		console.log("@@@@@@@@@@@@@@@@@@@@@@@@----", a,b);
 	}, // Custom logger function
-	errorInterceptor: (error) => {
-        // Add a human-friendly message based on the error type
-		console.log("errorInterceptor", error);
-        if (error.status === 401) {
-            error.extras.friendlyMessage = 'Your session has expired. Please log in again.';
-        } else if (error.status === 403) {
-            error.extras.friendlyMessage = 'You don\'t have permission to access this resource.';
-        } else if (error.status === 404) {
-            error.extras.friendlyMessage = 'We couldn\'t find what you\'re looking for.';
-        } else if (error.status >= 500) {
-            error.extras.friendlyMessage = 'Something went wrong on our server. Please try again later.';
-        } else if (error.type === 'network') {
-            error.extras.friendlyMessage = 'Connection problem. Please check your internet connection.';
-        } else {
-            error.extras.friendlyMessage = 'An unexpected error occurred.';
-        }
+	// errorInterceptor: (error) => {
+    //     // Add a human-friendly message based on the error type
+	// 	console.log("errorInterceptor", error);
+    //     if (error.status === 401) {
+    //         error.extras.friendlyMessage = 'Your session has expired. Please log in again.';
+    //     } else if (error.status === 403) {
+    //         error.extras.friendlyMessage = 'You don\'t have permission to access this resource.';
+    //     } else if (error.status === 404) {
+    //         error.extras.friendlyMessage = 'We couldn\'t find what you\'re looking for.';
+    //     } else if (error.status >= 500) {
+    //         error.extras.friendlyMessage = 'Something went wrong on our server. Please try again later.';
+    //     } else if (error.type === 'network') {
+    //         error.extras.friendlyMessage = 'Connection problem. Please check your internet connection.';
+    //     } else {
+    //         error.extras.friendlyMessage = 'An unexpected error occurred.';
+    //     }
         
-        // Add a timestamp to all errors
-        error.extras.interceptedAt = new Date().toISOString();
+    //     // Add a timestamp to all errors
+    //     error.extras.interceptedAt = new Date().toISOString();
         
-        // You could also log to an external service here
-        console.error('Error intercepted:', error.extras.friendlyMessage);
+    //     // You could also log to an external service here
+    //     console.error('Error intercepted:', error.extras.friendlyMessage);
         
-        return error;
-    },
+    //     return error;
+    // },
 });
 
 Api.interceptors.request.use(

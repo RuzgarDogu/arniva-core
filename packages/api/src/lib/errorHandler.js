@@ -2,6 +2,11 @@
 /** @typedef {import('./types').ErrorResponse} ErrorResponse */
 /** @typedef {import('./types').RequestInfo} RequestInfo */
 /** @typedef {import('./types').ResponseInfo} ResponseInfo */
+/** @typedef {import('./types').ResponseResult} ResponseResult */
+/** @typedef {import('./types').BeforeRequestCallback} BeforeRequestCallback */
+/** @typedef {import('./types').AfterRequestCallback} AfterRequestCallback */
+/** @typedef {import('./types').ErrorCallback} ErrorCallback */
+/** @typedef {import('./types').ErrorInterceptorCallback} ErrorInterceptorCallback */
 
 /**
  * @typedef {Object.<string, any>} JsonData
@@ -45,47 +50,45 @@ class ErrorHandler {
    * @returns {ErrorResponse} Standardized error object
    */
   processJsonErrorResponse(response, data) {
-  // Use default values if jsonErrorResponse is undefined
-  const messageKey = this.config.jsonErrorResponse?.messageKey || 'message';
-  const codeKey = this.config.jsonErrorResponse?.codeKey || 'code';
-  
-  /** @type {ErrorResponse} */
-  const appError = this._prepareError({
-    message: data[messageKey] || 'Unknown error',
-    code: data[codeKey] || 'UNKNOWN_ERROR',
-    status: response.status,
-    type: 'application',
-    timestamp: new Date().toISOString(),
-    handledByClient: true,
-    requestUrl: response.url,
-    response: {
+    // Use default values if jsonErrorResponse is undefined
+    const messageKey = this.config.jsonErrorResponse?.messageKey || 'message';
+    const codeKey = this.config.jsonErrorResponse?.codeKey || 'code';
+    
+    /** @type {ErrorResponse} */
+    const appError = this._prepareError({
+      message: data[messageKey] || 'Unknown error',
+      code: data[codeKey] || 'UNKNOWN_ERROR',
       status: response.status,
-      statusText: response.statusText,
-      headers: Object.fromEntries([...response.headers.entries()]),
-      data: data
-    },
-    extras: {}
-  });
-  
+      type: 'application',
+      timestamp: new Date().toISOString(),
+      handledByClient: true,
+      requestUrl: response.url,
+      response: {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries([...response.headers.entries()]),
+        data: data
+      },
+      extras: {}
+    });
+    
     this.logError('APPLICATION ERROR', appError);
     
     // Apply error interceptor if provided
     let interceptedError = appError;
-    if (typeof this.config.errorInterceptor === 'function' && 
-        this.config.errorInterceptor.toString() !== '() => {}') {
-      interceptedError = this.config.errorInterceptor(appError);
+    if (this.isNonEmptyFunction(this.config.errorInterceptor)) {
+      // This is the correct TypeScript type assertion syntax
+      interceptedError = /** @type {ErrorInterceptorCallback} */ (this.config.errorInterceptor)(appError);
       interceptedError.handledByClient = true;
       // Make sure extras exists even after interceptor
       this._prepareError(interceptedError);
     }
     
     // Call application error handler if provided
-    if (typeof this.config.onApplicationError === 'function' && 
-        this.config.onApplicationError.toString() !== '() => {}') {
-      this.config.onApplicationError(interceptedError);
-    } else if (typeof this.config.onError === 'function' && 
-              this.config.onError.toString() !== '() => {}') {
-      this.config.onError(interceptedError);
+    if (this.isNonEmptyFunction(this.config.onApplicationError)) {
+      /** @type {ErrorCallback} */ (this.config.onApplicationError)(interceptedError);
+    } else if (this.isNonEmptyFunction(this.config.onError)) {
+      /** @type {ErrorCallback} */ (this.config.onError)(interceptedError);
     }
     
     return interceptedError;
@@ -146,20 +149,17 @@ class ErrorHandler {
     let handledBySpecificHandler = this.callSpecificErrorHandler(error);
   
     // Apply error interceptor if provided
-    let interceptedError = error;
-    if (typeof this.config.errorInterceptor === 'function' && 
-        this.config.errorInterceptor.toString() !== '() => {}') {
-      interceptedError = this.config.errorInterceptor(error);
+    let interceptedError = error; 
+    if (this.isNonEmptyFunction(this.config.errorInterceptor)) {
+      interceptedError = /** @type {ErrorInterceptorCallback} */ (this.config.errorInterceptor)(error);
       interceptedError.handledByClient = true;
       // Make sure extras exists even after interceptor
       this._prepareError(interceptedError);
     }
   
     // Only call general error handler if no specific handler was called
-    if (!handledBySpecificHandler && 
-        typeof this.config.onError === 'function' && 
-        this.config.onError.toString() !== '() => {}') {
-      this.config.onError(interceptedError);
+    if (!handledBySpecificHandler && this.isNonEmptyFunction(this.config.onError)) {
+      /** @type {ErrorCallback} */ (this.config.onError)(interceptedError);
     }
   
     return interceptedError;
@@ -196,26 +196,20 @@ class ErrorHandler {
   
     this.logError('NETWORK ERROR', networkError);
   
-    // Rest of the method...
-
-  
     // Apply error interceptor if provided
     let interceptedError = networkError;
-    if (typeof this.config.errorInterceptor === 'function' && 
-        this.config.errorInterceptor.toString() !== '() => {}') {
-      interceptedError = this.config.errorInterceptor(networkError);
+    if (this.isNonEmptyFunction(this.config.errorInterceptor)) {
+      interceptedError = /** @type {ErrorInterceptorCallback} */ (this.config.errorInterceptor)(networkError);
       interceptedError.handledByClient = true;
       // Make sure extras exists even after interceptor
       this._prepareError(interceptedError);
     }
   
     // Call the network error handler specifically
-    if (typeof this.config.onNetworkError === 'function' && 
-        this.config.onNetworkError.toString() !== '() => {}') {
-      this.config.onNetworkError(interceptedError);
-    } else if (typeof this.config.onError === 'function' && 
-              this.config.onError.toString() !== '() => {}') {
-      this.config.onError(interceptedError);
+    if (this.isNonEmptyFunction(this.config.onNetworkError)) {
+      /** @type {ErrorCallback} */ (this.config.onNetworkError)(interceptedError);
+    } else if (this.isNonEmptyFunction(this.config.onError)) {
+      /** @type {ErrorCallback} */ (this.config.onError)(interceptedError);
     }
   
     return interceptedError;
@@ -227,14 +221,58 @@ class ErrorHandler {
    * @returns {ErrorResponse} Standardized error object
    */
   processAbortError(error) {
-    if (typeof this.config.onAbort === 'function' && 
-        this.config.onAbort.toString() !== '() => {}') {
-      this.config.onAbort(error);
+    if (this.isNonEmptyFunction(this.config.onAbort)) {
+      /** @type {ErrorCallback} */ (this.config.onAbort)(error);
+      error.handledByClient = true;
+    } else if (this.isNonEmptyFunction(this.config.onError)) {
+      /** @type {ErrorCallback} */ (this.config.onError)(error);
       error.handledByClient = true;
     }
     return error;
   }
 
+  /**
+   * Check if a handler is a non-empty function
+   * @param {Function|undefined} handler - Handler to check
+   * @returns {boolean} Whether the handler is a valid non-empty function
+   */
+  isNonEmptyFunction(handler) {
+    if (typeof handler !== 'function') return false;
+    
+    // Special case for Function.prototype or Object.prototype methods
+    if (handler === Function.prototype || handler === Object.prototype.toString) {
+      return false;
+    }
+    
+    try {
+      // Get the function body by converting to string and removing function declaration
+      const funcString = handler.toString();
+      
+      // Check for completely empty arrow functions in various formats
+      if (
+        funcString === '() => {}' || 
+        funcString === '()=>{}' || 
+        funcString === 'function(){}' || 
+        funcString === 'function() {}'
+      ) {
+        return false;
+      }
+      
+      // More detailed body analysis for other cases
+      const bodyMatch = funcString.match(/[{]([\s\S]*)[}]/);
+      if (!bodyMatch) return true; // If no braces found, assume it's a single-line return function
+      
+      const body = bodyMatch[1].trim();
+      
+      // A function with an empty body will just have whitespace or nothing between braces
+      return body !== '' && body !== ' ';
+    } catch (e) {
+      // If any error in string processing, assume it's non-empty to be safe
+      console.warn('Error checking function emptiness:', e);
+      return true;
+    }
+  }
+  
   /**
    * Call specific error handlers based on HTTP status code
    * @param {ErrorResponse} error - Error object
@@ -243,34 +281,24 @@ class ErrorHandler {
   callSpecificErrorHandler(error) {
     const { status } = error;
     let handledBySpecificHandler = false;
-
-    if (status === 404 && 
-        typeof this.config.onNotFound === 'function' && 
-        this.config.onNotFound.toString() !== '() => {}') {
-      this.config.onNotFound(error);
+  
+    if (status === 404 && this.isNonEmptyFunction(this.config.onNotFound)) {
+      /** @type {ErrorCallback} */ (this.config.onNotFound)(error);
       handledBySpecificHandler = true;
-    } else if (status === 401 && 
-              typeof this.config.onUnauthorized === 'function' && 
-              this.config.onUnauthorized.toString() !== '() => {}') {
-      this.config.onUnauthorized(error);
+    } else if (status === 401 && this.isNonEmptyFunction(this.config.onUnauthorized)) {
+      /** @type {ErrorCallback} */ (this.config.onUnauthorized)(error);
       handledBySpecificHandler = true;
-    } else if (status === 429 && 
-              typeof this.config.onRateLimit === 'function' && 
-              this.config.onRateLimit.toString() !== '() => {}') {
-      this.config.onRateLimit(error);
+    } else if (status === 429 && this.isNonEmptyFunction(this.config.onRateLimit)) {
+      /** @type {ErrorCallback} */ (this.config.onRateLimit)(error);
       handledBySpecificHandler = true;
-    } else if (status >= 500 && 
-              typeof this.config.onServerError === 'function' && 
-              this.config.onServerError.toString() !== '() => {}') {
-      this.config.onServerError(error);
+    } else if (status >= 500 && this.isNonEmptyFunction(this.config.onServerError)) {
+      /** @type {ErrorCallback} */ (this.config.onServerError)(error);
       handledBySpecificHandler = true;
-    } else if (status >= 400 && status < 500 && 
-              typeof this.config.onClientError === 'function' && 
-              this.config.onClientError.toString() !== '() => {}') {
-      this.config.onClientError(error);
+    } else if (status >= 400 && status < 500 && this.isNonEmptyFunction(this.config.onClientError)) {
+      /** @type {ErrorCallback} */ (this.config.onClientError)(error);
       handledBySpecificHandler = true;
     }
-
+  
     return handledBySpecificHandler;
   }
 
