@@ -77,18 +77,18 @@
 		// 		console.error('error', error);
 		// 	});
 
-		try {
-		    const test500 = await Api.get('/500', {
-		        config: {
-		            dataKey: 'testing2',
-		            baseUrl: 'https://httpstat.us',
-					suppressErrors: false
-		        }
-		    })
-		    console.log("test500", test500);
-		} catch (error) {
-		    // console.error('******error', error);
-		}
+		// try {
+		//     const test500 = await Api.get('/500', {
+		//         config: {
+		//             dataKey: 'testing2',
+		//             baseUrl: 'https://httpstat.us',
+		// 			suppressErrors: false
+		//         }
+		//     })
+		//     console.log("test500", test500);
+		// } catch (error) {
+		//     // console.error('******error', error);
+		// }
 		// Alternatif url: http://test.arniva.org/v1/banka
 		// try {
 		// 	const arnivaTest = await Api.get('https://test-api.arniva.cloud/v1/banka', {
@@ -125,20 +125,20 @@
 
 
 
-		const test3 = await Api.get(
-			'forecast',
-			{
-				latitude: 51.5074,
-				longitude: -0.1278,
-				current_weather: true
-			},
-			{
-				config: {
-					baseUrl: 'https://api.open-meteo.com/v1'
-				}
-			}
-		);
-		console.log('test3', test3);
+		// const test3 = await Api.get(
+		// 	'forecast',
+		// 	{
+		// 		latitude: 51.5074,
+		// 		longitude: -0.1278,
+		// 		current_weather: true
+		// 	},
+		// 	{
+		// 		config: {
+		// 			baseUrl: 'https://api.open-meteo.com/v1'
+		// 		}
+		// 	}
+		// );
+		// console.log('test3', test3);
 
 
 
@@ -163,44 +163,44 @@
 		// );
 		// console.log('test5', test5);
 		// Example usage with named results
-		const { comments, forecast } = await Api.all({
-			comments: Api.get('/comments?postId=1', {
-				config: {
-					dataKey: ''
-				}
-			}),
-			forecast: Api.get(
-				'forecast',
-				{
-					config: {
-						baseUrl: 'https://api.open-meteo.com/v1'
-					}
-				},
-				{
-					latitude: 51.5074,
-					longitude: -0.1278,
-					current_weather: true
-				}
-			)
-		});
-		// Access results using the property names
-		console.log("comments", comments);  // comments data
-		console.log("forecast", forecast);  // forecast data
+		// const { comments, forecast } = await Api.all({
+		// 	comments: Api.get('/comments?postId=1', {
+		// 		config: {
+		// 			dataKey: ''
+		// 		}
+		// 	}),
+		// 	forecast: Api.get(
+		// 		'forecast',
+		// 		{
+		// 			config: {
+		// 				baseUrl: 'https://api.open-meteo.com/v1'
+		// 			}
+		// 		},
+		// 		{
+		// 			latitude: 51.5074,
+		// 			longitude: -0.1278,
+		// 			current_weather: true
+		// 		}
+		// 	)
+		// });
+		// // Access results using the property names
+		// console.log("comments", comments);  // comments data
+		// console.log("forecast", forecast);  // forecast data
 
 
 
 
 // Execute multiple requests in parallel
-Api.all({
-  users: Api.get('/users'),
-  posts: Api.get('/posts'),
-  comments: Api.get('/comments')
-})
-  .then(results => {
-    console.log('Users:', results.users);
-    console.log('Posts:', results.posts);
-    console.log('Comments:', results.comments);
-  });
+// Api.all({
+//   users: Api.get('/users'),
+//   posts: Api.get('/posts'),
+//   comments: Api.get('/comments')
+// })
+//   .then(results => {
+//     console.log('Users:', results.users);
+//     console.log('Posts:', results.posts);
+//     console.log('Comments:', results.comments);
+//   });
 
 
 	});

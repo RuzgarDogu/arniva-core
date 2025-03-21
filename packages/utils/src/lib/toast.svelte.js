@@ -283,6 +283,12 @@ function createToastHelper(type) {
 	 * @throws {Error} If no message is provided in either parameter
 	 */
 	return function (message = '', config = {}) {
+
+		// Exit silently if not in browser environment
+		if (typeof document === 'undefined') {
+			return;
+		}
+
 		try {
 			// Case 1: First parameter is an object (config with message inside)
 			if (typeof message === 'object') {
