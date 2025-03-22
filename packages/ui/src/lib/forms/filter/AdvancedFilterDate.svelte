@@ -25,11 +25,9 @@
 	 * @param {{ start: Date|null; end: Date|null; }} e - Date event containing start and end dates
 	 */
 	function handleChange(e) {
-		console.log('e', e);
 		if (field.dateRange) {
 			if (e && e.start && e.end) {
 				let _field = JSON.parse(JSON.stringify(field));
-				console.log('e', e);
 				// Convert Date objects to ISO strings for the onChange handler
 				onChange &&
 					field &&

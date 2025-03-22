@@ -119,9 +119,7 @@
     <Range onChange={handleRange} type="range" color="accent" min={20} max={300}/>
 </div> -->
 
-<div style="margin-bottom: 30px;">
-	<AdvancedFilter {filterConfig} onChange={handleChange} />
-</div>
+	<AdvancedFilter class="mb-3" {filterConfig} onChange={handleChange} />
 
 <Table>
 	<Thead>
@@ -153,3 +151,4 @@
 		{/each}
 	</Tbody>
 </Table>
+

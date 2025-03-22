@@ -14,7 +14,6 @@
  * @type {ApplyFiltersFunction}
  */
 export function applyFilters(data, filters, config) {
-	console.log('filters', filters);
 	// If filter is empty or null, return all data
 	if (!filters || Object.keys(filters).length === 0) {
 		return data;

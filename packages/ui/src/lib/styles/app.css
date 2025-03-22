@@ -1424,7 +1424,7 @@
   height: 35px;
   display: flex;
   align-items: center;
-  padding: 0 0.5em;
+  padding: 0 1em;
 }
 .datepicker--inputs input {
   color: var(--ar-text-color-subtle);

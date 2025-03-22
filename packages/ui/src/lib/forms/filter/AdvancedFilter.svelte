@@ -17,10 +17,12 @@
 	 * @typedef {Object} Props
 	 * @property {FilterConfig} filterConfig - The filter configuration object
 	 * @property {Function} onChange - Callback function triggered when filter values change
+	 * @property {string} class - Additional classes to apply to the component
+	 * @property {string} buttonText - The text to display on the main filter button
 	 */
 
 	/** @type {Props} */
-	let { filterConfig, onChange } = $props();
+	let { filterConfig, onChange, class:cls='', buttonText="Filter" } = $props();
 
 	let searchText = $state('');
 	// Keep track of the current highest order
@@ -235,11 +237,11 @@
 	}
 </script>
 
-<InputGroup class="advanced-filter">
+<InputGroup class={['advanced-filter', cls].join(' ')}>
 	<Dropdown bind:this={filterDropdown}>
 		<Button dropdown size="small" square color="primary" class="advanced-filter--main-button">
 			<Icon icon="mdi:filter-outline" width="14" height="14" />
-			Filter
+			{buttonText}
 		</Button>
 		<DropdownContent>
 			{#each fields as field}

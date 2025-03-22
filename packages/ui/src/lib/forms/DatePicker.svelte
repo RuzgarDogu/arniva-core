@@ -670,7 +670,7 @@
 								<li>
 									<button onclick={option.action}
 										>{option.label}
-										<Icon name="alt-arrow-right" size="13px" />
+										<Icon icon="mdi:chevron-right" width="13" />
 									</button>
 								</li>
 							{/each}
@@ -679,7 +679,7 @@
 								<li>
 									<button onclick={option.action}
 										>{option.label}
-										<Icon name="alt-arrow-right" size="13px" />
+										<Icon icon="mdi:chevron-right" width="13" />
 									</button>
 								</li>
 							{/each}
@@ -692,11 +692,11 @@
 				<!-- Month navigation -->
 				<div class="datepicker--calendar-header">
 					<button aria-label="prev" class="datepicker--month-nav" onclick={prevMonth}>
-						<Icon name="alt-arrow-left" size="14px" />
+						<Icon icon="mdi:chevron-left" width="14" />
 					</button>
 					<div class="datepicker--month-title">{formatMonth(currentMonth)}</div>
 					<button aria-label="next" class="datepicker--month-nav" onclick={nextMonth}>
-						<Icon name="alt-arrow-right" size="14px" />
+						<Icon icon="mdi:chevron-right" width="14" />
 					</button>
 				</div>
 

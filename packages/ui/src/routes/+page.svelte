@@ -37,7 +37,6 @@
 	import { clickOutside } from '$lib/functions';
 
 	function handleSwitchChange(value) {
-		console.log('Switch value changed to:', value);
 		let result = value ? 'ON' : 'OFF';
 		// alert(`Switch value changed to: ${result}`);
 	}
