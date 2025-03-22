@@ -13,11 +13,30 @@
  */
 
 /**
+ * @typedef {Object} DateTranslation
+ * @property {string} selectdate - The text for the date picker select date button
+ * @property {string} selectenddate - The text for the date picker select end date button
+ * @property {string} thisweek - The text for the date picker this week button
+ * @property {string} lastweek - The text for the date picker last week button
+ * @property {string} thismonth - The text for the date picker this month button
+ * @property {string} lastmonth - The text for the date picker last month button
+ * @property {string} thisyear - The text for the date picker this year button
+ * @property {string} lastyear - The text for the date picker last year button
+*/
+
+/**
  * @typedef {Object} FilterConfig
  * @property {string} name - Name of the filter
  * @property {SearchConfig} [search] - Search configuration
  * @property {FilterField[]} fields - Filter fields configuration
+ * @property {Object} [translation] - Translations for filter UI elements
+ * @property {Object} [translation.general] - General translation terms
+ * @property {string} [translation.general.filter] - Translation for "Filter" action
+ * @property {string} [translation.general.clear] - Translation for "Clear" action
+ * @property {string} [translation.general.delete] - Translation for "Delete" action
+ * @property {DateTranslation} [translation.date] - Date-related translation terms
  */
+
 
 /**
  * @typedef {Object} FilterField

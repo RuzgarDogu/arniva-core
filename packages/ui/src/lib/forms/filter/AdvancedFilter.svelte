@@ -22,7 +22,7 @@
 	 */
 
 	/** @type {Props} */
-	let { filterConfig, onChange, class:cls='', buttonText="Filter" } = $props();
+	let { filterConfig, onChange, class:cls='' } = $props();
 
 	let searchText = $state('');
 	// Keep track of the current highest order
@@ -241,7 +241,7 @@
 	<Dropdown bind:this={filterDropdown}>
 		<Button dropdown size="small" square color="primary" class="advanced-filter--main-button">
 			<Icon icon="mdi:filter-outline" width="14" height="14" />
-			{buttonText}
+			{filterConfig?.translation?.general?.filter || 'Filter'}
 		</Button>
 		<DropdownContent>
 			{#each fields as field}
@@ -301,7 +301,7 @@
 					</Button>
 				</div>
 				<DropdownContent>
-					<AdvancedFilterContent {field} onChange={handleChange} />
+					<AdvancedFilterContent {filterConfig} {field} onChange={handleChange} />
 				</DropdownContent>
 			</Dropdown>
 		</div>

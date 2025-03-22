@@ -5,6 +5,7 @@
 	import Icon from '../../icons/Icon.svelte';
 	/**
 	 * @typedef {import('./types').Field} Field
+	 * @typedef {import('./types').FilterConfig} FilterConfig
 	 */
 
 	/**
@@ -21,10 +22,11 @@
 	 * @typedef {Object} Props
 	 * @property {Field} field - The field configuration object
 	 * @property {Function} onChange - Function to call when the field value changes
+	 * @property {FilterConfig} filterConfig - The filter configuration object
 	 */
 
 	/** @type {Props} */
-	let { field, onChange } = $props();
+	let { field, onChange, filterConfig } = $props();
 	let _field = $state(JSON.parse(JSON.stringify(field)));
 
 	/**
@@ -97,16 +99,16 @@
 			{:else if field.type === 'select' || field.type === 'boolean'}
 				<AdvancedFilterSelection field={_field} {onChange} multiple={false} />
 			{:else if field.type === 'date'}
-				<AdvancedFilterDate field={_field} {onChange} bind:this={filterDateContainer} />
+				<AdvancedFilterDate translation={filterConfig?.translation?.date} field={_field} {onChange} bind:this={filterDateContainer} />
 			{/if}
 		</div>
 		<div class="advanced-filter--content-footer">
 			<button class="btn-clear" onclick={clearSelections}>
-				Clear Selection
+				{filterConfig?.translation?.general?.clear || 'Clear Selection'}
 				<Icon name="xmark" size="17px" />
 			</button>
 			<button class="btn-clear" onclick={deleteField}>
-				Delete Filter
+				{filterConfig?.translation?.general?.delete || 'Delete'}
 				<Icon name="trash-bin-2" size="17px" />
 			</button>
 		</div>

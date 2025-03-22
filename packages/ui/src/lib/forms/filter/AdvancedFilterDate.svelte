@@ -3,16 +3,18 @@
 
 	/**
 	 * @typedef {import('./types').Field} Field
+	 * @typedef {import('./types').DateTranslation} DateTranslation
 	 */
 
 	/**
 	 * @typedef {Object} Props
 	 * @property {Field} field - The name of the filter
 	 * @property {Function} onChange - Callback function triggered when filter values change
+	 * @property {DateTranslation} [translation] - Translation object for date picker
 	 */
 
 	/** @type {Props} */
-	let { field, onChange } = $props();
+	let { field, onChange, translation } = $props();
 
 	/**
 	 * @typedef {Object} DateEvent
@@ -69,6 +71,7 @@
 
 <div class="advanced-filter--date-picker">
 	<DatePicker
+		translation={translation}
 		isEuropean={!field?.isAmerican}
 		isRange={field.dateRange}
 		quickSelect

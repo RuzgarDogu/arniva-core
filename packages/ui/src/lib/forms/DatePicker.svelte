@@ -3,21 +3,37 @@
 	import { Icon } from '../icons';
 
 	/**
+	 * @typedef {import('./filter/types').DateTranslation} DateTranslation
+	 */
+
+	/**
 	 * @typedef {Object} Props
 	 * @property {boolean|null|undefined} [isRange] - Whether to select a range of dates
 	 * @property {boolean} [quickSelect] - Whether to show quick select options
 	 * @property {boolean} [isEuropean] - Whether to use European date format (DD/MM/YYYY)
 	 * @property {boolean} [manualInput] - Whether to allow manual input of dates
 	 * @property {(dates: {start: Date|null, end: Date|null}) => void} [onChange] - Callback function triggered when dates change
+	 * @property {DateTranslation} [translation] - Translation object for date picker
 	 */
 
+	 
 	/** @type {Props} */
 	let {
 		isRange = false,
 		quickSelect = false,
 		isEuropean = true,
 		manualInput = true,
-		onChange
+		onChange,
+		translation={
+				selectdate: "Tarih Seç",
+				selectenddate: "Bitiş Tarihi Seç",
+				thisweek: "Bu Hafta",
+				lastweek: "Geçen Hafta",
+				thismonth: "Bu Ay",
+				lastmonth: "Geçen Ay",
+				thisyear: "Bu Yıl",
+				lastyear: "Geçen Yıl",
+			}
 	} = $props();
 
 	// State management with Svelte 5 runes
@@ -535,7 +551,7 @@
 	// Range date quick selection options
 	const rangeDateOptions = [
 		{
-			label: 'This week',
+			label: translation?.thisweek || "This week",
 			action: () => {
 				const today = getToday();
 				startDate = getWeekStartDate(today);
@@ -546,7 +562,7 @@
 			}
 		},
 		{
-			label: 'Last week',
+			label: translation?.lastweek || "Last week",
 			action: () => {
 				const lastWeek = addDays(getToday(), -7);
 				startDate = getWeekStartDate(lastWeek);
@@ -557,7 +573,7 @@
 			}
 		},
 		{
-			label: 'This month',
+			label: translation?.thismonth || "This month",
 			action: () => {
 				const today = getToday();
 				startDate = getFirstDayOfMonth(today);
@@ -568,7 +584,7 @@
 			}
 		},
 		{
-			label: 'Last month',
+			label: translation?.lastmonth || "Last month",
 			action: () => {
 				const today = getToday();
 				const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
@@ -580,7 +596,7 @@
 			}
 		},
 		{
-			label: 'Next month',
+			label: translation?.thisyear || "This year",
 			action: () => {
 				const today = getToday();
 				const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
@@ -592,22 +608,11 @@
 			}
 		},
 		{
-			label: 'This year',
+			label: translation?.lastyear || "Last year",
 			action: () => {
 				const today = getToday();
 				startDate = getFirstDayOfYear(today.getFullYear());
 				endDate = getLastDayOfYear(today.getFullYear());
-				updateDateValues();
-				showStartPicker = false;
-				showEndPicker = false;
-			}
-		},
-		{
-			label: 'Last year',
-			action: () => {
-				const today = getToday();
-				startDate = getFirstDayOfYear(today.getFullYear() - 1);
-				endDate = getLastDayOfYear(today.getFullYear() - 1);
 				updateDateValues();
 				showStartPicker = false;
 				showEndPicker = false;
@@ -634,7 +639,7 @@
 			bind:this={startInputRef}
 			type="text"
 			value={startInputValue}
-			placeholder="Select date"
+			placeholder={translation?.selectdate || "Select date"}
 			onfocus={() => (showStartPicker = true)}
 			oninput={handleStartInputChange}
 			onblur={() => handleInputBlur('start')}
@@ -647,7 +652,7 @@
 				bind:this={endInputRef}
 				type="text"
 				value={endInputValue}
-				placeholder="Select end date"
+				placeholder={translation.selectenddate || "Select end date"}
 				onfocus={() => (showEndPicker = true)}
 				oninput={handleEndInputChange}
 				onblur={() => handleInputBlur('end')}

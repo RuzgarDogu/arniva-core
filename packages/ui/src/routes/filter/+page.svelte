@@ -5,6 +5,23 @@
 
 	let filterConfig = {
 		name: 'filterName',
+		translation:{
+			general: {
+				filter: "Filtrele",
+				clear: "Temizle",
+				delete: "Sil",
+			},
+			date: {
+				selectdate: "Tarih Seç",
+				selectenddate: "Bitiş Tarihi Seç",
+				thisweek: "Bu Hafta",
+				lastweek: "Geçen Hafta",
+				thismonth: "Bu Ay",
+				lastmonth: "Geçen Ay",
+				thisyear: "Bu Yıl",
+				lastyear: "Geçen Yıl",
+			}
+		},
 		search: {
 			placeholder: 'Search Employees',
 			columns: ['name', 'email', 'phone']
