@@ -13,6 +13,9 @@
 	 * @property {any} [footer] Modal footer
 	 * @property {boolean} [noPadding] Modal no padding
 	 * @property {boolean} [devMode] Modal dev mode
+	 * @property {string} [footerClass] Modal footer class
+	 * @property {string} [headerClass] Modal header class
+	 * @property {string} [bodyClass] Modal body class
 	 * @property {() => void} [onclose] Modal close event
 	 */
 
@@ -23,6 +26,9 @@
 		name = 'Arniva Cloud',
 		title = '',
 		footer,
+		footerClass='',
+		headerClass='',
+		bodyClass='',
 		noPadding = false,
 		onclose = null,
 		devMode = false
@@ -68,7 +74,7 @@
 	use:modalInit
 >
 	<div class="modal--content">
-		<div class="modal--header">
+		<div class={['modal--header', headerClass].join(' ')}>
 			{#if title}
 				<div class="modal--title">{title}</div>
 			{/if}
@@ -84,12 +90,12 @@
 			</div>
 		</div>
 		{#if children}
-			<div class="modal--body">
+			<div class={['modal--body', bodyClass].join(' ')}>
 				{@render children()}
 			</div>
 		{/if}
 		{#if footer}
-			<div class="modal--footer">
+			<div class={['modal--footer', footerClass].join(' ')}>
 				{@render footer()}
 			</div>
 		{/if}

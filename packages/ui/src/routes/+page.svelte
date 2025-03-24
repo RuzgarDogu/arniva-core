@@ -339,6 +339,11 @@
 
 <Modal id="testModal3" title="Test Modal3" size="lg" name="Test_Modal3" bind:this={modal3}>
 	<h1>ok4</h1>
+	{#snippet footer()}
+	<Button color="primary" onClick={() => modal3.hide()} style="margin-bottom: 20px;">
+		Close Modal 3.aasdas
+	</Button>
+	{/snippet}
 </Modal>
 
 <Input placeholder="Fill in your name" type="text" style="margin-bottom: 30px;" />

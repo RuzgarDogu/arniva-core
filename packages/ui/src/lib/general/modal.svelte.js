@@ -1,8 +1,6 @@
 // @ts-nocheck
 import { afterNavigate } from '$app/navigation';
 
-let init = false;
-
 /**
  * @typedef {Object} SvelteInstance
  * @property {function(string): void} handleStateChange
@@ -62,7 +60,7 @@ class Modal {
 			modalContent.style.transform = 'none';
 			modalContent.style.width = `calc(100% - ${mainContentSectionLeft}px)`;
 			// modalContent.style.width = `calc(100% - 1px)`;
-			modalContent.style.height = `calc(100% - 1px)`;
+			// modalContent.style.height = `calc(100% - 1px)`;
 			modalContent.style.boxShadow = 'none';
 		} else {
 			if (modalContent) modalContent.removeAttribute('style');
@@ -117,50 +115,50 @@ class ModalController {
 
 	updateBreadcrumbs() {
 		this.activeModals.forEach((modal) => {
-			const breadcrumbContainer = modal.element.querySelector('.modal--breadcrumb');
-			if (breadcrumbContainer) {
-				// Clear breadcrumbs if 1 or fewer modals
-				if (this.activeModals.length <= 1) {
-					breadcrumbContainer.innerHTML = '';
-					return;
-				}
-
-				breadcrumbContainer.innerHTML = '';
-
-				this.activeModals.forEach((activeModal, index) => {
-					const breadcrumb = document.createElement('div');
-					breadcrumb.textContent = activeModal.title || activeModal.name;
-					breadcrumb.classList.add('modal--breadcrumb-item');
-
-					const handleClick = () => {
-						this.closeModalsAfterIndex(index);
-					};
-
-					breadcrumb.addEventListener('click', handleClick);
-
-					if (!this.eventListeners.has(breadcrumb)) {
-						this.eventListeners.set(breadcrumb, []);
-					}
-
-					// Get the listeners array with a definite assignment
-					const listeners = this.eventListeners.get(breadcrumb);
-					if (listeners) {
-						listeners.push({ type: 'click', handler: handleClick });
-					}
-
-					breadcrumbContainer.appendChild(breadcrumb);
-
-					if (index < this.activeModals.length - 1) {
-						const chevron = document.createElement('div');
-						chevron.innerHTML =
-							'<svg width="14px" height="14px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9 5L15 12L9 19" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>';
-						chevron.classList.add('breadcrumb-chevron');
-						breadcrumbContainer.appendChild(chevron);
-					}
-				});
+		  const breadcrumbContainer = modal.element.querySelector('.modal--breadcrumb');
+		  if (breadcrumbContainer) {
+			// Always clear breadcrumbs first
+			breadcrumbContainer.innerHTML = '';
+			
+			// Early return if 1 or fewer modals
+			if (this.activeModals.length <= 1) {
+			  return;
 			}
+	
+			this.activeModals.forEach((activeModal, index) => {
+			  const breadcrumb = document.createElement('div');
+			  breadcrumb.textContent = activeModal.title || activeModal.name;
+			  breadcrumb.classList.add('modal--breadcrumb-item');
+	
+			  const handleClick = () => {
+				this.closeModalsAfterIndex(index);
+			  };
+	
+			  breadcrumb.addEventListener('click', handleClick);
+	
+			  if (!this.eventListeners.has(breadcrumb)) {
+				this.eventListeners.set(breadcrumb, []);
+			  }
+	
+			  // Get the listeners array with a definite assignment
+			  const listeners = this.eventListeners.get(breadcrumb);
+			  if (listeners) {
+				listeners.push({ type: 'click', handler: handleClick });
+			  }
+	
+			  breadcrumbContainer.appendChild(breadcrumb);
+	
+			  if (index < this.activeModals.length - 1) {
+				const chevron = document.createElement('div');
+				chevron.innerHTML =
+				  '<svg width="14px" height="14px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9 5L15 12L9 19" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>';
+				chevron.classList.add('breadcrumb-chevron');
+				breadcrumbContainer.appendChild(chevron);
+			  }
+			});
+		  }
 		});
-	}
+	  }
 
 	/**
 	 * Updates z-indices for all active modals after one is closed
@@ -315,146 +313,164 @@ class ModalController {
 	}
 }
 
+
+
+// eslint-disable-next-line no-unused-vars
+// @ts-nocheck
+
+// Remove the module-level init flag as it's not needed
+// let init = false;
+
+// ...existing Modal class and ModalController class...
+
 // eslint-disable-next-line no-unused-vars
 export function modalInit(node) {
 	/** @type {ModalController|null} */
 	let controller = null;
-
-	function initializeController() {
-		// Create new controller if it doesn't exist
-		if (!controller) {
-			controller = new ModalController();
-		}
+	
+	// Use a shared controller instance reference to prevent duplicate controllers
+	// during HMR updates
+	if (window.__arnivaModalController) {
+	  controller = window.__arnivaModalController;
+	  controller.cleanupEventListeners();
+	} else {
+	  controller = new ModalController();
+	  window.__arnivaModalController = controller;
 	}
+  
 	function initializeModals() {
-		initializeController();
-		const modalElements = Array.from(document.querySelectorAll('.modal'));
-
-		modalElements.forEach((element, index) => {
-			// Cast the element to ModalElement type
-			/** @type {ModalElement} */
-			const modalElement = /** @type {ModalElement} */ (element);
-			const modal = new Modal(modalElement, index);
-
-			// Now controller is definitely not null
-			if (controller) controller.modals.set(modal.id, modal);
-
-			// Rest of your code remains the same
-			// Setup dismiss button
-			if (modal.dismissButton) {
-				const dismissHandler = () => {
-					modal.element.classList.add('closing');
-				};
-				modal.dismissButton.addEventListener('click', dismissHandler);
-				if (controller) {
-					if (!controller.eventListeners.has(modal.dismissButton)) {
-						controller.eventListeners.set(modal.dismissButton, []);
-					}
-					const listeners = controller.eventListeners;
-					if (listeners) {
-						let btns = listeners.get(modal.dismissButton);
-						if (btns) {
-							btns.push({
-								type: 'click',
-								handler: dismissHandler
-							});
-						}
-					}
-				}
-			}
-
-			// Setup enlarge button
-			if (modal.enlargeButton) {
-				const enlargeHandler = () => {
-					if (!controller) return;
-					controller.handleEnlarge(modal);
-				};
-				modal.enlargeButton.addEventListener('click', enlargeHandler);
-				if (controller) {
-					if (!controller.eventListeners.has(modal.enlargeButton)) {
-						controller.eventListeners.set(modal.enlargeButton, []);
-					}
-					let btn = controller.eventListeners.get(modal.enlargeButton);
-					if (btn) {
-						btn.push({
-							type: 'click',
-							handler: enlargeHandler
-						});
-					}
-				}
-			}
-
-			// Setup observer
-			if (controller) controller.observeModalState(modal);
-		});
-
-		setupTriggerButtons();
-	}
-
-	function setupTriggerButtons() {
-		const buttons = document.querySelectorAll('[data-ar-toggle="modal"]');
-		buttons.forEach((button) => {
-			if (!button.hasAttribute('data-ar-target')) return;
-
-			const targetId = button.getAttribute('data-ar-target');
-			// Check if targetId is not null before using it
-			if (!targetId) return;
-
-			const modal = controller && controller.modals.get(targetId);
-			if (!modal) return;
-
-			const triggerHandler = () => {
-				modal.element.classList.add('opening');
+	  if (controller) {
+		controller.cleanupEventListeners();
+	  }
+	  
+	  const modalElements = Array.from(document.querySelectorAll('.modal'));
+  
+	  // First clear all modal registrations to prevent duplicates
+	  if (controller) {
+		controller.modals.clear();
+		controller.activeModals = [];
+	  }
+  
+	  modalElements.forEach((element, index) => {
+		/** @type {ModalElement} */
+		const modalElement = /** @type {ModalElement} */ (element);
+		
+		// Since we cleared the modals map, we always create a new Modal instance
+		const modal = new Modal(modalElement, index);
+  
+		if (controller) {
+		  controller.modals.set(modal.id, modal);
+		  
+		  // Setup modal observers and recreate event handlers
+		  controller.observeModalState(modal);
+		  
+		  // Setup dismiss button handler
+		  if (modal.dismissButton) {
+			const dismissHandler = () => {
+			  modal.element.classList.add('closing');
 			};
-
-			button.addEventListener('click', triggerHandler);
-
-			if (controller) {
-				// Cast button to HTMLElement before using it with the event listeners map
-				/** @type {HTMLElement} */
-				const htmlButton = /** @type {HTMLElement} */ (button);
-
-				if (!controller.eventListeners.has(htmlButton)) {
-					controller.eventListeners.set(htmlButton, []);
-				}
-				let btn = controller.eventListeners.get(htmlButton);
-				if (btn) {
-					btn.push({
-						type: 'click',
-						handler: triggerHandler
-					});
-				}
+			
+			modal.dismissButton.addEventListener('click', dismissHandler);
+			
+			if (!controller.eventListeners.has(modal.dismissButton)) {
+			  controller.eventListeners.set(modal.dismissButton, []);
 			}
-		});
-	}
-
-	// eslint-disable-next-line no-undef
-	$effect(() => {
-		afterNavigate(() => {
-			if (!init) {
-				init = true;
-				initializeController();
-				initializeModals();
+			const listeners = controller.eventListeners.get(modal.dismissButton);
+			if (listeners) {
+			  listeners.push({ type: 'click', handler: dismissHandler });
 			}
-			// initializeController();
-			// initializeModals();
-		});
-
-		// Return cleanup function
-		return () => {
-			if (controller) {
-				controller.destroy();
-				init = false;
+		  }
+		  
+		  // Setup enlarge button handler if present
+		  if (modal.enlargeButton) {
+			const enlargeHandler = () => {
+			  controller.handleEnlarge(modal);
+			};
+			
+			modal.enlargeButton.addEventListener('click', enlargeHandler);
+			
+			if (!controller.eventListeners.has(modal.enlargeButton)) {
+			  controller.eventListeners.set(modal.enlargeButton, []);
 			}
-		};
-	});
-
-	return {
-		destroy() {
-			if (controller) {
-				controller.destroy();
-				init = false;
+			const listeners = controller.eventListeners.get(modal.enlargeButton);
+			if (listeners) {
+			  listeners.push({ type: 'click', handler: enlargeHandler });
 			}
+		  }
 		}
+	  });
+  
+	  setupTriggerButtons();
+	}
+  
+	function setupTriggerButtons() {
+	  const buttons = document.querySelectorAll('[data-ar-toggle="modal"]');
+	  
+	  buttons.forEach((button) => {
+		if (!button.hasAttribute('data-ar-target')) return;
+  
+		const targetId = button.getAttribute('data-ar-target');
+		if (!targetId) return;
+  
+		const modal = controller && controller.modals.get(targetId);
+		if (!modal) return;
+  
+		// Cast button to HTMLElement for TypeScript
+		const htmlButton = /** @type {HTMLElement} */ (button);
+		
+		const triggerHandler = () => {
+		  console.log('Modal trigger clicked for', targetId);
+		  modal.element.classList.add('opening');
+		};
+  
+		button.addEventListener('click', triggerHandler);
+  
+		if (controller) {
+		  if (!controller.eventListeners.has(htmlButton)) {
+			controller.eventListeners.set(htmlButton, []);
+		  }
+		  let btn = controller.eventListeners.get(htmlButton);
+		  if (btn) {
+			btn.push({
+			  type: 'click',
+			  handler: triggerHandler
+			});
+		  }
+		}
+	  });
+	}
+  
+	function reinitialize() {
+	  console.log('Reinitializing modal system');
+	  initializeModals();
+	}
+  
+	// Initialize immediately
+	reinitialize();
+	
+	// Setup navigation handler separately
+	afterNavigate(() => {
+	  console.log('After navigate, reinitializing modals');
+	  reinitialize();
+	});
+  
+	return {
+	  update() {
+		console.log('Modal update called');
+		reinitialize();
+	  },
+	  destroy() {
+		console.log('Modal destroy called');
+		if (controller) {
+		  controller.destroy();
+		  
+		  // Only delete the global reference if this specific instance owns it
+		  if (window.__arnivaModalController === controller) {
+			delete window.__arnivaModalController;
+		  }
+		  
+		  controller = null;
+		}
+	  }
 	};
-}
+  }
