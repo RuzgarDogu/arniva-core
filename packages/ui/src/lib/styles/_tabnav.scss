@@ -1,0 +1,37 @@
+.tabnav {
+    padding: var(--ar-nav-padding);
+    background-color: var(--ar-light-color);
+    border-top: 1px solid var(--ar-border-color);
+    display: flex;
+    gap: 0.5rem;
+    &--tab {
+        &.active {
+            background-color: var(--ar-accent-color-subtle);
+            border-radius: 5px;
+            & * {
+                color: var(--ar-accent-color);
+            }
+        }
+    }
+    &--tab-button {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-right: 0;
+        border-radius: 5px;
+        .close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+        }
+        &:hover {
+            .close {
+                visibility: visible;
+            }
+        }
+    }
+}

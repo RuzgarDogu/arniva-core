@@ -14,7 +14,8 @@
 		Dropdown,
 		Button,
 		DropdownContent,
-		Topnav
+		Topnav,
+		Tabnav
 	} from '$lib';
 </script>
 
@@ -315,6 +316,18 @@
 					</Button>
 				{/snippet}
 			</Topnav>
+			<Tabnav pages = {[
+				{
+					title: 'Filter',
+					icon: 'mdi:information',
+					link: '/filter'
+				},
+				{
+					title: 'Deneme',
+					icon: 'mdi:phone',
+					link: '/deneme'
+				},
+			]}/>
 		</Navbar>
 		<Content>
 			{@render children()}

@@ -1,7 +1,7 @@
 <script>
 	/** @type {{ data: import('./$types').PageData }} */
 	let { data } = $props();
-	import { AdvancedFilter, Table, Tbody, Thead, Trow, Range, applyFilters } from '$lib';
+	import { AdvancedFilter, Table, Tbody, Thead, Trow, Range, applyFilters, Button } from '$lib';
 
 	let filterConfig = {
 		name: 'filterName',
@@ -135,8 +135,12 @@
 <div style="margin-bottom: 30px;">
     <Range onChange={handleRange} type="range" color="accent" min={20} max={300}/>
 </div> -->
+<h1>Filter</h1>
+<div class="d-flex gap-3 mb-3">
+	<AdvancedFilter {filterConfig} onChange={handleChange} />
+	<Button autoWidth color="primary" onClick={() => tableData = data.dummyData}>Yeni Banka Ekle</Button>
+</div>
 
-	<AdvancedFilter class="mb-3" {filterConfig} onChange={handleChange} />
 
 <Table>
 	<Thead>
@@ -169,3 +173,12 @@
 	</Tbody>
 </Table>
 
+<style>
+	.d-flex {
+		display: flex;
+	}
+	.gap-3 {
+		gap: 1rem;
+	}
+
+</style>

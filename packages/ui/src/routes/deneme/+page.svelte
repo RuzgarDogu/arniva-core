@@ -3,7 +3,7 @@
 	import { Button, Header, Card, SpinnerComponent } from '$lib/general';
 </script>
 
-<h1>Welcome to your library project</h1>
+<h1>DENEME: Welcome to your library project</h1>
 <div>
 	<Button label="asd" />
 	<Header logo="/cloud_4305048.png" />

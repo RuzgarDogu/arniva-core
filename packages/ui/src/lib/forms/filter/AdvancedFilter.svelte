@@ -17,7 +17,7 @@
 	 * @typedef {Object} Props
 	 * @property {FilterConfig} filterConfig - The filter configuration object
 	 * @property {Function} onChange - Callback function triggered when filter values change
-	 * @property {string} class - Additional classes to apply to the component
+	 * @property {string} [class] - Additional classes to apply to the component
 	 */
 
 	/** @type {Props} */

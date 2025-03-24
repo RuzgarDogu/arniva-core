@@ -1,4 +1,5 @@
 <script>
+	
 	/**
 	 * @typedef {Object} Props
 	 * @property {boolean} [link] Is this the principal call to action on the page?
@@ -20,6 +21,8 @@
 	 * @property {string} [modal] The modal to open
 	 * @property {boolean} [modalEnlarge] Should the modal be enlarged?
 	 * @property {boolean} [modalDismiss] Should the modal be dismissed?
+	 * @property {boolean} [autoWidth] Should the button have auto width?
+	 * @property {boolean} [rounded] Should the button have auto width?
 	 * @property {() => void} [onClick] The onclick event handler
 	 */
 
@@ -44,7 +47,10 @@
 		square = false,
 		modal = '',
 		modalEnlarge = false,
-		modalDismiss = false
+		modalDismiss = false,
+		autoWidth = false,
+		rounded = false,
+		dataList = []
 	} = $props();
 </script>
 
@@ -52,6 +58,7 @@
 	<a
 		id={id}
 		href={url}
+		class:button--auto-width={autoWidth}
 		class:button--link={link}
 		class={['button', `${cls}`, `button--${size}`, `button--${color}`].join(' ')}
 		class:button--dropdown={dropdown}
@@ -59,6 +66,7 @@
 		class:button--no-padding={noPadding}
 		class:button--square={square}
 		class:button--thin={thin}
+		class:button--rounded={rounded}
 		style:background-color={backgroundColor}
 		{style}
 	>
@@ -72,6 +80,7 @@
 	<button
 		id={id}
 		{type}
+		class:button--auto-width={autoWidth}
 		class={['button', `${cls}`, `button--${size}`, `button--${color}`].join(' ')}
 		class:button--dropdown={dropdown}
 		class:button--list={list}
