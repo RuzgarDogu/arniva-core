@@ -1,7 +1,21 @@
 <script>
-	import { hello, toast, spinner } from '$lib';
+	import { hello, toast, spinner, confirm } from '$lib';
 
 	// hello('emre');
+
+
+// Using await
+function testConfirm() {
+  confirm({
+    title: "Delete item",
+    text: "Are you sure you want to delete this item?",
+    info: "This action cannot be undone",
+	transition: 'slide'
+  }).then((isConfirmed) => {
+	console.log("isConfirmed", isConfirmed);
+  });
+  
+}
 
 	function testSpinner() {
 		spinner.show('divSpinner', {
@@ -59,6 +73,9 @@
 </div>
 <div style="margin-bottom: 30px;">
 	<button id="spinnerTest" onclick={testSpinner}>Spinner</button>
+</div>
+<div style="margin-bottom: 30px;">
+	<button id="spinnerTest" onclick={testConfirm}>Confirm</button>
 </div>
 
 <style>

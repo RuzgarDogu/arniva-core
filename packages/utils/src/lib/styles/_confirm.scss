@@ -1,0 +1,148 @@
+:root {
+  --transition-duration: 300ms;
+}
+
+.confirm {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity var(--transition-duration, 300ms) ease;
+  font-family:
+		'Nunito Sans',
+		-apple-system,
+		'.SFNSText-Regular',
+		'San Francisco',
+		BlinkMacSystemFont,
+		'Segoe UI',
+		'Helvetica Neue',
+		Helvetica,
+		Arial,
+		sans-serif;
+}
+
+.confirm.show {
+  opacity: 1;
+}
+
+.confirm--header {
+    display: flex;
+    gap: 3px;
+    justify-content: space-between;
+}
+
+.confirm--dialog {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  transform: scale(0.9);
+  opacity: 0;
+  transition: transform var(--transition-duration, 300ms) ease,
+              opacity var(--transition-duration, 300ms) ease;
+}
+
+.confirm--dialog.show {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.confirm--content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.confirm--title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.confirm--text {
+  font-size: 1rem;
+  opacity: 0.7;
+}
+
+.confirm--info {
+  font-size: 0.875rem;
+  color: var(--ar-danger-color);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.confirm--buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.confirm--cancel-btn,
+.confirm--confirm-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.confirm--cancel-btn {
+  background-color: #f1f1f1;
+}
+
+.confirm--confirm-btn {
+  background-color: var(--ar-success-color);
+  color: white;
+}
+
+
+/* Transitions */
+.confirm--transition-fade {
+  transition: opacity var(--transition-duration, 300ms) ease;
+}
+
+.confirm--transition-slide {
+  transform: translateY(-50vh);
+  opacity: 0;
+  transition: transform var(--transition-duration, 300ms) cubic-bezier(0.16, 1, 0.3, 1),
+              opacity var(--transition-duration, 300ms) ease;
+}
+
+.confirm--transition-slide.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.confirm--transition-bounce {
+  transform: scale(0.8);
+  transition: transform var(--transition-duration, 300ms) cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity var(--transition-duration, 300ms) ease;
+}
+
+/* Add hide transitions for smoother exit animations */
+.confirm--dialog.hide {
+  opacity: 0;
+}
+
+.confirm--transition-slide.hide {
+  transform: translateY(20vh);
+  opacity: 0;
+}
+
+.confirm--transition-bounce.hide {
+  transform: scale(0.8);
+  opacity: 0;
+}
+
+.confirm--transition-fade.hide {
+  opacity: 0;
+}
