@@ -36,6 +36,7 @@
   --ar-text-color-emphasis: #000;
   --ar-secondary-color-subtle: #f7f7f7;
   --ar-secondary-color-emphasis: #d8d8d8;
+  --ar-nav-padding: 0.5rem;
 }
 
 .layout {
@@ -659,10 +660,13 @@
   align-items: center;
   cursor: pointer;
   border: 0;
-  border-radius: var(--ar-border-radius);
+  border-radius: var(--ar-border-radius-sm);
   font-weight: 800;
   line-height: 1;
   font-family: "Nunito Sans", -apple-system, ".SFNSText-Regular", "San Francisco", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.button--rounded {
+  border-radius: var(--ar-border-radius);
 }
 .button--transparent {
   background-color: transparent;
@@ -779,6 +783,10 @@
 .button--thin {
   font-weight: 600;
   font-size: 0.8rem;
+}
+.button--auto-width {
+  width: auto;
+  white-space: nowrap;
 }
 
 .card {
@@ -1602,7 +1610,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem;
+  padding: var(--ar-nav-padding);
   gap: 1rem;
   width: 100%;
   box-sizing: border-box;
@@ -1969,4 +1977,38 @@
   border-top: solid 1px var(--ar-border-color);
   position: relative;
   filter: none;
+}
+
+.tabnav {
+  padding: var(--ar-nav-padding);
+  background-color: var(--ar-light-color);
+  border-top: 1px solid var(--ar-border-color);
+  display: flex;
+  gap: 0.5rem;
+}
+.tabnav--tab.active {
+  background-color: var(--ar-accent-color-subtle);
+  border-radius: 5px;
+}
+.tabnav--tab.active * {
+  color: var(--ar-accent-color);
+}
+.tabnav--tab-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 0;
+  border-radius: 5px;
+}
+.tabnav--tab-button .close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+.tabnav--tab-button:hover .close {
+  visibility: visible;
 }
