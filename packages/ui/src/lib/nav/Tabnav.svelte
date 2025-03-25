@@ -127,7 +127,7 @@
             return;
         }
 
-        let route = r?.to?.route?.id;
+        let route = r?.to?.url?.pathname;
         currentPath = route || '';
         console.log("route", route)
         isInsidePages = pages.some(p => p.link === route);

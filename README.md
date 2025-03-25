@@ -54,7 +54,7 @@ AND DELETE css if you like.
 ### Publishing Utils
 
 #### IMPORTANT - Change Version Number inside package.json file
-
+#### IMPORTANT ALSO - Before publishing, please make sure that there is no d.ts file inside lib, or Github repo also.
 First compile scss to css by running this script:
 
 ```bash
