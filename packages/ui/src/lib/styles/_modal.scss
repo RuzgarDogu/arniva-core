@@ -13,8 +13,9 @@
 		.modal--content {
 			opacity: 1;
 			visibility: visible;
-			width: 60%;
+			width: auto;
 			height: auto;
+			min-width: 500px;
 		}
 	}
 	&--content {
@@ -55,7 +56,7 @@
 		right: 0;
 		width: 100%;
 		filter: none;
-		height: calc(100% - 50px);
+		height: auto;
 		button[data-ar-enlarge='modal'] {
 			transform: rotate(180deg);
 		}

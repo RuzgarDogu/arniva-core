@@ -1271,8 +1271,9 @@
 .modal.open .modal--content {
   opacity: 1;
   visibility: visible;
-  width: 60%;
+  width: auto;
   height: auto;
+  min-width: 500px;
 }
 .modal--content {
   opacity: 0;
@@ -1311,7 +1312,7 @@
   right: 0;
   width: 100%;
   filter: none;
-  height: calc(100% - 50px);
+  height: auto;
 }
 .modal.enlarged > .modal--content button[data-ar-enlarge=modal] {
   transform: rotate(180deg);
