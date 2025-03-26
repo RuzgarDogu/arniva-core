@@ -17,7 +17,7 @@
 		disabled = false,
 		size = 'medium',
 		dropdown = false,
-		element,
+		element = $bindable(),
 		...rest
 	} = $props();
 
