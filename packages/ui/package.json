@@ -1,6 +1,6 @@
 {
 	"name": "@ruzgardogu/ui",
-	"version": "0.0.71",
+	"version": "0.0.72",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run prepack",
@@ -60,6 +60,7 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
-		"@iconify/svelte": "^4.2.0"
+		"@iconify/svelte": "^4.2.0",
+		"sortablejs": "^1.15.6"
 	}
 }

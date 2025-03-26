@@ -2016,3 +2016,6 @@
 .tabnav--tab-button:hover .close {
   visibility: visible;
 }
+.tabnav.invisible {
+  display: none;
+}

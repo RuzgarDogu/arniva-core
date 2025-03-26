@@ -327,6 +327,11 @@
 					icon: 'mdi:phone',
 					link: '/deneme'
 				},
+				{
+					title: 'Icons',
+					icon: 'mdi:settings',
+					link: '/icons'
+				}
 			]}/>
 		</Navbar>
 		<Content>

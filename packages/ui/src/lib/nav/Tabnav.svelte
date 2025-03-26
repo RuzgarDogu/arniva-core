@@ -1,51 +1,41 @@
 <script>
     import Button from '../general/Button.svelte';
     import Icon from '../icons/Icon.svelte';
-    import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
+    import { afterNavigate, goto } from '$app/navigation';
     import { onMount } from 'svelte';
-
+    import Sortable from 'sortablejs';
+    
     /**
-     * @typedef {Object} Page
+     * @typedef {Object} PageItem
      * @property {string} title - The title of the page
      * @property {string} link - The link to the page
      * @property {string} icon - The icon to display in the tab
+     * @property {boolean} [active] - Whether the page is currently active
      */
 
-    /**
-     * @typedef {Object} Pages
-     * @property {string} title The title of the page
-     * @property {string} link The link to the page
-     * @property {string} icon The icon to display in the tab
-    */
 
     /**
      * @typedef {Object} Props
-     * @property {Pages[]} pages The pages to display in the tabnav
+     * @property {PageItem[]} pages The pages to display in the tabnav
      */
 
-    /**
-     * @typedef {Object} OpenPage
-     * @property {string} title - The title of the tab
-     * @property {string} link - The link to the page
-     * @property {string} icon - The icon to display in the tab
-     * @property {boolean} active - Whether the tab is currently active
-     */
 
     // Cookie configuration
     const COOKIE_NAME = 'open_pages';
     const COOKIE_EXPIRES_DAYS = 7;
 
-    /** @type {OpenPage[]} */
+    /** @type {PageItem[]} */
     let openPages = $state([]);
-    let preventNextNavHandler = $state(false);
-    /** @type {string} */
-    let currentPath = $state('');
-    let isInsidePages = $state(false)
-    // Track current path for handling special cases
 
     
     /** @type {Props} */
     let { pages } = $props();
+
+    /**
+     * The sortable element reference
+     * @type {HTMLElement}
+     */
+    let sortableEl;
 
     /**
      * Sets a cookie with the specified name, value, and expiration days
@@ -78,82 +68,84 @@
     }
     
     /**
-    * Deletes a cookie by setting its expiration to the past
-    * @param {string} name - The name of the cookie to delete
-    * @returns {void}
-    */
-    function deleteCookie(name) {
-        document.cookie = name + '=; Max-Age=-99999999; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    * Initializes the open pages state
+     * @param {string} path - The current path
+     */
+    function initialize(path) {
+        let cookiePages = getCookie(COOKIE_NAME);
+        /**
+         * @type {PageItem[]}
+         */
+        let parsed = [];
+        if (cookiePages) {
+            parsed = JSON.parse(cookiePages);
+        }
+        // Check if the current path is already in the open pages
+        const exists = parsed.some(p => p.link === path);
+        if (!exists) {
+            // Add the current page to the open pages
+            const page = pages.find(p => p.link === path);
+            if (page) {
+                parsed.push({
+                    title: page.title,
+                    link: page.link,
+                    icon: page.icon,
+                    active: true
+                });
+            }
+        }
+
+            parsed = parsed.map(p => {
+                p.active = p.link === path;
+                return p;
+            });
+            setCookie(COOKIE_NAME, JSON.stringify(parsed), COOKIE_EXPIRES_DAYS);
+            openPages = parsed;
     }
 
     // Load open pages from cookies on component mount
     onMount(() => {
-        if (typeof document !== 'undefined') {  // Check if we're in browser environment
-            const savedPages = getCookie(COOKIE_NAME);
-            if (savedPages) {
-                try {
-                    openPages = JSON.parse(savedPages);
+        if (sortableEl) {
+            Sortable.create(sortableEl, {
+                group: {
+                    name: 'sortableEl',
+                    put: false
+                },
+                ghostClass: 'sortable-ghost',
+                animation: 200,
+                onEnd: () => {
+                    /**
+                     * Array of tab elements from the DOM
+                     * @type {Array<HTMLDivElement>}
+                     */
+                    const tabs = Array.from(sortableEl.querySelectorAll('.tabnav--tab'));
+
+                                        /**
+                     * Array of link URLs extracted from tab elements' data attributes
+                     * @type {Array<string>}
+                     */
+                    const newOrder = tabs.map(tab => /** @type {string} */ (tab.dataset.link));
                     
-                    // Set active page based on current path
-                    if (currentPath) {
-                        openPages = openPages.map(p => ({
-                            ...p,
-                            active: p.link === currentPath
-                        }));
+                    const newPages = newOrder.map(link => 
+                        openPages.find(p => p.link === link)
+                    ).filter(Boolean); // Filter out any undefined items
+                                        
+                    try {
+                        // Update cookie with the new order
+                        setCookie(COOKIE_NAME, JSON.stringify(newPages), COOKIE_EXPIRES_DAYS);
+                    } catch (e) {
+                        console.error('Error updating open pages:', e);
                     }
-                } catch (e) {
-                    console.error('Error parsing saved pages from cookie:', e);
-                    openPages = [];
                 }
-            }
+            })
         }
     });
 
-    // Save to cookies whenever openPages changes
-    beforeNavigate(() => {
-        if (typeof document !== 'undefined') {
-            if (openPages.length > 0) {
-                setCookie(COOKIE_NAME, JSON.stringify(openPages), COOKIE_EXPIRES_DAYS);
-            } else {
-                deleteCookie(COOKIE_NAME);
-            }
-        }
-    });
 
     afterNavigate((r) => {
-        // Skip this handler if we just closed a tab and navigated elsewhere
-        if (preventNextNavHandler) {
-            preventNextNavHandler = false;
-            return;
-        }
-
-        let route = r?.to?.url?.pathname;
-        currentPath = route || '';
-        console.log("route", route)
-        isInsidePages = pages.some(p => p.link === route);
-        console.log("isInsidePages", isInsidePages)
-        if (route) {
-            let page = pages.find(p => p.link === route);
-            if (page) {
-                // First, update active status without changing order
-                openPages = openPages.map(p => ({
-                    ...p,
-                    active: p.link === page.link
-                }));
-                
-                // Then check if the page exists
-                const pageExists = openPages.some(p => p.link === page.link);
-                
-                // If it doesn't exist, add it to the end with active status
-                if (!pageExists) {
-                    const newPage = {
-                        ...page,
-                        active: true
-                    };
-                    openPages = [...openPages, newPage];
-                }
-            }
-        }
+        let path = r?.to?.url?.pathname
+        let isInPages = pages.some(p => p.link === path)
+        if(path && isInPages) initialize(path)
     });
 
     /**
@@ -162,7 +154,7 @@
      * @param {string} link - The link of the page to close
      * @returns {Promise<void>}
      */
-    async function closePage(e, link) {
+     async function closePage(e, link) {
         e.preventDefault();
         e.stopPropagation();
         // Check if the page being closed is active
@@ -170,34 +162,30 @@
 
         // Remove the page from openPages
         const updatedPages = openPages.filter(p => p.link !== link);
-        
-        // Set flag to prevent afterNavigate from adding the page back
-        preventNextNavHandler = true;
-        
+
         // Update the openPages state
         openPages = updatedPages;
 
-        console.log("isactive", isActive)
+        setCookie(COOKIE_NAME, JSON.stringify(updatedPages), COOKIE_EXPIRES_DAYS);
+
         // Handle navigation if the closed tab was active
         if (isActive) {
             if (updatedPages.length > 0) {
                 // Navigate to the first remaining tab
-                console.log("Navigating to:", updatedPages[0].link);
                 goto(updatedPages[0].link, { replaceState: true, invalidateAll: true });
                 updatedPages[0].active = true;
             } else {
                 // If no tabs left, navigate to home
-                console.log("navigationg to home")
                 goto("/");
             }
         }
     }
 </script>
 
-{#if openPages.length > 0 && isInsidePages}
-    <div class="tabnav">
+<div class="tabnav" bind:this={sortableEl} class:invisible={openPages.length === 0}>
+        {#if openPages.length > 0}
         {#each openPages as page}
-            <div class="tabnav--tab" class:active={page.active}>
+            <div class="tabnav--tab" class:active={page.active} data-link={page.link}>
                 <Button class="tabnav--tab-button" thin size="small" color="transparent" link url={page.link}>
                     <Icon icon={page.icon} size="small" />
                     {page.title}
@@ -210,5 +198,6 @@
                 </Button>
             </div>
         {/each}
+        {/if}
     </div>
-{/if}
+
