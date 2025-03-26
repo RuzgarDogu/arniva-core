@@ -7,6 +7,7 @@
 	 * @property {boolean} [dropdown]
 	 * @property {any} [value]
 	 * @property {'small' | 'medium' | 'large'} size
+	 * @property {HTMLInputElement} element
 	 */
 
 	/** @type {Props} */
@@ -16,12 +17,15 @@
 		disabled = false,
 		size = 'medium',
 		dropdown = false,
+		element,
 		...rest
 	} = $props();
+
 </script>
 
 <input
 	bind:value
+	bind:this={element}
 	class="form-input {size == 'medium' ? '' : `form-input--${size}`} {cls}"
 	class:button--dropdown={dropdown}
 	{...rest}
