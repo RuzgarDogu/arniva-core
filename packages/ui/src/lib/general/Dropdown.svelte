@@ -103,8 +103,10 @@
 		
 			dropdownContent.style.position = 'fixed';
 			
-			// Set the width to match the dropdown for both cases
-			dropdownContent.style.width = `${nodeRect.width}px`;
+			// Only set width for fullWidth case
+			if (fullWidth) {
+				dropdownContent.style.width = `${nodeRect.width}px`;
+			}
 		
 			// Only set positioning if NOT in a modal
 			if (!isInModal) {
@@ -118,7 +120,6 @@
 					dropdownContent.style.left = `${buttonRect.right - dropdownRect.width}px`;
 				} else if (fullWidth) {
 					dropdownContent.style.left = `${nodeRect.left}px`;
-					dropdownContent.style.width = `${nodeRect.width}px`;
 				} else {
 					dropdownContent.style.left = `${buttonRect.left}px`;
 				}
