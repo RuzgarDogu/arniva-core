@@ -124,9 +124,28 @@
 
 	let testid = 8;
 
+	let switchvalue = true;
+
 </script>
 
 <h1 style="margin-bottom: 20px;">ANA SAYFA: Introduction</h1>
+
+<h2>{switchvalue}</h2>
+
+<div style="margin-bottom: 20px;">
+	<Switch 
+  trueText="Yes"
+  falseText="No"
+  bind:value={switchvalue}
+  disabled={false}
+  name="switch"
+  id="switch"
+  label="Switch"
+  required={false}
+  color="default"
+  reverse={false}
+ />
+</div>
 
 <Button onClick={() => modal3.show()} color="primary" style="margin-bottom: 20px;">
 	Open Modal 3

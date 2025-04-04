@@ -21,7 +21,7 @@
 	let {
 		trueText = '',
 		falseText = '',
-		value = false,
+		value = $bindable(false),
 		disabled = false,
 		name = '',
 		id = random_id,
@@ -58,7 +58,7 @@
 		{name}
 		{disabled}
 		{required}
-		checked={value}
+		bind:checked={value}
 		onchange={handleChange}
 	/>
 	<label class="switch--input-label" aria-disabled="false" for={id} aria-label="dropdown">
