@@ -88,33 +88,49 @@
 
 		function adjustDropdownPosition() {
 			if (!dropdownContent) return;
-
+		
 			dropdownContent.style.display = 'block';
 			dropdownContent.style.visibility = 'hidden';
-
+		
 			const buttonRect = button.getBoundingClientRect();
 			const nodeRect = node.getBoundingClientRect();
 			const dropdownRect = dropdownContent.getBoundingClientRect();
 			const availableSpaceBelow = window.innerHeight - buttonRect.bottom;
 			const availableSpaceRight = window.innerWidth - buttonRect.right;
-
+		
+			// Check if we're inside a regular modal
+			const isInModal = node.closest('.modal') !== null;
+		
+			console.log('buttonRect', buttonRect);
+			console.log('nodeRect', nodeRect);
+			console.log('dropdownRect', dropdownRect);
+			console.log('availableSpaceBelow', availableSpaceBelow);
+			console.log('availableSpaceRight', availableSpaceRight);
+			console.log('isInModal', isInModal);
+		
 			dropdownContent.style.position = 'fixed';
-
-			if (availableSpaceBelow < dropdownRect.height) {
-				dropdownContent.style.top = `${buttonRect.top - dropdownRect.height}px`;
-			} else {
-				dropdownContent.style.top = `${buttonRect.bottom}px`;
+			
+			// Set the width to match the dropdown for both cases
+			dropdownContent.style.width = `${nodeRect.width}px`;
+		
+			// Only set positioning if NOT in a modal
+			if (!isInModal) {
+				if (availableSpaceBelow < dropdownRect.height) {
+					dropdownContent.style.top = `${buttonRect.top - dropdownRect.height}px`;
+				} else {
+					dropdownContent.style.top = `${buttonRect.bottom}px`;
+				}
+		
+				if (!fullWidth && availableSpaceRight < dropdownRect.width) {
+					dropdownContent.style.left = `${buttonRect.right - dropdownRect.width}px`;
+				} else if (fullWidth) {
+					dropdownContent.style.left = `${nodeRect.left}px`;
+					dropdownContent.style.width = `${nodeRect.width}px`;
+				} else {
+					dropdownContent.style.left = `${buttonRect.left}px`;
+				}
 			}
-
-			if (!fullWidth && availableSpaceRight < dropdownRect.width) {
-				dropdownContent.style.left = `${buttonRect.right - dropdownRect.width}px`;
-			} else if (fullWidth) {
-				dropdownContent.style.left = `${nodeRect.left}px`;
-				dropdownContent.style.width = `${nodeRect.width}px`;
-			} else {
-				dropdownContent.style.left = `${buttonRect.left}px`;
-			}
-
+		
 			dropdownContent.style.visibility = 'visible';
 		}
 

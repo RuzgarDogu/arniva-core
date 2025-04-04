@@ -18,11 +18,13 @@
 	 * @property {'small' | 'medium' | 'large'} size
 	 * @property {string} placeholder
 	 * @property {any} rest
+	 * @property {() => void} onSelect - Callback function when an option is selected
+	 * @property {string} value - Selected value
 	 * @property {SelectOption[]} data - Array of options for the dropdown/select
 	 */
 
 	/** @type {Props} */
-	let { class: cls = '', data = [], onSelect, placeholder = '', ...rest } = $props();
+	let { class: cls = '', value = $bindable(), data = [], onSelect, placeholder = '', ...rest } = $props();
 
 	/** @type {string} */
 	let searchText = $state('');
@@ -35,6 +37,19 @@
 
 	/** @type {number|string|null} */
 	let focusedItemId = $state(null);
+
+	$effect(() => {
+		if (value && data.length > 0) {
+			// Find item that matches the value (ID)
+			const foundItem = data.find(
+				/** @param {SelectOption} item */ (item) => item.id === value
+			);
+			if (foundItem) {
+				// Set the searchText to the name of the selected item
+				searchText = foundItem.name;
+			}
+		}
+	});
 
 	/**
 	 * Updates the search text and shows dropdown
@@ -55,6 +70,7 @@
 			return;
 		}
 
+
 		const searchTerms = searchText
 			.toLowerCase()
 			.split(/\s+/)
@@ -74,6 +90,7 @@
 	 * @param {SelectOption} item - The selected item
 	 */
 	function select(item) {
+		value = item.id;
 		onSelect && onSelect(item);
 		searchText = item.name;
 		if (searchDropdown) searchDropdown.hide();
@@ -163,12 +180,14 @@
 			if (!isItemSelected) {
 				searchText = '';
 				focusedItemId = null;
+				value = null;
 			}
 		}
 	}
 
 	function clearSearch() {
 		searchText = '';
+		value = null;
 		onSelect && onSelect(null);
 		focusedItemId = null;
 		// Give focus back to the input
@@ -188,7 +207,7 @@
 		onChange={checkDropdown}
 	>
 		<div class="form-select--search--container">
-			<Input dropdown oninput={handleInput} value={searchText} {placeholder} />
+			<Input dropdown oninput={handleInput} bind:value={searchText} {placeholder} />
 			<Button
 				class="clear-button {searchText ? 'active' : ''}"
 				square

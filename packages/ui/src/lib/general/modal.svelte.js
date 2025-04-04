@@ -441,7 +441,6 @@ export function modalInit(node) {
 	}
   
 	function reinitialize() {
-	  console.log('Reinitializing modal system');
 	  initializeModals();
 	}
   
@@ -450,17 +449,14 @@ export function modalInit(node) {
 	
 	// Setup navigation handler separately
 	afterNavigate(() => {
-	  console.log('After navigate, reinitializing modals');
 	  reinitialize();
 	});
   
 	return {
 	  update() {
-		console.log('Modal update called');
 		reinitialize();
 	  },
 	  destroy() {
-		console.log('Modal destroy called');
 		if (controller) {
 		  controller.destroy();
 		  

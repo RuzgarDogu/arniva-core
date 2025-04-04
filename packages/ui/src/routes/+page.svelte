@@ -121,9 +121,46 @@
 
 	// For date range selection:
 	let dateRange = { start: null, end: null };
+
+	let testid = 8;
+
 </script>
 
 <h1 style="margin-bottom: 20px;">ANA SAYFA: Introduction</h1>
+
+<Button onClick={() => modal3.show()} color="primary" style="margin-bottom: 20px;">
+	Open Modal 3
+</Button>
+
+<Select 
+size="medium"
+placeholder="Start typing..."
+search
+data={dummyData}
+onSelect={(e) => console.log('e', e)}
+/>
+
+<Modal id="testModal3" title="Test Modal3" size="lg" name="Test_Modal3" bind:this={modal3}>
+
+	<FormGroup>
+		<FormGroupItem label="Adı" required>
+			<Select size="medium" placeholder="Select an option" bind:value={testid}>
+				{#each dummyData as branch (branch.id)}
+					<option value={branch.id}>{branch.name}</option>
+				{/each}
+			</Select>
+			<Select 
+			size="medium"
+			placeholder="Start typing..."
+			search
+			data={dummyData}
+			bind:value={testid}
+			/>
+		</FormGroupItem>
+	</FormGroup>
+
+</Modal>
+
 <!-- <button data-ar-toggle="modal" data-ar-target="testModal" class="input-group-text bg-lightgray border-0 border-end-0 p-1">
 	Modal 1
 	</button> -->
@@ -304,9 +341,7 @@
 
 <Button modal="testModal" color="primary" style="margin-bottom: 20px;">Modal 1</Button>
 
-<Button onClick={() => modal3.show()} color="primary" style="margin-bottom: 20px;">
-	Open Modal 3
-</Button>
+
 
 <Modal
 	id="testModal"
@@ -337,14 +372,7 @@
 	<Button modal="testModal3" color="danger" style="margin-bottom: 20px;">Modal 3</Button>
 </Modal>
 
-<Modal id="testModal3" title="Test Modal3" size="lg" name="Test_Modal3" bind:this={modal3}>
-	<h1>ok4</h1>
-	{#snippet footer()}
-	<Button color="primary" onClick={() => modal3.hide()} style="margin-bottom: 20px;">
-		Close Modal 3.aasdas
-	</Button>
-	{/snippet}
-</Modal>
+
 
 <Input placeholder="Fill in your name" type="text" style="margin-bottom: 30px;" />
 

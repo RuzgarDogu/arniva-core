@@ -1,9 +1,14 @@
 <script>
 	/** @type {{ data: import('./$types').PageData }} */
 	import { Button, Header, Card, SpinnerComponent } from '$lib/general';
+	import Img from './Img.svelte';
 </script>
 
 <h1>DENEME: Welcome to your library project</h1>
+<div style="margin-bottom: 10px; margin-top: 10px; width:100px;">
+	<Img src="/cloud_4305048.png" alt="cloud" width="20" fluid lazy />
+</div>
+
 <div>
 	<Button label="asd" />
 	<Header logo="/cloud_4305048.png" />

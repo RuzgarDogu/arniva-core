@@ -14,6 +14,9 @@
 	 * @property {'small' | 'medium' | 'large'} size
 	 * @property {any} rest
 	 * @property {boolean} search
+	 * @property {string} placeholder
+	 * @property {() => void} onSelect - Callback function when an option is selected
+	 * @property {string} value - Selected value
 	 * @property {SelectOption[]} data - Array of options for the dropdown/select
 	 * @property {any} children
 	 */
@@ -21,6 +24,7 @@
 	/** @type {Props} */
 	let {
 		children,
+		value = $bindable(),
 		class: cls = '',
 		placeholder = '',
 		size = 'medium',
@@ -33,12 +37,13 @@
 </script>
 
 {#if search}
-	<SelectDropdown {data} {onSelect} {placeholder} />
+	<SelectDropdown bind:value {data} {onSelect} {placeholder} />
 {:else}
 	<select
 		class="form-select {size == 'medium' ? '' : `form-select--${size}`} {cls}"
 		{...rest}
 		{disabled}
+		bind:value
 	>
 		{#if placeholder}
 			<option class="form-select--placeholder" disabled selected>{placeholder}</option>
