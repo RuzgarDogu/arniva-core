@@ -101,13 +101,6 @@
 			// Check if we're inside a regular modal
 			const isInModal = node.closest('.modal') !== null;
 		
-			console.log('buttonRect', buttonRect);
-			console.log('nodeRect', nodeRect);
-			console.log('dropdownRect', dropdownRect);
-			console.log('availableSpaceBelow', availableSpaceBelow);
-			console.log('availableSpaceRight', availableSpaceRight);
-			console.log('isInModal', isInModal);
-		
 			dropdownContent.style.position = 'fixed';
 			
 			// Set the width to match the dropdown for both cases
