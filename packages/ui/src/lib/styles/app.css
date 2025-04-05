@@ -1268,7 +1268,7 @@
 .modal.open {
   visibility: visible;
 }
-.modal.open .modal--content {
+.modal.open > .modal--content {
   opacity: 1;
   visibility: visible;
   width: auto;
