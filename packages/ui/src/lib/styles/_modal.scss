@@ -15,7 +15,7 @@
 			visibility: visible;
 			width: auto;
 			height: auto;
-			min-width: 500px;
+			min-width: 400px;
 		}
 	}
 	&--content {
@@ -36,12 +36,40 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
+		max-width: 100vw;
 		.modal--body {
 			overflow-y: auto;
 			padding: 1rem 1.5rem;
 			flex: 1;
 		}
 	}
+
+	&.modal-sm {
+		.modal--content {
+			width: 400px;
+		}
+	}
+	&.modal-md {
+		.modal--content {
+			width: 650px;
+		}
+	}
+	&.modal-lg {
+		.modal--content {
+			width: 900px;
+		}
+	}
+	&.modal-xl {
+		.modal--content {
+			width: 1200px;
+		}
+	}
+	&.modal-auto {
+		.modal--content {
+			width: auto;
+		}
+	}
+
 
 	&.enlarged > .modal--content {
 		position: absolute;

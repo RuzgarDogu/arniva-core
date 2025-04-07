@@ -128,7 +128,48 @@
 
 </script>
 
+
 <h1 style="margin-bottom: 20px;">ANA SAYFA: Introduction</h1>
+
+
+<div style="margin-bottom: 20px;">
+	<Button modal="modalAuto" color="primary" style="margin-bottom: 20px;">
+		Auto Modal
+	</Button>
+	<Button modal="modalSm" color="primary" style="margin-bottom: 20px;">
+		Small Modal
+	</Button>
+	<Button modal="modalMd" color="primary" style="margin-bottom: 20px;">
+		Medium Modal
+	</Button>
+	<Button modal="modalLg" color="primary" style="margin-bottom: 20px;">
+		Large Modal
+	</Button>
+	<Button modal="modalXl" color="primary" style="margin-bottom: 20px;">
+		X Large Modal
+	</Button>
+
+
+<Modal id="modalAuto" title="Auto Modal">
+	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis accusantium doloremque, non similique ipsa ut dolore quisquam optio quam alias fugit, sapiente expedita asperiores illum?</p>
+</Modal>
+<Modal id="modalSm" title="Small Modal" size="sm">
+	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis accusantium doloremque, non similique ipsa ut dolore quisquam optio quam alias fugit, sapiente expedita asperiores illum?</p>
+</Modal>
+<Modal id="modalMd" title="Medium Modal" size="md">
+	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis accusantium doloremque, non similique ipsa ut dolore quisquam optio quam alias fugit, sapiente expedita asperiores illum?</p>
+</Modal>
+<Modal id="modalLg" title="Large Modal" size="lg">
+	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis accusantium doloremque, non similique ipsa ut dolore quisquam optio quam alias fugit, sapiente expedita asperiores illum?</p>
+</Modal>
+<Modal id="modalXl" title="X Large Modal" size="xl">
+	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis accusantium doloremque, non similique ipsa ut dolore quisquam optio quam alias fugit, sapiente expedita asperiores illum?</p>
+</Modal>
+
+
+</div>
+
+
 
 <h2>{switchvalue}</h2>
 

@@ -16,6 +16,7 @@
 	 * @property {string} [footerClass] Modal footer class
 	 * @property {string} [headerClass] Modal header class
 	 * @property {string} [bodyClass] Modal body class
+	 * @property {'auto' | 'sm' | 'md' | 'lg' | 'xl'} [size] Modal size
 	 * @property {() => void} [onclose] Modal close event
 	 */
 
@@ -31,7 +32,8 @@
 		bodyClass='',
 		noPadding = false,
 		onclose = null,
-		devMode = false
+		devMode = false,
+		size = 'auto'
 	} = $props();
 
 	/**
@@ -64,7 +66,7 @@
 </script>
 
 <div
-	class="modal"
+	class={['modal', `modal-${size}`].join(' ')}
 	class:dev-mode={devMode}
 	{id}
 	data-ar-name={name}
