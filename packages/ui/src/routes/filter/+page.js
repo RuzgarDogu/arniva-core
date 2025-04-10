@@ -111,6 +111,17 @@ export async function load() {
 			gender: 'female',
 			isManager: false,
 			department: 'Sales'
+		},
+		{
+			id: 10,
+			name: 'Ğşü çöğü Iışık',
+			email: 'hannah@dummy.com',
+			phone: '8899001122',
+			age: 24,
+			dob: '2000-08-14',
+			gender: 'female',
+			isManager: false,
+			department: 'Sales'
 		}
 	];
 
