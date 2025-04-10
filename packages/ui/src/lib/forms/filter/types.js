@@ -7,9 +7,15 @@
  */
 
 /**
+ * @typedef {Object} SearchColumns
+ * @property {string} label - Display label for the column
+ * @property {string} value - Value associated with the column
+ */
+
+/**
  * @typedef {Object} SearchConfig
  * @property {string} [placeholder] - Placeholder text for search input
- * @property {string[]} columns - Columns to search in
+ * @property {SearchColumns[]} columns - Columns to search in
  */
 
 /**

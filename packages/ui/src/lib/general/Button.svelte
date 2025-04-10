@@ -2,12 +2,13 @@
 	
 	/**
 	 * @typedef {Object} Props
+	 * @property {boolean} [disabled] Is the button disabled?
 	 * @property {boolean} [link] Is this the principal call to action on the page?
 	 * @property {string} [backgroundColor] What background color to use
 	 * @property {'small' | 'medium' | 'large'} [size] How large should the button be?
 	 * @property {string} [label] Button contents
 	 * @property {'button' | 'submit' | 'reset'} [type] The type of button
-	 * @property {'primary' | 'secondary' | 'transparent' | 'accent' | 'danger' | 'success' | 'default' | 'warning'} [color] The color of the button
+	 * @property {'primary' | 'secondary' | 'transparent' | 'accent' | 'danger' | 'success' | 'default' | 'warning' | 'light' } [color] The color of the button
 	 * @property {string} [url] The URL the button should link to
 	 * @property {boolean} [dropdown] Is this a dropdown button?
 	 * @property {boolean} [list] Is this a list button?
@@ -50,7 +51,7 @@
 		modalDismiss = false,
 		autoWidth = false,
 		rounded = false,
-		dataList = []
+		disabled = false,
 	} = $props();
 </script>
 
@@ -87,8 +88,10 @@
 		class:button--no-padding={noPadding}
 		class:button--square={square}
 		class:button--thin={thin}
+		class:button--disabled={disabled}
 		style:background-color={backgroundColor}
 		{style}
+		disabled={disabled}
 		onclick={onClick}
 		data-ar-toggle={modal ? 'modal' : null}
 		data-ar-target={modal ? modal : null}

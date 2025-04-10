@@ -1,0 +1,79 @@
+@mixin buttonColors {
+    background-color: var(--ar-accent-color-subtle);
+    border-color: red;
+    box-shadow: var(--ar-accent-color-emphasis) 0px 0px 0px 1px inset;
+    color: var(--ar-accent-color-emphasis);
+}
+
+.pagination {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap; // Allow wrapping on very small screens
+    
+    &--numbers {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        
+        @media (max-width: 768px) {
+            display: none; // Hide page numbers on mobile
+        }
+    }
+    
+    &--button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-left: 16px;
+        padding-right: 16px;
+        padding-top: 0;
+        padding-bottom: 0;
+        height: 36px;
+        font-weight: 600;
+        
+        @media (max-width: 768px) {
+            // Smaller buttons on mobile
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        
+        &:hover {
+            @include buttonColors;
+        }
+        
+        &.pagination--button-active {
+            @include buttonColors;
+        }
+        
+        &.button--disabled {
+            color: var(--ar-text-color-subtle);
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    }
+    
+    &--select {
+        min-width: 40px;
+        width: 92px;
+        background-color: var(--ar-light-color);
+        
+        @media (max-width: 768px) {
+            width: 80px; // Slightly smaller on mobile
+        }
+    }
+    
+    // Add current page indicator for mobile
+    &--mobile-indicator {
+        display: none;
+        align-items: center;
+        font-size: 0.85rem;
+        
+        @media (max-width: 768px) {
+            display: flex;
+        }
+    }
+}

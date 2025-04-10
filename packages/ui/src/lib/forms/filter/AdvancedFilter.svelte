@@ -2,11 +2,11 @@
 	import Dropdown from '../../general/Dropdown.svelte';
 	import Button from '../../general/Button.svelte';
 	import DropdownContent from '../../general/DropdownContent.svelte';
-	import Input from '../Input.svelte';
 	import InputGroup from '../InputGroup.svelte';
 	import Icon from '../../icons/Icon.svelte';
 	import AdvancedFilterContent from './AdvancedFilterContent.svelte';
 	import Checkbox from '../Checkbox.svelte';
+	import AdvancedFilterInput from './AdvancedFilterInput.svelte';
 
 	/**
 	 * @typedef {import('./types').FilterConfig} FilterConfig
@@ -23,9 +23,9 @@
 	/** @type {Props} */
 	let { filterConfig, onChange, class:cls='' } = $props();
 
-	let searchText = $state('');
 	// Keep track of the current highest order
 	let currentOrder = $state(0);
+	let resetTrigger = $state(0);
 
 	let fields = $state(
 		filterConfig.fields.map((field) => {
@@ -148,23 +148,6 @@
 	}
 
 	/**
-	 * Function to handle search input
-	 * @param {InputEvent} e - The input event
-	 */
-	function handleSearch(e) {
-		// Cast the target to HTMLInputElement
-		let search = e?.target && /** @type {HTMLInputElement} */ (e.target).value;
-		if (!search || search === '') {
-			delete filter.search;
-			onChange && filter && onChange(filter);
-			return;
-		}
-		filter.search = search;
-		onChange && filter && onChange(filter);
-		return;
-	}
-
-	/**
 	 * Function to check if filters exist
 	 * @returns {boolean} True if filters exist, false otherwise
 	 */
@@ -183,7 +166,8 @@
 			f.order = -1;
 			return f;
 		});
-		searchText = '';
+		resetTrigger++;
+
 		onChange && filter && onChange(filter);
 	}
 
@@ -234,6 +218,29 @@
 		}
 		return '';
 	}
+
+
+	/**
+	 * @typedef {Object} ColumnSearch
+	 * @property {string} column - The column to search in
+	 * @property {string} value - The search term/value
+	 */
+	
+	/**
+	 * Handles input from the AdvancedFilterInput component
+	 * @param {ColumnSearch|null} e - Object containing column and value, or null when cleared
+	 */
+	function handleInput(e) {
+		if (!e || e.value === '') {
+			delete filter.search;
+			onChange && filter && onChange(filter);
+			return;
+		}
+		filter.search = e;
+		onChange && filter && onChange(filter);
+		return;
+	}
+
 </script>
 
 <InputGroup class={['advanced-filter', cls].join(' ')}>
@@ -305,7 +312,9 @@
 			</Dropdown>
 		</div>
 	{/each}
-	<Input oninput={handleSearch} bind:value={searchText} />
+
+	<AdvancedFilterInput {resetTrigger} columns={filterConfig?.search?.columns || []} onSelect={handleInput}/>
+	
 	{#if checkIfFiltersExist()}
 		<Button class="advanced-filter--reset" size="small" color="success" onClick={resetFilter}>
 			Reset

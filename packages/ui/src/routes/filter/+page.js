@@ -1,5 +1,6 @@
 /** @type {import('./$types').PageLoad} */
 export async function load() {
+
 	let dummyData = [
 		{
 			id: 1,

@@ -8,6 +8,7 @@
  * @typedef {import('./types').SearchConfig} SearchConfig
  */
 
+
 /**
  * Applies filters to data based on provided filter criteria and configuration
  *
@@ -22,33 +23,67 @@ export function applyFilters(data, filters, config) {
 	// Create a copy to work with
 	let filteredData = [...data];
 
+	/**
+	 * @typedef {Object} ColumnSearch
+	 * @property {string} column - The column to search in
+	 * @property {string} value - The search value
+	 */
+	
 	// Handle search separately before other filters
-	if (
-		'search' in filters &&
-		typeof filters.search === 'string' &&
-		filters.search &&
-		config.search &&
-		Array.isArray(config.search.columns)
-	) {
-		// Store search config in a variable to help TypeScript understand it's not undefined
-		/** @type {SearchConfig} */
-		const searchConfig = config.search;
-
-		const searchTerms = filters.search.toLowerCase().trim().split(/\s+/);
-		filteredData = filteredData.filter((row) => {
-			// Must match all search terms across any combination of columns
-			return searchTerms.every((term) => {
-				// Check if any column contains this term
-				return searchConfig.columns.some((column) => {
-					return (
-						row[column] !== undefined &&
-						row[column] !== null &&
-						String(row[column]).toLowerCase().includes(term)
-					);
+	if ('search' in filters) {
+		// Handle the new column-specific search format
+		if (
+			typeof filters.search === 'object' && 
+			filters.search !== null && 
+			'column' in filters.search && 
+			'value' in filters.search && 
+			/** @type {ColumnSearch} */ (filters.search).value
+		) {
+			/** @type {ColumnSearch} */
+			const columnSearch = /** @type {ColumnSearch} */ (filters.search);
+			
+			// Get search terms from the value
+			const searchTerms = columnSearch.value.toLowerCase().trim().split(/\s+/);
+			
+			// Filter data based on the specific column
+			filteredData = filteredData.filter((row) => {
+				// Must match all search terms in the specified column
+				return searchTerms.every((term) => {
+					const columnValue = row[columnSearch.column];
+					return columnValue !== undefined && 
+						  columnValue !== null &&
+						  String(columnValue).toLowerCase().includes(term);
 				});
 			});
-		});
-
+		} 
+		// Maintain backward compatibility with the old search format (string value)
+		else if (
+			typeof filters.search === 'string' &&
+			filters.search &&
+			config.search &&
+			Array.isArray(config.search.columns)
+		) {
+			/** @type {SearchConfig} */
+			const searchConfig = config.search;
+		
+			const searchTerms = filters.search.toLowerCase().trim().split(/\s+/);
+			filteredData = filteredData.filter((row) => {
+				// Must match all search terms across any combination of columns
+				return searchTerms.every((term) => {
+					// Check if any column contains this term
+					return searchConfig.columns.some((column) => {
+						// First convert to unknown, then to string to avoid TypeScript errors
+						const columnName = /** @type {string} */ (/** @type {unknown} */ (column));
+						return (
+							row[columnName] !== undefined &&
+							row[columnName] !== null &&
+							String(row[columnName]).toLowerCase().includes(term)
+						);
+					});
+				});
+			});
+		}
+	
 		// Create a new filters object without the search property for the rest of the filtering
 		// eslint-disable-next-line no-unused-vars
 		const { search, ...otherFilters } = filters;

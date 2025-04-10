@@ -19,3 +19,4 @@ export { default as ListGroup } from './ListGroup.svelte';
 export { default as ListGroupItem } from './ListGroupItem.svelte';
 export { default as Modal } from './Modal.svelte';
 export { default as SpinnerComponent } from './SpinnerComponent.svelte';
+export { default as Pagination } from './Pagination.svelte';

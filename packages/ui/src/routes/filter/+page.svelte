@@ -24,7 +24,20 @@
 		},
 		search: {
 			placeholder: 'Search Employees',
-			columns: ['name', 'email', 'phone']
+			columns: [
+				{
+					label: 'Search in Name',
+					value: 'name'
+				},
+				{
+					label: 'Search in Email',
+					value: 'email'
+				},
+				{
+					label: 'Search in Phone',
+					value: 'phone'
+				}
+			]
 		},
 		fields: [
 			{
@@ -103,6 +116,7 @@
 	let tableData = $state(data.dummyData);
 
 	function handleChange(fields) {
+		console.log("fields", fields);
 		tableData = applyFilters(data.dummyData, fields, filterConfig);
 	}
 
