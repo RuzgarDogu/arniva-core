@@ -42,8 +42,8 @@ export function applyFilters(data, filters, config) {
 			/** @type {ColumnSearch} */
 			const columnSearch = /** @type {ColumnSearch} */ (filters.search);
 			
-			// Get search terms from the value
-			const searchTerms = columnSearch.value.toLowerCase().trim().split(/\s+/);
+			// Get search terms from the value - use normal case for splitting
+			const searchTerms = columnSearch.value.trim().split(/\s+/);
 			
 			// Filter data based on the specific column
 			filteredData = filteredData.filter((row) => {
@@ -51,8 +51,8 @@ export function applyFilters(data, filters, config) {
 				return searchTerms.every((term) => {
 					const columnValue = row[columnSearch.column];
 					return columnValue !== undefined && 
-						  columnValue !== null &&
-						  String(columnValue).toLowerCase().includes(term);
+						columnValue !== null &&
+						String(columnValue).toLocaleLowerCase('tr-TR').includes(term.toLocaleLowerCase('tr-TR'));
 				});
 			});
 		} 
@@ -66,7 +66,7 @@ export function applyFilters(data, filters, config) {
 			/** @type {SearchConfig} */
 			const searchConfig = config.search;
 		
-			const searchTerms = filters.search.toLowerCase().trim().split(/\s+/);
+			const searchTerms = filters.search.trim().split(/\s+/);
 			filteredData = filteredData.filter((row) => {
 				// Must match all search terms across any combination of columns
 				return searchTerms.every((term) => {
@@ -77,7 +77,7 @@ export function applyFilters(data, filters, config) {
 						return (
 							row[columnName] !== undefined &&
 							row[columnName] !== null &&
-							String(row[columnName]).toLowerCase().includes(term)
+							String(row[columnName]).toLocaleLowerCase('tr-TR').includes(term.toLocaleLowerCase('tr-TR'))
 						);
 					});
 				});
