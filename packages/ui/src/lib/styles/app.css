@@ -559,6 +559,8 @@
 }
 .form-select--small {
   padding: 0.25em;
+  height: 30px;
+  min-height: auto;
 }
 .form-select--large {
   padding: 0.85em;
@@ -1893,18 +1895,18 @@
   }
 }
 .pagination {
-  height: 36px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.3rem;
   flex-wrap: wrap;
 }
 .pagination--numbers {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.3rem;
 }
 @media (max-width: 768px) {
   .pagination--numbers {
@@ -1915,11 +1917,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-top: 0;
-  padding-bottom: 0;
-  height: 36px;
+  padding: 0;
+  font-size: 0.85rem;
   font-weight: 600;
 }
 @media (max-width: 768px) {
@@ -1949,6 +1948,7 @@
   min-width: 40px;
   width: 92px;
   background-color: var(--ar-light-color);
+  font-size: 0.75rem;
 }
 @media (max-width: 768px) {
   .pagination--select {
@@ -1964,6 +1964,30 @@
   .pagination--mobile-indicator {
     display: flex;
   }
+}
+.pagination.pagination--default button {
+  height: 36px;
+  width: 36px;
+  padding: 0.25em;
+  min-height: auto;
+}
+.pagination.pagination--default select {
+  padding: 0.25em;
+  height: 36px;
+  min-height: auto;
+}
+.pagination.pagination--small button {
+  height: 30px;
+  width: 30px;
+  padding: 0.25em;
+  min-height: auto;
+  font-size: 0.75rem;
+}
+.pagination.pagination--small select {
+  padding: 0.25em;
+  height: 30px;
+  min-height: auto;
+  font-size: 0.75rem;
 }
 
 .advanced-filter {

@@ -3,11 +3,24 @@
     import Icon from '../icons/Icon.svelte';
     import Select from '../forms/select/Select.svelte';
     
+    /**
+     * @typedef {Object<string, any>} Props
+     * @property {number} [totalItems] The total number of items
+     * @property {number} [start] The starting index of the current page
+     * @property {number} [limit] The number of items per page
+     * @property {boolean} [compact] Whether to show a compact version of the pagination
+     * @property {boolean} [showEntries] Whether to show the entries select box
+     * @property {function} [onChange] Callback function to handle page changes
+     * @property {string} [selectPlaceholder] Placeholder for the select box
+     * @property { small | default} [size] Size of the pagination component
+    */
+
+    /** @type {Props} */
     let { current = {
             totalItems: 999999999,
             start: 0,
             limit: 10
-        }, compact = false, showEntries = true, onChange } = $props();
+        }, compact = false, showEntries = true, onChange, selectPlaceholder = "Select an option", size="small" } = $props();
     
     let entries = [10, 25, 50, 100];
     let itemsPerPage = $state(current.limit || entries[0]);
@@ -151,10 +164,9 @@
     }
 
 </script>
-<div class="pagination">
-
+<div class={['pagination', `pagination--${size}`, compact ? 'pagination--compact' : ''].join(' ')}>
     {#if showEntries}
-    <Select size="medium" placeholder="Select an option" bind:value={itemsPerPage} 
+    <Select size="small" placeholder={selectPlaceholder} bind:value={itemsPerPage} 
         class="pagination--select" 
         onchange={() => {
             // This ensures currentPage is properly adjusted before sending to main
@@ -168,7 +180,7 @@
 
 
     <Button onClick={decrement} class="pagination--button pagination--prev" disabled={currentPage === 1}>
-        <Icon icon="mdi:chevron-left" width="24" height="24" />
+        <Icon icon="mdi:chevron-left" width="16" height="16" />
     </Button>
 
     <!-- Mobile page indicator -->
@@ -190,5 +202,5 @@
         {/each}
         </div>
     {/if}
-    <Button onClick={increment} class="pagination--button pagination--next" disabled={currentPage === totalPages}><Icon icon="mdi:chevron-right" width="24" height="24" /></Button>
+    <Button onClick={increment} class="pagination--button pagination--next" disabled={currentPage === totalPages}><Icon icon="mdi:chevron-right" width="16" height="16" /></Button>
 </div>

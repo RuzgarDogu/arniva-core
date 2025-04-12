@@ -35,6 +35,8 @@
 	padding: var(--ar-form-element-padding);
 	&--small {
 		padding: 0.25em;
+		height: 30px;
+		min-height: auto;
 	}
 	&--large {
 		padding: 0.85em;
