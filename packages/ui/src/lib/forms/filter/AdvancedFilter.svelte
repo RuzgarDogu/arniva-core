@@ -133,7 +133,8 @@
 		field.isOpen = false;
 		field.value = '';
 		field.order = -1;
-		filter[field.name] = '';
+		// Delete the property instead of setting it to empty string
+		delete filter[field.name];
 		onChange && fields && onChange(filter);
 	}
 
@@ -152,7 +153,18 @@
 	 * @returns {boolean} True if filters exist, false otherwise
 	 */
 	function checkIfFiltersExist() {
-		return Object.keys(filter).length > 0;
+		// Check if there are any non-empty values in the filter object
+		return Object.keys(filter).length > 0 && 
+			Object.values(filter).some(value => {
+				// Check if it's truly a value that would trigger filtering
+				if (value === null || value === undefined || value === '') return false;
+				// Check for empty arrays
+				if (Array.isArray(value) && value.length === 0) return false;
+				// Check for empty objects (for range filters or dates with no selection)
+				if (typeof value === 'object' && value !== null && 
+					Object.values(value).every(v => v === null || v === undefined || v === '')) return false;
+				return true;
+			});
 	}
 
 	/**
