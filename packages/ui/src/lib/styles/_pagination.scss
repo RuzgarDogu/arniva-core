@@ -1,7 +1,5 @@
 @mixin buttonColors {
     background-color: var(--ar-accent-color-subtle);
-    border-color: red;
-    box-shadow: var(--ar-accent-color-emphasis) 0px 0px 0px 1px inset;
     color: var(--ar-accent-color-emphasis);
 }
 
@@ -56,8 +54,7 @@
     &--select {
         min-width: 40px;
         width: 92px;
-        background-color: var(--ar-light-color);
-        font-size: 0.75rem;
+        font-size: 0.85rem;
         @media (max-width: 768px) {
             width: 80px; // Slightly smaller on mobile
         }

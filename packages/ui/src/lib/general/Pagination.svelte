@@ -20,9 +20,9 @@
             totalItems: 999999999,
             start: 0,
             limit: 10
-        }, compact = false, showEntries = true, onChange, selectPlaceholder = "Select an option", size="small" } = $props();
+        }, compact = false, showEntries = true, onChange, selectPlaceholder = "Select an option", size="default" } = $props();
     
-    let entries = [10, 25, 50, 100];
+    let entries = [10, 25, 50, 100 ];
     let itemsPerPage = $state(current.limit || entries[0]);
     
     // Calculate the initial current page based on start and limit
@@ -178,29 +178,30 @@
     </Select>
     {/if}
 
+    {#if totalPages > 1}
+        <Button onClick={decrement} class="pagination--button pagination--prev" disabled={currentPage === 1}>
+            <Icon icon="mdi:chevron-left" width="16" height="16" />
+        </Button>
 
-    <Button onClick={decrement} class="pagination--button pagination--prev" disabled={currentPage === 1}>
-        <Icon icon="mdi:chevron-left" width="16" height="16" />
-    </Button>
-
-    <!-- Mobile page indicator -->
-    <div class="pagination--mobile-indicator">
-        {currentPage}/{totalPages}
-    </div>
-
-    {#if !compact}
-        <div class="pagination--numbers">
-            {#each availableNumbers as page}
-            {@const isActive = page.isActive}
-            {@const isEllipsis = page.type === 'ellipsis'}
-            <Button
-                onClick={() => setItem(page)}
-                class={['pagination--button', isActive ? 'pagination--button-active' : '', isEllipsis ? 'pagination--button-ellipsis' : ''].join(' ')}
-            >
-                {page.value}
-            </Button>
-        {/each}
+        <!-- Mobile page indicator -->
+        <div class="pagination--mobile-indicator">
+            {currentPage}/{totalPages}
         </div>
+
+        {#if !compact}
+            <div class="pagination--numbers">
+                {#each availableNumbers as page}
+                {@const isActive = page.isActive}
+                {@const isEllipsis = page.type === 'ellipsis'}
+                <Button
+                    onClick={() => setItem(page)}
+                    class={['pagination--button', isActive ? 'pagination--button-active' : '', isEllipsis ? 'pagination--button-ellipsis' : ''].join(' ')}
+                >
+                    {page.value}
+                </Button>
+            {/each}
+            </div>
+        {/if}
+        <Button onClick={increment} class="pagination--button pagination--next" disabled={currentPage === totalPages}><Icon icon="mdi:chevron-right" width="16" height="16" /></Button>
     {/if}
-    <Button onClick={increment} class="pagination--button pagination--next" disabled={currentPage === totalPages}><Icon icon="mdi:chevron-right" width="16" height="16" /></Button>
 </div>
