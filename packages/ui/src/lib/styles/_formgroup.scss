@@ -13,4 +13,11 @@
 			}
 		}
 	}
+	&.form-group--no-border {
+		.form-group-item {
+			td {
+				border-bottom: none;
+			}
+		}
+	}
 }

@@ -761,7 +761,7 @@ onSelect={(e) => console.log('e', e)}
 
 <Tab style="margin-bottom: 30px;">
 	<TabItem title="Tab Item 1">
-		<FormGroup style="margin-bottom: 30px;">
+		<FormGroup noBorder style="margin-bottom: 30px;">
 			<FormGroupItem label="name" required>
 				<Input placeholder="Fill in your name" type="text" />
 			</FormGroupItem>

@@ -397,6 +397,9 @@
 .form-group .form-group-item--label .required {
   color: var(--ar-danger-color);
 }
+.form-group.form-group--no-border .form-group-item td {
+  border-bottom: none;
+}
 
 .switch {
   display: inline-flex;
