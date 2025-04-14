@@ -2109,6 +2109,10 @@
   align-items: center;
   justify-content: space-between;
 }
+.advanced-filter.form-input-group {
+  flex: 1;
+  width: auto;
+}
 
 .tabnav {
   padding: var(--ar-nav-padding);
