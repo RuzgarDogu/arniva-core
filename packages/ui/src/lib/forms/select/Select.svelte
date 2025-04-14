@@ -14,8 +14,10 @@
 	 * @property {'small' | 'medium' | 'large'} size
 	 * @property {any} rest
 	 * @property {boolean} search
+	 * @property {boolean} serverSide - Whether searching is handled by the server
 	 * @property {string} placeholder
 	 * @property {() => void} onSelect - Callback function when an option is selected
+	 * @property {() => void} [onInput] - Callback function when the search input changes
 	 * @property {string} value - Selected value
 	 * @property {SelectOption[]} data - Array of options for the dropdown/select
 	 * @property {any} children
@@ -31,13 +33,15 @@
 		disabled = false,
 		search = false,
 		data = [],
+		serverSide = false,
 		onSelect,
+		onInput,
 		...rest
 	} = $props();
 </script>
 
 {#if search}
-	<SelectDropdown bind:value {data} {onSelect} {placeholder} />
+	<SelectDropdown bind:value {data} {onSelect} {placeholder} {onInput} {serverSide}/>
 {:else}
 	<select
 		class="form-select {size == 'medium' ? '' : `form-select--${size}`} {cls}"
