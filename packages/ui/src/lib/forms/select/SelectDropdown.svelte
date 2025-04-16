@@ -6,9 +6,7 @@
 	import Input from '../../forms/Input.svelte';
 
 	/**
-	 * @typedef {Object} SelectOption
-	 * @property {number|string} id - Unique identifier for the option
-	 * @property {string} name - Display text for the option
+	 * @typedef {{ id: number|string, [key: string]: any }} SelectOption
 	 */
 
 	/**
@@ -18,6 +16,7 @@
 	 * @property {'small' | 'medium' | 'large'} size
 	 * @property {string} placeholder
 	 * @property {any} rest
+	 * @property {string} nameKey - Key to use for the option name
 	 * @property {() => void} onSelect - Callback function when an option is selected
 	 * @property {() => void} [onInput] - Callback function when the search input changes
 	 * @property {string} value - Selected value
@@ -27,7 +26,8 @@
 
 	/** @type {Props} */
 	let { 
-		class: cls = '', 
+		class: cls = '',
+		nameKey = 'name',
 		value = $bindable(), 
 		data = [], 
 		onSelect, 
@@ -99,7 +99,7 @@
 			);
 			if (foundItem) {
 				// Set the searchText to the name of the selected item
-				searchText = foundItem.name;
+				searchText = foundItem[nameKey];
 			}
 		} else if (value === null && !isUserEditing) {
 			// Reset search text if value is null and user is not editing
@@ -136,7 +136,7 @@
 
 		filteredData = data.filter(
 			/** @param {SelectOption} item */ (item) => {
-				const normalizedItemName = normalizeText(item.name);
+				const normalizedItemName = normalizeText(item[nameKey]);
 				// Check if all search terms appear somewhere in the normalized item name
 				return searchTerms.every((term) => normalizedItemName.includes(term));
 			}
@@ -176,7 +176,7 @@
 	function select(item) {
 		value = item.id;
 		onSelect && onSelect(item);
-		searchText = item.name;
+		searchText = item[nameKey];
 		isUserEditing = false; // User has selected an item, so they're no longer editing
 		if (searchDropdown) searchDropdown.hide();
 	}
@@ -228,7 +228,7 @@
 
 				// Check if any item is selected (this assumes the searchText would match exactly one item's name)
 				const isItemSelected = data.some(
-					/** @param {SelectOption} item */ (item) => item.name === searchText
+					/** @param {SelectOption} item */ (item) => item[nameKey] === searchText
 				);
 
 				// Reset all variables if no item is selected
@@ -273,7 +273,7 @@
 			// If using client-side search, check if any item matches
 			// Check if any item is selected by comparing searchText with item names
 			const isItemSelected = data.some(
-				/** @param {SelectOption} item */ (item) => item.name === searchText
+				/** @param {SelectOption} item */ (item) => item[nameKey] === searchText
 			);
 
 			// If no item is selected, reset the search text
@@ -348,7 +348,7 @@
 			{#each filteredData as item}
 				<Button
 					class={focusedItemId && item.id === focusedItemId ? 'focused' : ''}
-					onClick={() => select(item)}>{item?.name || ''}</Button
+					onClick={() => select(item)}>{item?.[nameKey] || ''}</Button
 				>
 			{:else}
 				<p>No results found</p>

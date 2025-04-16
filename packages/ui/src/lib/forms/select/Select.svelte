@@ -10,6 +10,7 @@
 	/**
 	 * @typedef {Object<string, any>} Props
 	 * @property {string} class
+	 * @property {string} nameKey - Key to use for the option name
 	 * @property {boolean} disabled
 	 * @property {'small' | 'medium' | 'large'} size
 	 * @property {any} rest
@@ -26,6 +27,7 @@
 	/** @type {Props} */
 	let {
 		children,
+		nameKey = 'name',
 		value = $bindable(),
 		class: cls = '',
 		placeholder = '',
@@ -41,7 +43,7 @@
 </script>
 
 {#if search}
-	<SelectDropdown bind:value {data} {onSelect} {placeholder} {onInput} {serverSide}/>
+	<SelectDropdown bind:value {data} {onSelect} {placeholder} {onInput} {serverSide} {nameKey}/>
 {:else}
 	<select
 		class="form-select {size == 'medium' ? '' : `form-select--${size}`} {cls}"
