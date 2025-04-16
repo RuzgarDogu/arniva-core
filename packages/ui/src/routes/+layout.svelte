@@ -323,7 +323,7 @@
 					link: '/filter'
 				},
 				{
-					title: 'Deneme',
+					title: 'Deneme Sayfası 1',
 					icon: 'mdi:phone',
 					link: '/deneme'
 				},
@@ -331,6 +331,31 @@
 					title: 'Icons',
 					icon: 'mdi:settings',
 					link: '/icons'
+				},
+				{
+					title: 'Ajax Search',
+					icon: 'mdi:settings',
+					link: '/ajaxsearch'
+				},
+				{
+					title: 'Forms',
+					icon: 'mdi:settings',
+					link: '/forms'
+				},
+				{
+					title: 'Input Test',
+					icon: 'mdi:settings',
+					link: '/inputtest'
+				},
+				{
+					title: 'Modal Test',
+					icon: 'mdi:settings',
+					link: '/modaltest'
+				},
+				{
+					title: 'Pagination',
+					icon: 'mdi:settings',
+					link: '/pagination'
 				}
 			]}/>
 		</Navbar>

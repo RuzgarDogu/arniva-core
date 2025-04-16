@@ -1,9 +1,10 @@
 <script>
     import Button from '../general/Button.svelte';
+    import Dropdown from '../general/Dropdown.svelte';
+    import DropdownContent from '../general/DropdownContent.svelte';
     import Icon from '../icons/Icon.svelte';
     import { afterNavigate, goto } from '$app/navigation';
     import { onMount } from 'svelte';
-    import Sortable from 'sortablejs';
     
     /**
      * @typedef {Object} PageItem
@@ -32,10 +33,35 @@
     let { pages } = $props();
 
     /**
-     * The sortable element reference
+     * The container element reference
      * @type {HTMLElement}
      */
-    let sortableEl;
+    let containerEl;
+
+
+    /**
+     * Tabs that fit in the visible container
+     * @type {PageItem[]}
+     */
+    let visibleTabs = $state([]);
+
+    /**
+     * Tabs that don't fit in the visible container and should be shown in dropdown
+     * @type {PageItem[]}
+     */
+    let overflowTabs = $state([]);
+
+    /**
+     * Width of the dropdown button
+     * @type {number}
+     */
+    const DROPDOWN_WIDTH = 50; // in pixels
+
+    /**
+     * Gap between tabs
+     * @type {number}
+     */
+    const TAB_GAP = 8; // in pixels
 
     /**
      * Sets a cookie with the specified name, value, and expiration days
@@ -105,47 +131,133 @@
 
     // Load open pages from cookies on component mount
     onMount(() => {
-        if (sortableEl) {
-            Sortable.create(sortableEl, {
-                group: {
-                    name: 'sortableEl',
-                    put: false
-                },
-                ghostClass: 'sortable-ghost',
-                animation: 200,
-                onEnd: () => {
-                    /**
-                     * Array of tab elements from the DOM
-                     * @type {Array<HTMLDivElement>}
-                     */
-                    const tabs = Array.from(sortableEl.querySelectorAll('.tabnav--tab'));
-
-                                        /**
-                     * Array of link URLs extracted from tab elements' data attributes
-                     * @type {Array<string>}
-                     */
-                    const newOrder = tabs.map(tab => /** @type {string} */ (tab.dataset.link));
-                    
-                    const newPages = newOrder.map(link => 
-                        openPages.find(p => p.link === link)
-                    ).filter(Boolean); // Filter out any undefined items
-                                        
-                    try {
-                        // Update cookie with the new order
-                        setCookie(COOKIE_NAME, JSON.stringify(newPages), COOKIE_EXPIRES_DAYS);
-                    } catch (e) {
-                        console.error('Error updating open pages:', e);
-                    }
-                }
-            })
+        // Initial calculation
+        calculateVisibleTabs();
+        
+        // Set up resize observer to recalculate on container resize
+        const resizeObserver = new ResizeObserver(() => {
+            calculateVisibleTabs();
+        });
+        
+        if (containerEl) {
+            resizeObserver.observe(containerEl);
         }
+        
+        return () => {
+            if (containerEl) {
+                resizeObserver.unobserve(containerEl);
+            }
+        };
     });
 
+    /**
+     * Calculates which tabs should be visible and which should go to overflow dropdown
+     */
+    function calculateVisibleTabs() {
+        if (!containerEl || openPages.length === 0) {
+            visibleTabs = [];
+            overflowTabs = [];
+            return;
+        }
+        
+        const containerWidth = containerEl.offsetWidth;
+        
+        // Handle simple case first - just show all tabs if we have a small number
+        if (openPages.length <= 3) {
+            visibleTabs = [...openPages];
+            overflowTabs = [];
+            return;
+        }
+        
+        // Create temporary elements to measure actual tab widths
+        const tempContainer = document.createElement('div');
+        tempContainer.style.visibility = 'hidden';
+        tempContainer.style.position = 'absolute';
+        tempContainer.style.top = '-9999px';
+        tempContainer.className = 'tabnav';
+        document.body.appendChild(tempContainer);
+        
+        // For each page, create a temporary tab to measure its width
+        const tabWidths = [];
+        for (let i = 0; i < openPages.length; i++) {
+            const tempTab = document.createElement('div');
+            tempTab.className = 'tabnav--tab';
+            tempTab.style.maxWidth = ''; // Let it size naturally
+            tempTab.innerHTML = `
+                <div class="tabnav--tab-button">
+                    <span style="width: 24px;"></span>
+                    <span class="tab-title">${openPages[i].title}</span>
+                    <span style="width: 24px;"></span>
+                </div>
+            `;
+            tempContainer.appendChild(tempTab);
+            tabWidths.push(tempTab.offsetWidth + TAB_GAP); // Add gap
+        }
+        
+        // Clean up temp elements
+        document.body.removeChild(tempContainer);
+        
+        // Determine how many tabs can fit based on actual widths
+        let availableWidth = containerWidth;
+        let visibleCount = 0;
+        let widthSum = 0;
+        let needsDropdown = false;
+        
+        // First pass - see if we need a dropdown
+        for (let i = 0; i < tabWidths.length; i++) {
+            widthSum += tabWidths[i];
+        }
+        
+        if (widthSum > availableWidth) {
+            // Need dropdown, reduce available width
+            availableWidth -= DROPDOWN_WIDTH;
+            needsDropdown = true;
+        }
+        
+        // Second pass - calculate how many tabs can fit
+        widthSum = 0;
+        for (let i = 0; i < tabWidths.length; i++) {
+            if (widthSum + tabWidths[i] <= availableWidth) {
+                widthSum += tabWidths[i];
+                visibleCount++;
+            } else {
+                break;
+            }
+        }
+        
+        // Always show at least one tab
+        visibleCount = Math.max(1, visibleCount);
+        
+        if (needsDropdown && visibleCount >= openPages.length) {
+            // Edge case - we thought we'd need a dropdown, but turns out we don't
+            visibleCount = openPages.length;
+            needsDropdown = false;
+        }
+        
+        // Update the state
+        visibleTabs = openPages.slice(0, visibleCount);
+        overflowTabs = needsDropdown ? openPages.slice(visibleCount) : [];
+
+        console.log("Visible tabs:", visibleTabs.length, "Overflow tabs:", overflowTabs.length);
+    }
+
+    /**
+     * Handle visibility detection using resize observer
+     * @param {HTMLElement} node - The node to observe
+     */
+    function handleVisible(node) {
+        // Set containerEl to enable calculations
+        containerEl = node;
+        calculateVisibleTabs();
+    }
 
     afterNavigate((r) => {
         let path = r?.to?.url?.pathname
         let isInPages = pages.some(p => p.link === path)
-        if(path && isInPages) initialize(path)
+        if(path && isInPages) {
+            initialize(path);
+            calculateVisibleTabs();
+        }
     });
 
     /**
@@ -179,16 +291,20 @@
                 goto("/");
             }
         }
+
+        // After state update, recalculate visible tabs
+        setTimeout(calculateVisibleTabs, 0);
     }
 </script>
 
-<div class="tabnav" bind:this={sortableEl} class:invisible={openPages.length === 0}>
-        {#if openPages.length > 0}
-        {#each openPages as page}
+<div class="tabnav" class:invisible={openPages.length === 0} use:handleVisible>
+    {#if openPages.length > 0}
+        <!-- Visible tabs -->
+        {#each visibleTabs as page}
             <div class="tabnav--tab" class:active={page.active} data-link={page.link}>
                 <Button class="tabnav--tab-button" thin size="small" color="transparent" link url={page.link}>
                     <Icon icon={page.icon} size="small" />
-                    {page.title}
+                    <span class="tab-title">{page.title}</span>
                     <button 
                         data-close-url={page.link}
                         class="close" 
@@ -198,6 +314,40 @@
                 </Button>
             </div>
         {/each}
+        
+        <!-- Dropdown for overflow tabs -->
+        {#if overflowTabs.length > 0}
+            <div class="tabnav--more">
+                <Dropdown>
+                    <Button dropdown size="small" square color="transparent">
+                        <Icon icon="mdi:dots-horizontal" width="24" height="24" />
+                    </Button>
+                    <DropdownContent>
+                        {#each overflowTabs as page}
+                            <div class="tabnav--dropdown-item" class:active={page.active}>
+                                <Button 
+                                    class="tabnav--dropdown-button" 
+                                    thin 
+                                    size="small" 
+                                    color="transparent" 
+                                    link 
+                                    url={page.link}
+                                >
+                                    <Icon icon={page.icon} size="small" />
+                                    <span>{page.title}</span>
+                                    <button 
+                                        data-close-url={page.link}
+                                        class="close" 
+                                        onclick={(e) => closePage(e, page.link)}>
+                                        <Icon icon="mdi:close" size="extra-small" color="#696a6b" />
+                                    </button>
+                                </Button>
+                            </div>
+                        {/each}
+                    </DropdownContent>
+                </Dropdown>
+            </div>
         {/if}
-    </div>
+    {/if}
+</div>
 
