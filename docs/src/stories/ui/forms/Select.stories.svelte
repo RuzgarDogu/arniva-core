@@ -15,82 +15,135 @@
 				options: ['small', 'medium', 'large']
 			},
 			disabled: { control: 'boolean' },
+			nameKey: { control: 'text' },
+			serverSide: { control: 'boolean' },
 			rest: { control: 'object' }
 		}
 	});
 
+	/**
+	 * @typedef {Object} DummyDataItem
+	 * @property {number} id - Unique identifier
+	 * @property {string} name - Person name
+	 * @property {string} email - Email address
+	 * @property {string} phone - Phone number
+	 * @property {number} age - Person age
+	 * @property {string} fullName - Full name of the person
+	 */
+
+	/** @type {DummyDataItem[]} */
 	let dummyData = [
 		{
 			id: 1,
 			name: 'John Doe',
 			email: 'john@dummy.com',
 			phone: '1234567890',
-			age: 25
+			age: 25,
+			fullName: 'John Robert Doe'
 		},
 		{
 			id: 2,
 			name: 'Jane Doe',
 			email: 'jane@dummy.com',
 			phone: '0987654321',
-			age: 30
+			age: 30,
+			fullName: 'Jane Elizabeth Doe'
 		},
 		{
 			id: 3,
 			name: 'Alice Smith',
 			email: 'alice@dummy.com',
 			phone: '1122334455',
-			age: 28
+			age: 28,
+			fullName: 'Alice Marie Smith'
 		},
 		{
 			id: 4,
 			name: 'Bob Johnson',
 			email: 'bob@dummy.com',
 			phone: '2233445566',
-			age: 35
+			age: 35,
+			fullName: 'Robert Johnson'
 		},
 		{
 			id: 5,
 			name: 'Charlie Brown',
 			email: 'charlie@dummy.com',
 			phone: '3344556677',
-			age: 40
+			age: 40,
+			fullName: 'Charles Brown'
 		},
 		{
 			id: 6,
 			name: 'Diana Prince',
 			email: 'diana@dummy.com',
 			phone: '4455667788',
-			age: 22
+			age: 22,
+			fullName: 'Diana Prince'
 		},
 		{
 			id: 7,
 			name: 'Evan Wright',
 			email: 'evan@dummy.com',
 			phone: '5566778899',
-			age: 27
+			age: 27,
+			fullName: 'Evan Wright'
 		},
 		{
 			id: 8,
 			name: 'Fiona Gallagher',
 			email: 'fiona@dummy.com',
 			phone: '6677889900',
-			age: 33
+			age: 33,
+			fullName: 'Fiona Gallagher'
 		},
 		{
 			id: 9,
 			name: 'George King',
 			email: 'george@dummy.com',
 			phone: '7788990011',
-			age: 29
+			age: 29,
+			fullName: 'George King'
 		},
 		{
 			id: 10,
 			name: 'Hannah Montana',
 			email: 'hannah@dummy.com',
 			phone: '8899001122',
-			age: 24
+			age: 24,
+			fullName: 'Hannah Montana'
 		}
 	];
+	
+	/** @type {DummyDataItem[]} */
+	let serverSearchResults = $state([]);
+
+	/**
+	 * Simulated server-side search
+	 * @param {string} searchTerm - The term to search for
+	 */
+	function performServerSearch(searchTerm) {
+		console.log('Performing server-side search for:', searchTerm);
+		
+		// Simulate API delay
+		setTimeout(() => {
+			if (!searchTerm) {
+				serverSearchResults = [];
+				return;
+			}
+			
+			// Simple client-side filtering to simulate server response
+			const normalizedSearch = searchTerm.toLowerCase();
+			serverSearchResults = dummyData.filter(item => 
+				item.name.toLowerCase().includes(normalizedSearch) || 
+				item.email.toLowerCase().includes(normalizedSearch)
+			);
+			
+			console.log('Server returned results:', serverSearchResults);
+		}, 300);
+	}
+	
+	
 </script>
 
 <Story name="Select Example" args={{ size: 'medium', placeholder: 'Select an option' }}>
@@ -124,6 +177,64 @@
 >
 	{#snippet children(args)}
 		<Select {...args} />
+	{/snippet}
+</Story>
+
+<Story
+	name="Custom Name Key"
+	args={{
+		size: 'medium',
+		placeholder: 'Search by full name...',
+		search: true,
+		data: dummyData,
+		nameKey: 'fullName',
+		/**
+		 * @param {DummyDataItem|null} e - The selected item data
+		 */
+		onSelect: (e) => {
+			if (e) {
+				alert(`Selected: ${e.fullName}`);
+			} else {
+				alert('Search is cleared');
+			}
+		}
+	}}
+>
+	{#snippet children(args)}
+		<Select {...args} />
+	{/snippet}
+</Story>
+
+<Story
+	name="Server-Side Search"
+	args={{
+		size: 'medium',
+		placeholder: 'Search users (server-side)...',
+		search: true,
+		serverSide: true,
+		/**
+		 * @param {DummyDataItem|null} e - The selected item data
+		 */
+		onSelect: (e) => {
+			if (e) {
+				alert(`Selected: ${e.name} (${e.email})`);
+			} else {
+				alert('Selection cleared');
+			}
+		},
+		/**
+		 * @param {string} searchText - The current search text
+		 */
+		onInput: (searchText) => {
+			performServerSearch(searchText);
+		}
+	}}
+>
+	{#snippet children(args)}
+		<div>
+			<p class="hint">Type to trigger server-side search</p>
+			<Select {...args} data={serverSearchResults} />
+		</div>
 	{/snippet}
 </Story>
 
@@ -205,3 +316,11 @@
 		</Select>
 	{/snippet}
 </Story>
+
+<style>
+	.hint {
+		font-size: 0.85em;
+		opacity: 0.7;
+		margin-bottom: 0.5em;
+	}
+</style>

@@ -2,8 +2,8 @@
     import Input from '../Input.svelte';
     import Dropdown from '../../general/Dropdown.svelte';
     import DropdownContent from '../../general/DropdownContent.svelte';
-    import Button from '$lib/general/Button.svelte';
-    import Icon from '$lib/icons/Icon.svelte';
+    import Button from '../../general/Button.svelte';
+    import Icon from '../../icons/Icon.svelte';
 
     /**
      * @typedef {Object} Column
