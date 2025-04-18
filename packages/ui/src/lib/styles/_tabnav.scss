@@ -14,7 +14,8 @@
         height: 32px; // Fixed height for tabs to prevent growth when active
         display: flex; // Ensure flex layout
         align-items: center; // Vertical centering
-
+        background-color: #fff;
+        
         &.active {
             background-color: var(--ar-accent-color-subtle);
             // border-radius: 5px;

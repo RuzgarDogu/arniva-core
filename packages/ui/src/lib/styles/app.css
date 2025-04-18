@@ -2131,6 +2131,7 @@
   height: 32px;
   display: flex;
   align-items: center;
+  background-color: #fff;
 }
 .tabnav--tab.active {
   background-color: var(--ar-accent-color-subtle);
