@@ -238,7 +238,6 @@
         visibleTabs = openPages.slice(0, visibleCount);
         overflowTabs = needsDropdown ? openPages.slice(visibleCount) : [];
 
-        console.log("Visible tabs:", visibleTabs.length, "Overflow tabs:", overflowTabs.length);
     }
 
     /**
