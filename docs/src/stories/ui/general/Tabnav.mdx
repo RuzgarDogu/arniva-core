@@ -1,7 +1,46 @@
-import { Meta } from '@storybook/blocks';
+import { Canvas, Meta, Controls, Story } from '@storybook/blocks';
 
-<Meta title="UI/General/Tabnav" />
+<Meta title="UI/General/TabNav" />
 
 # Tabnav
 
-Will be implemented soon.
+The `Tabnav` component provides a tab-based navigation system that remembers open tabs between sessions using cookies. It automatically adapts to available space, showing overflow tabs in a dropdown menu when needed.
+
+## Usage
+
+```svelte
+<Tabnav {pages} />
+```
+
+## Props
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `pages` | `PageItem[]` | Array of page objects containing information about available pages |
+
+### Page Item Structure
+
+Each item in the `pages` array should have the following structure:
+
+```typescript
+interface PageItem {
+  title: string;   // The title of the page displayed in the tab
+  link: string;    // The URL/path to the page
+  icon: string;    // The icon to display in the tab (using Icon component)
+  active: boolean; // Whether the page is currently active
+}
+```
+
+## Features
+
+- **Persistent Tabs**: Remembers open tabs between sessions using browser cookies
+- **Responsive Design**: Automatically adapts to available space, showing overflow tabs in a dropdown
+- **Close Functionality**: Each tab can be closed individually
+- **Active Tab Tracking**: Automatically highlights the active tab based on the current route
+
+## Implementation Notes
+
+- The component uses cookies to store open tabs with a default expiration of 7 days
+- The component automatically detects the current URL path and marks the corresponding tab as active
+- When a tab is closed, navigation will redirect to the first remaining tab, or to the home page if no tabs remain
+- Tabs that don't fit in the visible container are moved to an overflow dropdown menu
