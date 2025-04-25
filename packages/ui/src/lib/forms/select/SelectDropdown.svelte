@@ -4,7 +4,6 @@
 	import DropdownContent from '../../general/DropdownContent.svelte';
 	import Button from '../../general/Button.svelte';
 	import Input from '../../forms/Input.svelte';
-
 	/**
 	 * @typedef {{ id: number|string, [key: string]: any }} SelectOption
 	 */
@@ -85,10 +84,21 @@
 		}
 		
 		// Only perform client-side filtering when not in server-side mode
-		if (!serverSide) {
-			updateFilteredData();
-		}
+        updateFilteredData();
+		// if (!serverSide) {
+		// }
 	}
+
+    // Modify the effect that watches data changes
+    $effect(() => {
+        // For both client and server-side mode, apply filtering to the data
+        // when it changes - this ensures we maintain filtering on new data
+        if (searchText.trim()) {
+            updateFilteredData();
+        } else {
+            filteredData = data;
+        }
+    });
 
 	// Override the automatic text updating when value changes
 	$effect(() => {
@@ -107,41 +117,27 @@
 		}
 	});
 
-	$effect(() => {
-		// In server-side mode, we should always just use the data directly
-		// without trying to filter it
-		if (serverSide) {
-			filteredData = data;
-			return;
-		}
-		
-		// Set filtered data to match provided data when the data changes
-		filteredData = data;
-	});
-
-	/**
-	 * Updates the filtered data based on the search text
-	 */
-	function updateFilteredData() {
-		if (!searchText.trim()) {
-			filteredData = data;
-			return;
-		}
-
-		const searchTerms = searchText
-			.toLowerCase()
-			.split(/\s+/)
-			.filter((term) => term.length > 0)
-			.map(normalizeText);
-
-		filteredData = data.filter(
-			/** @param {SelectOption} item */ (item) => {
-				const normalizedItemName = normalizeText(item[nameKey]);
-				// Check if all search terms appear somewhere in the normalized item name
-				return searchTerms.every((term) => normalizedItemName.includes(term));
-			}
-		);
-	}
+    // Update the updateFilteredData function to work in both modes
+    function updateFilteredData() {
+        if (!searchText.trim()) {
+            filteredData = data;
+            return;
+        }
+    
+        const searchTerms = searchText
+            .toLowerCase()
+            .split(/\s+/)
+            .filter((term) => term.length > 0)
+            .map(normalizeText);
+    
+        filteredData = data.filter(
+            /** @param {SelectOption} item */ (item) => {
+                const normalizedItemName = normalizeText(item[nameKey]);
+                // Check if all search terms appear somewhere in the normalized item name
+                return searchTerms.every((term) => normalizedItemName.includes(term));
+            }
+        );
+    }
 
 	/**
 	 * Normalizes text for search by converting Turkish characters to their ASCII equivalents

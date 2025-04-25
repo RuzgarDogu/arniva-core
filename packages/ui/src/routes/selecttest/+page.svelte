@@ -24,7 +24,7 @@
 
 <h1>{details}</h1>
 
-<Select
+<!-- <Select
 size="medium"
 nameKey="adi"
 placeholder="Start typing..."
@@ -37,4 +37,16 @@ onInput={(e) => {
     }}
 {data}
 bind:value={details}
+/> -->
+
+
+<Select
+nameKey="adi"
+size="medium"
+placeholder="Start typing..."
+search
+onInput={(e) => {
+    console.log("searching for: ", e);
+}}
+data={data}
 />
