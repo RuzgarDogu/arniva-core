@@ -2125,6 +2125,11 @@
 .advanced-filter.form-input-group {
   flex: 1;
   width: auto;
+  padding-left: 0.2rem;
+}
+.advanced-filter--main-button {
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 .tabnav {
@@ -2168,6 +2173,7 @@
   white-space: nowrap;
   margin: 0 0.5rem;
   text-align: center;
+  max-width: 100px;
 }
 .tabnav--tab-button .close {
   display: flex;
