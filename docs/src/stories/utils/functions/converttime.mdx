@@ -1,0 +1,164 @@
+import { Meta } from '@storybook/blocks';
+import { convertTime } from '@utils';
+
+<Meta title="Utils/Functions/ConvertTime" />
+
+# ConvertTime Function
+
+This utility function formats date strings according to various configuration options. It allows you to customize date formats, time inclusion, and separators.
+
+## How to import
+
+```javascript
+import { convertTime } from '@ruzgardogu/utils';
+```
+
+## Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>dateString</td>
+      <td>string</td>
+      <td>The date string to convert (ISO format)</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>config</td>
+      <td>object</td>
+      <td>Configuration object</td>
+      <td>defaultTimeConfig</td>
+    </tr>
+    <tr>
+      <td>config.date</td>
+      <td>boolean</td>
+      <td>Whether to include the date in the output</td>
+      <td>true</td>
+    </tr>
+    <tr>
+      <td>config.time</td>
+      <td>boolean</td>
+      <td>Whether to include the time in the output</td>
+      <td>false</td>
+    </tr>
+    <tr>
+      <td>config.timeZone</td>
+      <td>'UTC' | 'local'</td>
+      <td>The timezone to use</td>
+      <td>'UTC'</td>
+    </tr>
+    <tr>
+      <td>config.format</td>
+      <td>'US' | 'EU' | 'ISO'</td>
+      <td>The date format to use</td>
+      <td>'US'</td>
+    </tr>
+    <tr>
+      <td>config.separator</td>
+      <td>string</td>
+      <td>The separator to use between date parts</td>
+      <td>'.'</td>
+    </tr>
+  </tbody>
+</table>
+
+## Format Types
+
+The function supports three date formats:
+
+- **US**: MM/DD/YYYY (Month-Day-Year)
+- **EU**: DD/MM/YYYY (Day-Month-Year)
+- **ISO**: YYYY/MM/DD (Year-Month-Day)
+
+## Examples
+
+Here are some usage examples:
+
+### Basic Usage with Default Settings
+
+```javascript
+// Using default settings (US format with '.' separator)
+convertTime('2025-04-27T09:34:12.317879Z');
+// Returns: "04.27.2025"
+```
+
+### Different Format Types
+
+```javascript
+// EU format (Day-Month-Year)
+convertTime('2025-04-27T09:34:12.317879Z', { format: 'EU' });
+// Returns: "27.04.2025"
+
+// ISO format (Year-Month-Day)
+convertTime('2025-04-27T09:34:12.317879Z', { format: 'ISO' });
+// Returns: "2025.04.27"
+```
+
+### Different Separators
+
+```javascript
+// Using slash as separator
+convertTime('2025-04-27T09:34:12.317879Z', { separator: '/' });
+// Returns: "04/27/2025"
+
+// Using dash as separator
+convertTime('2025-04-27T09:34:12.317879Z', { separator: '-' });
+// Returns: "04-27-2025"
+```
+
+### Including Time
+
+```javascript
+// Including time with date
+convertTime('2025-04-27T09:34:12.317879Z', { time: true });
+// Returns: "04.27.2025 09:34"
+
+// Only time, no date
+convertTime('2025-04-27T09:34:12.317879Z', { date: false, time: true });
+// Returns: "09:34"
+```
+
+### Complete Example with Multiple Options
+
+```javascript
+// EU format with dash separator and time
+convertTime('2025-04-27T09:34:12.317879Z', {
+  format: 'EU',
+  separator: '-',
+  time: true
+});
+// Returns: "27-04-2025 09:34"
+```
+
+## Return Value
+
+The function returns a formatted date string based on the provided configuration. If neither date nor time is requested, it returns an empty string.
+
+## Type Definition
+
+```typescript
+function convertTime(
+  dateString: string,
+  config?: {
+    date?: boolean,
+    time?: boolean,
+    timeZone?: 'UTC' | 'local',
+    format?: 'US' | 'EU' | 'ISO',
+    separator?: string
+  }
+): string;
+```
+
+## Notes
+
+- If the date is invalid, it will return "Invalid Date"
+- When both date and time are enabled, they are separated by a space
+- The function works with any valid date string format that JavaScript's Date constructor can parse

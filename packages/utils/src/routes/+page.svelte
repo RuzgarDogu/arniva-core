@@ -1,5 +1,5 @@
 <script>
-	import { hello, toast, spinner, confirm } from '$lib';
+	import { hello, toast, spinner, confirm, convertTime } from '$lib';
 
 	// hello('emre');
 
@@ -55,9 +55,28 @@ function testConfirm() {
 			spinner.hide('divSpinner');
 		}, 3000);
 	}
+
+	let updated_at = "2025-04-27T09:34:12.317879Z";
+
+	const options = {
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+		hour: '2-digit',
+		minute: '2-digit',
+		second: '2-digit',
+		timeZoneName: 'short'
+	};
+
+
 </script>
 
-
+<h1>{convertTime(updated_at)}</h1>
+<h2>{convertTime(updated_at, { format: 'US', separator: '/' })}</h2>
+<h2>{convertTime(updated_at, { format: 'US', separator: '.', date: true, time: true })}</h2>
+<h2>{convertTime(updated_at, { format: 'US', separator: '-', date: true, time: false })}</h2>
+<h2>{convertTime(updated_at, { format: 'EU', separator: '.', date: true, time: false })}</h2>
+<h2>{convertTime(updated_at, { format: 'ISO', separator: '-', date: true, time: false })}</h2>
 <div id="container">
 	<h1>Welcome to your library project</h1>
 	<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
