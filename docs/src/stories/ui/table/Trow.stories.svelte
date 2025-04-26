@@ -18,6 +18,7 @@
 			}
 		}
 	});
+
 </script>
 
 <Story
@@ -38,5 +39,24 @@
 				</Trow>
 			</Tbody>
 		</Table>
+	{/snippet}
+</Story>
+
+<Story
+	name="Clickable Row"
+>
+	{#snippet children()}
+		<Table>
+			<Tbody>
+				<Trow onClick={() => alert('Row clicked!')}>
+					<td>1</td>
+					<td>John Doe</td>
+					<td>johndoe@dummy.com</td>
+					<td>+90 (555) 555-55-55</td>
+					<td>42</td>
+				</Trow>
+			</Tbody>
+		</Table>
+		<p style="margin-top: 1rem; font-style: italic;">Click on the row to trigger the onClick event</p>
 	{/snippet}
 </Story>

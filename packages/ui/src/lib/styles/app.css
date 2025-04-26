@@ -1146,7 +1146,7 @@
 }
 .table--size--normal {
   font-size: 0.85rem;
-  line-height: 20px;
+  line-height: 24px;
 }
 .table--size--small {
   font-size: 0.75rem;
@@ -1154,11 +1154,17 @@
 }
 .table--size--large {
   font-size: 1rem;
-  line-height: 24px;
+  line-height: 29px;
 }
 .table--size--compact {
   font-size: 0.75rem;
   line-height: 12px;
+}
+.table--hover tr:hover {
+  background-color: var(--ar-light-color);
+}
+.table--row-cursor td {
+  cursor: pointer;
 }
 
 .table-container {
@@ -1253,7 +1259,7 @@
 }
 .table-container--size--normal {
   font-size: 0.85rem;
-  line-height: 20px;
+  line-height: 24px;
 }
 .table-container--size--small {
   font-size: 0.75rem;
@@ -1261,11 +1267,17 @@
 }
 .table-container--size--large {
   font-size: 1rem;
-  line-height: 24px;
+  line-height: 29px;
 }
 .table-container--size--compact {
   font-size: 0.75rem;
   line-height: 12px;
+}
+.table-container--hover tr:hover {
+  background-color: var(--ar-light-color);
+}
+.table-container--row-cursor td {
+  cursor: pointer;
 }
 
 .modal {

@@ -78,6 +78,11 @@
 			},
 			height: {
 				control: { type: 'text' }
+			},
+			hover: {
+				control: { type: 'boolean' },
+				description: 'Enables hover effect on table rows',
+				defaultValue: true
 			}
 		}
 	});
@@ -238,6 +243,38 @@
 	name="Large Table"
 	args={{
 		size: 'large'
+	}}
+>
+	{#snippet children(args)}
+		<Table {...args}>
+			<Thead>
+				<Trow>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Phone</th>
+					<th>Age</th>
+				</Trow>
+			</Thead>
+			<Tbody>
+				{#each dummyData as item}
+					<Trow>
+						<td>{item.id}</td>
+						<td>{item.name}</td>
+						<td>{item.email}</td>
+						<td>{item.phone}</td>
+						<td>{item.age}</td>
+					</Trow>
+				{/each}
+			</Tbody>
+		</Table>
+	{/snippet}
+</Story>
+
+<Story
+	name="With Hover Disabled"
+	args={{
+		hover: false
 	}}
 >
 	{#snippet children(args)}

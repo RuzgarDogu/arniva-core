@@ -10,6 +10,7 @@
 	 * @property {string} [id] The table id
 	 * @property {any} [children] The button contents
 	 * @property {string} [class] The class to add to the button
+	 * @property {boolean} [hover] Should the table have hover effect?
 	 */
 
 	/** @type {Props} */
@@ -21,7 +22,8 @@
 		type = 'default',
 		border = 'inline',
 		height = 'auto',
-		headerType = 'normal'
+		headerType = 'normal',
+		hover = true,
 	} = $props();
 </script>
 
@@ -35,6 +37,7 @@
 			`table--size--${size}`,
 			`table--header-type-${headerType}`
 		].join(' ')}
+		class:table--hover={hover}
 		{id}
 	>
 		{@render children?.()}

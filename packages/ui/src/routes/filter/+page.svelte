@@ -1,7 +1,7 @@
 <script>
 	/** @type {{ data: import('./$types').PageData }} */
 	let { data } = $props();
-	import { AdvancedFilter, Table, Tbody, Thead, Trow, Range, applyFilters, Button } from '$lib';
+	import { AdvancedFilter, Table, Tbody, Thead, Trow, Range, applyFilters, Button, Icon } from '$lib';
 
 	let filterConfig = {
 		name: 'filterName',
@@ -168,11 +168,12 @@
 			<th>Departmen</th>
 			<th>Date of Birth</th>
 			<th>Is Manager?</th>
+			<th>Actions</th>
 		</Trow>
 	</Thead>
 	<Tbody>
-		{#each tableData as row}
-			<Trow>
+		{#each tableData as row, index (index)}
+			<Trow onClick={() => console.log("row click", row)}>
 				<td>{row.id}</td>
 				<td>{row.name}</td>
 				<td>{row.age}</td>
@@ -182,6 +183,13 @@
 				<td>{row.department}</td>
 				<td>{row.dob}</td>
 				<td>{row.isManager}</td>
+				<td>
+					<Button color="primary" size="small" onClick={() => console.log("button click", row)}>
+						Edit
+					</Button>
+					<Button color="danger" size="small" onClick={() => console.log(row)}>Delete</Button>
+					<Button color="success" size="small" onClick={() => console.log(row)}>View</Button>
+				</td>
 			</Trow>
 		{/each}
 	</Tbody>

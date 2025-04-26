@@ -1,7 +1,7 @@
 $table-padding: 0.5rem;
-$normal-line-height: 20px;
+$normal-line-height: 24px;
 $small-line-height: 14px;
-$large-line-height: 24px;
+$large-line-height: 29px;
 $compact-line-height: 12px;
 $sticky-negative-margin: -32px;
 
@@ -129,6 +129,21 @@ $sticky-negative-margin: -32px;
 		font-size: 0.75rem;
 		line-height: $compact-line-height;
 	}
+	&--hover {
+		tr:hover {
+			background-color: var(--ar-light-color);
+		}
+	}
+	&--row-cursor {
+		td {
+			cursor: pointer;
+		}
+	}
+	// &--cursor {
+	// 	td {
+	// 		cursor: pointer;
+	// 	}
+	// }
 }
 
 .table {
