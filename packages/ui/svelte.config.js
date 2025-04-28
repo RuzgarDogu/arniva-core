@@ -10,6 +10,7 @@ const config = {
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter(),
 		alias: {
+			// Keep the alias for development mode
 			'@ruzgardogu/utils': fileURLToPath(new URL('../utils/src/lib', import.meta.url))
 		}
 	},

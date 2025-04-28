@@ -7,16 +7,25 @@ export default defineConfig(({ mode }) => {
 	const isDev = mode === 'development';
 	console.log('========dev', isDev);
 
+	// For development, use local file references
+	// For production, rely on proper package dependencies
 	let alias = isDev
 		? {
 				'@ruzgardogu/utils': fileURLToPath(new URL('../utils/src/lib', import.meta.url))
-			}
+		  }
 		: {};
 
 	return {
 		plugins: [sveltekit()],
 		resolve: {
 			alias: alias
+		},
+		// Ensure external packages are properly handled in build
+		build: {
+			rollupOptions: {
+				// Mark @ruzgardogu/utils as external so it's not bundled
+				external: ['@ruzgardogu/utils']
+			}
 		}
 	};
 });

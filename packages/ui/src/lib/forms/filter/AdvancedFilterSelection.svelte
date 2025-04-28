@@ -3,6 +3,7 @@
 	import Checkbox from '../Checkbox.svelte';
 	import { onMount } from 'svelte';
 	import Input from '../Input.svelte';
+	// @ts-ignore
 	import { convertQueryObjectToString } from '@ruzgardogu/utils';
 
 	
