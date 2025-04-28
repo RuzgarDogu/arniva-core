@@ -165,6 +165,9 @@ importers:
       '@iconify/svelte':
         specifier: ^4.2.0
         version: 4.2.0(svelte@5.20.0)
+      '@ruzgardogu/utils':
+        specifier: ^0.0.21
+        version: 0.0.21(svelte@5.20.0)
       sortablejs:
         specifier: ^1.15.6
         version: 1.15.6
@@ -1398,6 +1401,11 @@ packages:
     resolution: {integrity: sha512-0PVwmgzZ8+TZ9oGBmdZoQVXflbvuwzN/HRclujpl4N/q3i+y0lqLw8n1bXA8ru3sApDjlmONaNAuYr38y1Kr9w==}
     cpu: [x64]
     os: [win32]
+
+  '@ruzgardogu/utils@0.0.21':
+    resolution: {integrity: sha512-18Nn/trGK0TSoOotjRLtQZsHdXMFJWzRll1hk18QQkus2uTH3dHpKvphk4kMlDnZiYwWexDhBcbL8hPafD/THw==, tarball: https://npm.pkg.github.com/download/@ruzgardogu/utils/0.0.21/003b7e0623149a9ca9028dd4e92ceef2771d92e5}
+    peerDependencies:
+      svelte: ^5.0.0
 
   '@storybook/addon-actions@8.5.6':
     resolution: {integrity: sha512-kREkqUNmaYFYL5NsgbtYXxuFbVGuoA1reQPYl/ToqI/ujXZo1XDo0o+Sztjj8r2GVAjaM6a96FUxEJ7yg1yBCg==}
@@ -4835,6 +4843,10 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.34.6':
     optional: true
+
+  '@ruzgardogu/utils@0.0.21(svelte@5.20.0)':
+    dependencies:
+      svelte: 5.20.0
 
   '@storybook/addon-actions@8.5.6(storybook@8.5.6(prettier@3.5.1))':
     dependencies:
