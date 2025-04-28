@@ -264,7 +264,7 @@
 		} else if (field.type === 'date') {
 			
 			const dateText = getDateText(field);
-			console.log('dateText', dateText);
+
 			return dateText ? `(${dateText})` : '';
 		} else if (field.type === 'multiselect' && Array.isArray(field.value) && field.value.length > 0) {
 			// Just show the count for multiselect fields

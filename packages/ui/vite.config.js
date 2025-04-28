@@ -5,7 +5,6 @@ import { fileURLToPath, URL } from 'url';
 export default defineConfig(({ mode }) => {
 	// Now you can use mode to determine if it's dev or production
 	const isDev = mode === 'development';
-	console.log('========dev', isDev);
 
 	// For development, use local file references
 	// For production, rely on proper package dependencies

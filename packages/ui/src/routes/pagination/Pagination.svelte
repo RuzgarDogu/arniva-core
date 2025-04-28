@@ -60,7 +60,12 @@
 	// --- Logic for generating the visible page numbers using $derived ---
 	const ELLIPSIS = '...';
 
-	/** Helper function to generate a range of numbers. */
+	/**
+	 * Helper function to generate a range of numbers.
+	 * @param {number} start - The starting number of the range
+	 * @param {number} end - The ending number of the range (inclusive)
+	 * @returns {number[]} An array containing the range of numbers
+	 */
 	function range(start, end) {
 		let length = end - start + 1;
 		if (length <= 0) return []; // Return empty if range is invalid
@@ -69,7 +74,7 @@
 
 	/**
 	 * Derived state calculating the array of page numbers and ellipses to display.
-	 * @type {($derived<(number | string)[]>)}
+	 * @type {Array<number|string>}
 	 */
 	let paginationRange = $derived.by(() => {
 		const currentTotalPages = totalPages;
@@ -86,7 +91,7 @@
         // We simplify this: Aim to show firstPage, lastPage, currentPage, siblings.
         // Let's calculate the number of elements needed for the "core" block:
         // currentPage + siblings on left + siblings on right = 1 + 2 * currentSiblingCount
-        const coreBlockLength = 1 + 2 * currentSiblingCount;
+        // const coreBlockLength = 1 + 2 * currentSiblingCount;
 
         // Calculate the number of page numbers we show *in addition* to first and last potentially with ellipses
         // This helps determine if ellipses are needed. Total slots needed roughly:
@@ -129,7 +134,6 @@
 		if (!shouldShowLeftEllipsis && shouldShowRightEllipsis) {
             // Determine the page numbers to show on the left side
             // Should include page 1 up to the right sibling
-			let leftRangeEnd = 1 + coreBlockLength + (currentSiblingCount > 0 ? 1 : 0); // Adjust based on complexity, aim for fixed # usually. Try a simpler fixed approach:
             let showCount = 3 + 2 * currentSiblingCount; // Fixed slots around the start
 			let leftRange = range(1, showCount);
 			const result = [...leftRange, ELLIPSIS, lastPageIndex];
@@ -175,9 +179,9 @@
 	let isLastPage = $derived(currentPage === totalPages || totalPages === 0);
 
 	// For debugging: log the calculated range when it changes
-	$effect(() => {
-		console.log("Calculated paginationRange:", paginationRange);
-	});
+	// $effect(() => {
+	// 	console.log("Calculated paginationRange:", paginationRange);
+	// });
 
 </script>
 

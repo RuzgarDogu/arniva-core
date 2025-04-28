@@ -39,7 +39,6 @@ class Modal {
 		let mainContentSection = document.querySelector('.layout__content');
 		if (!mainContentSection) {
 			mainContentSection = this.element;
-			console.log('mainContentSection', mainContentSection);
 			// If there's no parent element either, return
 			if (!mainContentSection) return;
 		}
@@ -419,7 +418,6 @@ export function modalInit(node) {
 		const htmlButton = /** @type {HTMLElement} */ (button);
 		
 		const triggerHandler = () => {
-		  console.log('Modal trigger clicked for', targetId);
 		  modal.element.classList.add('opening');
 		};
   
