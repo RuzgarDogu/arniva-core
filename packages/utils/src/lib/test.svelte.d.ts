@@ -1,0 +1,5 @@
+/**
+ * @param {string} name
+ * @returns {void}
+ * */
+export function hello(name?: string): void;
