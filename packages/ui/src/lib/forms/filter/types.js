@@ -40,9 +40,12 @@
  * @property {string} [translation.general.filter] - Translation for "Filter" action
  * @property {string} [translation.general.clear] - Translation for "Clear" action
  * @property {string} [translation.general.delete] - Translation for "Delete" action
+ * @property {string} [translation.general.selected] - Translation for "Delete" action
+ * @property {string} [translation.general.loading] - Translation for "Delete" action
+ * @property {string} [translation.general.loadingOptions] - Translation for "Delete" action
+ * @property {string} [translation.general.noOptions] - Translation for "Delete" action
  * @property {DateTranslation} [translation.date] - Date-related translation terms
  */
-
 
 /**
  * @typedef {Object} FilterField
@@ -78,6 +81,7 @@
  * @property {number} order - Order in which fields were opened
  * @property {boolean|null|undefined} [dateRange] - Whether this field is a range filter
  * @property {boolean} [isAmerican] - Whether dates should be parsed in American format (MM/DD/YYYY) instead of European (DD/MM/YYYY)
+ * @property {string} [_id] - Unique identifier generated for each field entry based on name and type
  */
 
 /**

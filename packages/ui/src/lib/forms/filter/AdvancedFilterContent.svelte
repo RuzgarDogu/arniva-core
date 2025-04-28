@@ -43,7 +43,12 @@
 
 	function clearSelections() {
 		_field.value = null;
-		_field && onChange && onChange({ name: field.name, value: null, isOpen: true });
+		_field && onChange && onChange({ 
+			name: field.name, 
+			type: field.type, // Pass the type to identify the field
+			value: null, 
+			isOpen: true 
+		});
 
 		// Reset range component if it exists
 		filterRangeContainer?.reset();
@@ -53,7 +58,12 @@
 	function deleteField() {
 		_field.value = [];
 		_field.isOpen = false;
-		_field && onChange && onChange({ name: field.name, value: [], isOpen: false });
+		_field && onChange && onChange({ 
+			name: field.name, 
+			type: field.type, // Pass the type to identify the field
+			value: [], 
+			isOpen: false 
+		});
 		filterRangeContainer?.reset();
 		filterDateContainer?.reset();
 	}
@@ -95,9 +105,9 @@
 			{#if _field.type === 'range'}
 				<AdvancedFilterRange field={_field} {onChange} bind:this={filterRangeContainer} />
 			{:else if _field.type === 'multiselect'}
-				<AdvancedFilterSelection field={_field} {onChange} multiple={true} />
+				<AdvancedFilterSelection {filterConfig} field={_field} {onChange} />
 			{:else if field.type === 'select' || field.type === 'boolean'}
-				<AdvancedFilterSelection field={_field} {onChange} multiple={false} />
+				<AdvancedFilterSelection {filterConfig} field={_field} {onChange} />
 			{:else if field.type === 'date'}
 				<AdvancedFilterDate translation={filterConfig?.translation?.date} field={_field} {onChange} bind:this={filterDateContainer} />
 			{/if}

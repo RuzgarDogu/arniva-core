@@ -2023,6 +2023,10 @@
 }
 .advanced-filter--item-label {
   font-weight: 500;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .advanced-filter--content-header {
   letter-spacing: 0.16em;
@@ -2077,8 +2081,6 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-.advanced-filter--multiselect .advanced-filter--filter-options {
   max-height: 200px;
   overflow-y: auto;
 }
@@ -2130,6 +2132,20 @@
 .advanced-filter--main-button {
   text-transform: uppercase;
   font-weight: 700;
+}
+.advanced-filter--search {
+  padding: 0 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.advanced-filter--search input {
+  background-color: var(--ar-light-color);
+  border: 1px solid var(--ar-border-color) !important;
+}
+.advanced-filter--no-results, .advanced-filter--loading {
+  padding: 10px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--ar-text-color-subtle);
 }
 
 .tabnav {

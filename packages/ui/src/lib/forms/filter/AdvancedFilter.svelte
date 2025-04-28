@@ -34,7 +34,9 @@
 				...field,
 				value: '',
 				isOpen: false,
-				order: -1 // Initialize with -1 (means never opened)
+				order: -1,
+				// Generate a unique identifier for each field entry based on name and type
+				_id: `${field.name}_${field.type}`
 			};
 		})
 	);
@@ -56,8 +58,8 @@
 	 * @param {Field} field - The field to toggle
 	 */
 	function toggleFieldDropdown(field) {
-		// Toggle the isOpen state
-		let _field = fields.find((f) => f.name === field.name);
+		// Toggle the isOpen state - use _id to uniquely identify fields with the same name
+		let _field = fields.find((f) => f._id === field._id);
 		if (!_field) return;
 		_field.isOpen = !_field.isOpen;
 
@@ -80,8 +82,8 @@
 
 		// Ensure next tick to allow rendering
 		setTimeout(() => {
-			// Get the dropdown reference (after the state has been updated)
-			let dd = fieldDropdown[field.name];
+			// Get the dropdown reference using _id instead of name
+			let dd = fieldDropdown[field._id];
 
 			if (dd && _field.isOpen) {
 				dd.show();
@@ -108,16 +110,29 @@
 
 	/**
 	 * Function to handle field value changes
-	 * @param {{name: string, value: any, isOpen: boolean}} e - The change object with field name and new value
+	 * @param {{name: string, value: any, isOpen: boolean, type: string}} e - The change object with field details
 	 */
 	function handleChange(e) {
+		// Find field by both name and type to handle same-name fields correctly
 		/** @type {Field|undefined} */
-		let _field = fields.find((f) => f.name === e.name);
+		let _field = fields.find((f) => f.name === e.name && f.type === e.type);
 		if (!_field) return;
 
 		_field.value = e.value;
 		_field.isOpen = e.isOpen;
-		filter[e.name] = e.value;
+		
+		// Store in filter object, distinguishing by type if needed
+		if (_field.type === 'multiselect') {
+			// For multiselect, ensure we don't overwrite single select values
+			if (!filter[e.name] || !Array.isArray(filter[e.name])) {
+				filter[e.name] = e.value;
+			} else {
+				filter[e.name] = e.value;
+			}
+		} else {
+			filter[e.name] = e.value;
+		}
+		
 		onChange && fields && onChange(filter);
 	}
 
@@ -139,8 +154,13 @@
 		onChange && fields && onChange(filter);
 	}
 
-	function getRangeValue(/** @type {import('./types').RangeValue} */ value) {
-		if (value && typeof value === 'object') {
+	/**
+	 * Process a value and extract range information
+	 * @param {any} value - The value to extract range information from, could be a RangeValue object or another type
+	 * @returns {import('./types').RangeValue|any} - The processed range value or the original value if not applicable
+	 */
+	function getRangeValue(value) {
+		if (value && typeof value === 'object' && !Array.isArray(value)) {
 			return {
 				start: value.min ?? value.start,
 				end: value.max ?? value.end
@@ -232,8 +252,32 @@
 		return '';
 	}
 
-
 	/**
+	 * Gets the display text for a field's value
+	 * @param {Field} field - The field to get display text for
+	 * @returns {string} The formatted display text
+	 */
+	function getFieldDisplayText(field) {
+		if (field.type === 'range' && field.value && typeof field.value === 'object') {
+			const rangeValue = getRangeValue(field.value);
+			return `(${rangeValue.start} - ${rangeValue.end})`;
+		} else if (field.type === 'date') {
+			
+			const dateText = getDateText(field);
+			console.log('dateText', dateText);
+			return dateText ? `(${dateText})` : '';
+		} else if (field.type === 'multiselect' && Array.isArray(field.value) && field.value.length > 0) {
+			// Just show the count for multiselect fields
+			let selectedText = filterConfig?.translation?.general?.selected || 'selected';
+			return `(${field.value.length} ${selectedText})`;
+		} else if (field.value !== null && field.value !== undefined && field.value !== '') {
+			// For single select or other values, just show the value itself
+			return `(${field.value})`;
+		}
+		return '';
+	}
+
+		/**
 	 * @typedef {Object} ColumnSearch
 	 * @property {string} column - The column to search in
 	 * @property {string} value - The search term/value
@@ -243,7 +287,7 @@
 	 * Handles input from the AdvancedFilterInput component
 	 * @param {ColumnSearch|null} e - Object containing column and value, or null when cleared
 	 */
-	function handleInput(e) {
+	 function handleInput(e) {
 		if (!e || e.value === '') {
 			delete filter.search;
 			onChange && filter && onChange(filter);
@@ -254,6 +298,19 @@
 		return;
 	}
 
+	/**
+ * Normalizes search columns into the expected Column format
+ * @param {Array<{value: string, label: string}|string>} columns - Raw column data from config
+ * @returns {Array<{value: string, label: string}>} - Normalized column objects
+ */
+function normalizeColumns(columns) {
+  return columns.map(column => {
+    if (typeof column === 'string') {
+      return { value: column, label: column };
+    }
+    return column;
+  });
+}
 </script>
 
 <InputGroup class={['advanced-filter', cls].join(' ')}>
@@ -277,36 +334,21 @@
 		</DropdownContent>
 	</Dropdown>
 
-	{#each orderedOpenFields as field (field.name)}
+	{#each orderedOpenFields as field (field._id)}
 		<div
 			class="advanced-filter--dropdown-wrapper"
 			class:advanced-filter--dropdown-wrapper--no-value={field.value === '' ||
 				field.value === null ||
 				field.value === undefined}
 		>
-			<Dropdown bind:this={fieldDropdown[field.name]}>
+			<Dropdown bind:this={fieldDropdown[field._id]}>
 				<div class="advanced-filter--dropdown">
 					<Button dropdown size="small" square color="transparent">
 						{field.label}
-						{#if field.value !== null && field.value !== undefined}
-							{#if field.type === 'range' && field.value && typeof field.value === 'object'}
-								{@const rangeValue = getRangeValue(field.value)}
-								<span class="advanced-filter--item-label">
-									({rangeValue.start} - {rangeValue.end})
-								</span>
-							{:else if field.type === 'date'}
-								{@const dateText = getDateText(field)}
-								{#if dateText}
-									<span class="advanced-filter--item-label">({dateText})</span>
-								{/if}
-							{:else}
-								{@const val = field.options?.find((o) => o.value === field.value)}
-								{#if val && val.label}
-									<span class="advanced-filter--item-label">({val.label})</span>
-								{:else if field.value}
-									<span class="advanced-filter--item-label">({field.value})</span>
-								{/if}
-							{/if}
+						{#if field.value !== null && field.value !== undefined && field.value !== ''}
+							<span class="advanced-filter--item-label">
+								{getFieldDisplayText(field)}
+							</span>
 						{/if}
 					</Button>
 					<Button
@@ -320,14 +362,24 @@
 					</Button>
 				</div>
 				<DropdownContent>
-					<AdvancedFilterContent {filterConfig} {field} onChange={handleChange} />
+					<AdvancedFilterContent 
+						{filterConfig} 
+						field={{...field, _id: field._id}} 
+						onChange={handleChange} 
+					/>
 				</DropdownContent>
 			</Dropdown>
 		</div>
 	{/each}
 
-	<AdvancedFilterInput {resetTrigger} columns={filterConfig?.search?.columns || []} onSelect={handleInput}/>
+	<!-- <AdvancedFilterInput {resetTrigger} columns={filterConfig?.search?.columns || []} onSelect={handleInput}/> -->
 	
+	<AdvancedFilterInput 
+	{resetTrigger} 
+	columns={normalizeColumns(filterConfig?.search?.columns || [])}
+	onSelect={handleInput}
+  />
+
 	{#if checkIfFiltersExist()}
 		<Button class="advanced-filter--reset" size="small" color="success" onClick={resetFilter}>
 			Reset

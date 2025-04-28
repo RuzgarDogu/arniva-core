@@ -27,33 +27,41 @@
 	 * @param {{ start: Date|null; end: Date|null; }} e - Date event containing start and end dates
 	 */
 	function handleChange(e) {
+		// Create a deep copy of the field to avoid modifying the original
+		let _field = JSON.parse(JSON.stringify(field));
+		
+		// For date ranges
 		if (field.dateRange) {
 			if (e && e.start && e.end) {
-				let _field = JSON.parse(JSON.stringify(field));
-				// Convert Date objects to ISO strings for the onChange handler
-				onChange &&
-					field &&
-					onChange({
-						name: _field.name,
-						value: {
-							start: e.start.toISOString(),
-							end: e.end.toISOString()
-						},
-						isOpen: true
-					});
-			}
-		} else {
-			onChange &&
-				field &&
-				e.start &&
-				onChange({
-					name: field.name,
-					value: {
-						start: e.start.toISOString(),
-						end: e.end ? e.end.toISOString() : null
-					},
+				// Set both start and end dates for range
+				_field.value = {
+					start: e.start.toISOString(),
+					end: e.end.toISOString()
+				};
+				
+				// Always pass the type property to ensure proper handling in parent component
+				onChange && onChange({
+					name: _field.name,
+					type: _field.type, // Explicitly include the type
+					value: _field.value,
 					isOpen: true
 				});
+			}
+		} 
+		// For single date selection
+		else if (e && e.start) {
+			_field.value = {
+				start: e.start.toISOString(),
+				end: e.end ? e.end.toISOString() : null
+			};
+			
+			// Always pass the type property to ensure proper handling in parent component
+			onChange && onChange({
+				name: _field.name,
+				type: _field.type, // Explicitly include the type
+				value: _field.value,
+				isOpen: true
+			});
 		}
 	}
 
