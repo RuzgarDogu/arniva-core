@@ -131,7 +131,7 @@
 	// Use the new filtering function in your derived state
 
 
-	let mainChecked = $state();
+	let mainChecked = $state(false);
 	let singleChecked = $state([]);
 
 	$inspect("Main Checkbox", mainChecked);

@@ -27,7 +27,7 @@
 		id = random_id,
 		name = '',
 		value,
-		group=$bindable(),
+		group=$bindable([]),
 		checked=$bindable(),
 		color = 'default',
 		boxed = false,
@@ -55,10 +55,10 @@
 		
 		const isNowChecked = event.target.checked;
 		
-		// // Update the checked state
+		// Update the checked state
 		checked = isNowChecked;
 		
-		// // Update the group if applicable
+		// Update the group if applicable
 		if (group && value !== undefined) {
 			if (isNowChecked && !group.includes(value)) {
 				group = [...group, value];
@@ -75,7 +75,6 @@
 </script>
 
 <div class={['custom-checkbox', boxed ? 'custom-checkbox--boxed' : '', cls].join(' ')} {style}>
-	{#if group !== undefined}
 	<input 
 		type="checkbox" 
 		{id} 
@@ -85,9 +84,6 @@
 		onchange={handleInputChange}
 		{...rest} 
 	/>
-	{:else}
-	<input type="checkbox" {id} {name} {value} bind:checked {onchange} {...rest} />
-	{/if}
 	<label class={['custom-checkbox--label', `custom-checkbox--${color}`]} for={id}
 	class:custom-checkbox--label-inline={inline}
 	>

@@ -29,40 +29,56 @@
 	// Determine if this is a multiselect based solely on field type
 	let isMultiSelect = $derived(_field.type === 'multiselect');
 
-	// Initialize state based on field.value and field type
-	/** @type {string|string[]|boolean|import('./types').RangeValue|null} */
-	let selectedValues = $state(
-		isMultiSelect
-			? (field.value && Array.isArray(field.value) ? field.value : []) 
-			: field.value
-	);
+	// // Initialize state based on field.value and field type
+	// /** @type {string|string[]|boolean|import('./types').RangeValue|null} */
+	// let selectedValues = $state(
+	// 	isMultiSelect
+	// 		? (field.value && Array.isArray(field.value) ? field.value : []) 
+	// 		: field.value
+	// );
 
 	// State for server-side filtering
 	let searchTerm = $state('');
 	let isLoading = $state(false);
-	let localOptions = $state([]); // Local copy of options for server-side filtering
-	let optionsCache = $state([]); // Cache to store all items ever fetched
+
+    // State for server-side filtering
+
+    /**
+     * Local copy of options for server-side filtering
+     * @type {Option[]}
+     */
+	 let localOptions = $state([]);
+
+/**
+ * Cache to store all items ever fetched
+ * @type {Option[]}
+ */
+let optionsCache = $state([]);
 	let pagination = $state({
 		offset: 0,
 		limit: 10,
 		total: 0
 	});
 
-	// Watch for changes in field.value from parent component
-	$effect(() => {
-		selectedValues = isMultiSelect
-			? field.value && Array.isArray(field.value)
-				? field.value
-				: []
-			: field.value;
-	});
+    /**
+     * @typedef {string|string[]|boolean|import('./types').RangeValue|null|undefined} SelectedValuesType
+     */
+
+    // Initialize `selectedValues` outside of its own scope
+    /** @type {SelectedValuesType} */
+    let selectedValues;
+
+    $effect(() => {
+        selectedValues = isMultiSelect
+            ? (field.value && Array.isArray(field.value) ? field.value : [])
+            : field.value;
+    });
 
 	/**
 	 * Function to handle selection change
 	 * @param {string|boolean} value - The selected option value
-	 * @param {string|undefined} label - The label for the selected option
 	 */
-	function handleSelection(value, label) {
+	function handleSelection(value) {
 		if (isMultiSelect) {
 			// Multi-select mode
 			/** @type {string[]} */
@@ -127,6 +143,17 @@
 	// Get appropriate component based on field type
 	const SelectionComponent = $derived(isMultiSelect ? Checkbox : Radio);
 
+    /**
+     * @typedef {Object} SearchFilter
+     * @property {string} column - The column to search in
+     * @property {string} value - The search value
+     */
+
+    /**
+     * @typedef {Object} Filter
+     * @property {SearchFilter} [search] - The search filter object
+     */
+
 	/**
 	 * Fetch options from the server
 	 * @param {string} searchText - The search text to filter by
@@ -137,6 +164,7 @@
 		isLoading = true;
 		try {
 			// Create filter object for search if searchText exists
+			/** @type {Filter} */
 			const filter = {};
 			if (searchText) {
 				filter.search = {
@@ -214,6 +242,10 @@
 		return Array.from(uniqueMap.values());
 	}
 
+	// Declare searchTimeout with an explicit type
+    /** @type {number | NodeJS.Timeout | undefined} */
+	let searchTimeout;
+
 	/**
 	 * Handle search input change
 	 * @param {Event} event - The input event
@@ -237,8 +269,7 @@
 		}, 300);
 	}
 
-	// Initialize options for server-side filtering
-	let searchTimeout;
+
 	
 	onMount(() => {
 		if (_field.serverSide) {
@@ -267,8 +298,6 @@
 		}
 	});
 
-	// Display options - either from server or local field config
-	let displayOptions = $derived(_field.serverSide ? localOptions : _field.options || []);
 </script>
 
 <div
@@ -299,7 +328,7 @@
 							value={option.id}
 							label={option[_field.nameKey || 'adi']}
 							checked={isSelected(option.id)}
-							onchange={() => handleSelection(option.id, option[_field.nameKey || 'adi'])}
+							onchange={() => handleSelection(option.id)}
 						/>
 					</div>
 				{/each}
@@ -330,7 +359,7 @@
 						value={option.value}
 						label={option.label}
 						checked={isSelected(option.value)}
-						onchange={() => handleSelection(option.value, option.label)}
+						onchange={() => handleSelection(option.value)}
 					/>
 				</div>
 			{/each}

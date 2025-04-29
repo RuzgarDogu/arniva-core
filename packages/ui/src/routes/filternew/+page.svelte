@@ -24,7 +24,6 @@
         const res = await fetch(endpoint, requestOptions);
         const result = await res.json();
         warehouses = result.data;
-        console.log(warehouses);
     }
 
     onMount(async () => {
@@ -33,9 +32,7 @@
     });
 
     function handleFilterChange(event) {
-        console.log("event", event);
         const queryParams = convertQueryObjectToString(pagination, event);
-        console.log("query params:", queryParams);
         
         // Call getWarehouseData with the generated query params
         getWarehouseData(queryParams);
@@ -43,7 +40,6 @@
     }
 
     async function getBranchData(queryParams = '') {
-        console.log("query params:", queryParams);
         const requestOptions = {
             method: "GET",
             redirect: "follow"
@@ -53,16 +49,13 @@
         const res = await fetch(endpoint, requestOptions);
         const result = await res.json();
         branches = result.data;
-        console.log(branches);
     }
 
 
     let sube_id = $state(null);
 
     async function handleSearchInput(event) {
-        console.log("event", event);
         const queryParams = `?offset=0&limit=100&filter=adi co ${event}`
-        console.log("query params:", queryParams);
         
         
         // // Call getBranchData with the generated query params

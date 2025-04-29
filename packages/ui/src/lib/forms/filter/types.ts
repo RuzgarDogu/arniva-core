@@ -2,9 +2,11 @@
  * Represents a single option in a selection list
  */
 export type Option = {
-  label: string;
+  id: string;
   value: string | boolean | number;
 };
+
+
 
 /**
  * Range value type used for both date and numeric ranges

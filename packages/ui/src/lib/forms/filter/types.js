@@ -63,10 +63,9 @@
  * @property {number} max - Maximum value for range
  */
 
+
 /**
- * @typedef {Object} Option
- * @property {string} label - Display text for the option
- * @property {*} value - Value associated with the option
+ * @typedef {{ id: string, label: string }} Option
  */
 
 /**
