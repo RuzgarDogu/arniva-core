@@ -191,6 +191,9 @@
   line-height: normal;
   color: var(--ar-text-color-subtle);
 }
+.custom-checkbox--label-inline {
+  position: initial !important;
+}
 .custom-checkbox label::before {
   content: "";
   position: absolute;
@@ -283,6 +286,9 @@
   font-size: 0.85rem;
   line-height: normal;
   color: var(--ar-text-color-subtle);
+}
+.custom-radio--label-inline {
+  position: initial !important;
 }
 .custom-radio label::before {
   content: "";

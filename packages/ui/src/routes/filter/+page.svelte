@@ -1,7 +1,7 @@
 <script>
 	/** @type {{ data: import('./$types').PageData }} */
 	let { data } = $props();
-	import { AdvancedFilter, Table, Tbody, Thead, Trow, Range, applyFilters, Button, Icon } from '$lib';
+	import { AdvancedFilter, Table, Tbody, Thead, Trow, Range, applyFilters, Button, Icon, Checkbox } from '$lib';
 
 	let filterConfig = {
 		name: 'filterName',
@@ -159,6 +159,9 @@
 <Table>
 	<Thead>
 		<Trow>
+			<th>
+				<Checkbox inline />
+			</th>
 			<th>ID</th>
 			<th>Name</th>
 			<th>Age</th>
@@ -174,6 +177,7 @@
 	<Tbody>
 		{#each tableData as row, index (index)}
 			<Trow onClick={() => console.log("row click", row)}>
+				<td><Checkbox inline /></td>
 				<td>{row.id}</td>
 				<td>{row.name}</td>
 				<td>{row.age}</td>
