@@ -1,6 +1,6 @@
 {
 	"name": "@ruzgardogu/ui",
-	"version": "0.1.03",
+	"version": "0.1.04",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run prepack",

@@ -129,6 +129,14 @@
 	 */
 
 	// Use the new filtering function in your derived state
+
+
+	let mainChecked = $state();
+	let singleChecked = $state([]);
+
+	$inspect("Main Checkbox", mainChecked);
+	$inspect("Single Checkbox", singleChecked);
+
 </script>
 
 <!-- <div style="margin-bottom: 30px;">
@@ -160,7 +168,7 @@
 	<Thead>
 		<Trow>
 			<th>
-				<Checkbox inline />
+				<Checkbox inline bind:checked={mainChecked}/>
 			</th>
 			<th>ID</th>
 			<th>Name</th>
@@ -177,7 +185,7 @@
 	<Tbody>
 		{#each tableData as row, index (index)}
 			<Trow onClick={() => console.log("row click", row)}>
-				<td><Checkbox inline /></td>
+				<td><Checkbox name="asd" inline bind:group={singleChecked} value={row.id}/></td>
 				<td>{row.id}</td>
 				<td>{row.name}</td>
 				<td>{row.age}</td>

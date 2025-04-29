@@ -24,10 +24,14 @@
 		// Cast event.target to HTMLElement to use closest method
 		/** @type {HTMLElement} */
 		const target = /** @type {HTMLElement} */ (event.target);
-		const clickedElement = target.closest('button');
 		
-		if (clickedElement) {
-			// Do nothing if the click was on a button
+		// Check for button, input elements (checkbox, radio), or labels
+		const clickedButton = target.closest('button');
+		const clickedInput = target.closest('input');
+		const clickedLabel = target.closest('label');
+		
+		if (clickedButton || clickedInput || clickedLabel) {
+			// Do nothing if the click was on an interactive element
 			return;
 		}
 		// Otherwise, call the row's onClick handler
