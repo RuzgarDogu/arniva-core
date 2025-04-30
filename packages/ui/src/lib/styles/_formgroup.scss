@@ -1,21 +1,93 @@
 .form-group {
 	width: 100%;
-	.form-group-item {
-		td {
+	
+	// Column layout for both label positions
+	&--columns-1 {
+		// Full width single column
+	}
+	
+	&--columns-2 {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+	}
+	
+	&--columns-3 {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+	}
+	
+	&--columns-4 {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1rem;
+	}
+	
+	&--columns-5 {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		gap: 1rem;
+	}
+	
+	// Top label styles
+	&--labels-top {
+		.form-group-item {
+			display: flex;
+			flex-direction: column;
 			border-bottom: 1px solid var(--ar-border-color);
 			padding: 10px;
-		}
-		&--label {
-			@include label-styles;
-			padding: 10px;
-			.required {
-				color: var(--ar-danger-color);
+			
+			&--label {
+				@include label-styles;
+				padding-bottom: 10px;
+				.required {
+					color: var(--ar-danger-color);
+				}
+			}
+			
+			&--input {
+				width: 100%;
 			}
 		}
 	}
-	&.form-group--no-border {
+	
+	// Left label styles
+	&--labels-left {
+		.form-group-table {
+			width: 100%;
+		}
+		
+		.form-group-column {
+			width: 100%;
+		}
+		
 		.form-group-item {
 			td {
+				border-bottom: 1px solid var(--ar-border-color);
+				padding: 10px;
+			}
+			
+			&--label {
+				@include label-styles;
+				white-space: nowrap;
+				padding-right: 15px;
+				vertical-align: middle;
+				
+				.required {
+					color: var(--ar-danger-color);
+				}
+			}
+			
+			&--input {
+				width: 100%;
+			}
+		}
+	}
+	
+	&.form-group--no-border {
+		.form-group-item {
+			td, & {
 				border-bottom: none;
 			}
 		}
