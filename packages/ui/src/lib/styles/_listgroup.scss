@@ -4,12 +4,45 @@
 	padding-left: 0;
 	margin-bottom: 0;
 	border-radius: var(--ar-border-radius);
+
+	// Default column layout
+	&--columns-1 {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+
+	&--columns-2 {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+	}
+
+	&--columns-3 {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+	}
+
+	&--columns-4 {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1rem;
+	}
+
+	&--columns-5 {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		gap: 1rem;
+	}
+
 	.list-group-item {
 		position: relative;
 		display: block;
 		padding: 0.4rem 0.8rem;
 		margin-bottom: -1px;
 		border-bottom: 1px solid var(--ar-border-color);
+
 		&:last-child {
 			margin-bottom: 0;
 			border-bottom: none;

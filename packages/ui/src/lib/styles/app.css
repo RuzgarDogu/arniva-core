@@ -376,6 +376,31 @@
   margin-bottom: 0;
   border-radius: var(--ar-border-radius);
 }
+.list-group--columns-1 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+.list-group--columns-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+.list-group--columns-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.list-group--columns-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+.list-group--columns-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
 .list-group .list-group-item {
   position: relative;
   display: block;
