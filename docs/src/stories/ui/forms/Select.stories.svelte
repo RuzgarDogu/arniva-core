@@ -148,13 +148,17 @@
 
 <Story name="Select Example" args={{ size: 'medium', placeholder: 'Select an option' }}>
 	{#snippet children(args)}
-		<Select {...args}>
-			<option value="1">Test 1</option>
-			<option value="2">Test 2</option>
-			<option value="3">Test 3</option>
-		</Select>
+	<Select {...args}>
+		<option value="1">Test 1</option>
+		<option value="2">Test 2</option>
+		<option value="3">Test 3</option>
+	</Select>
+	<div style="margin-top: 20px;">
+		<p>⚠️ <strong>IMPORTANT:</strong> with regular select use <code>"onchange"</code> event. With search, use <code>"onSelect"</code></p>
+	</div>
 	{/snippet}
 </Story>
+
 
 <Story
 	name="Select Example (Searchable)"
