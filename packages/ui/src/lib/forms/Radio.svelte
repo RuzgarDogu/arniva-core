@@ -8,7 +8,7 @@
 	* @property {string} [name] - Name attribute for the radio button
 	* @property {string|number|boolean|object|null} [value] - Value of the radio button
 	* @property {boolean} [checked] - Whether the radio button is checked
-	* @property {string|number|boolean|object|null} [group] - Binding for the radio button group value
+	* @property {string|number|boolean|object|null|unknown} [group] - Binding for the radio button group value
 	* @property {boolean} [boxed] - Whether to display as a box instead of standard radio button
 	* @property {'primary' | 'secondary' | 'default' | 'accent' | 'success' | 'danger' | 'warning'} [color]
 	* @property {string} [subtitle] - Additional descriptive text shown below the label
