@@ -12,6 +12,7 @@
 	let { children, right, id = random_id, ...rest } = $props();
 
 	let activeTab = $state(0);
+	import { onDestroy } from 'svelte';
 
 	/**
 	 * @param {HTMLElement} node
@@ -30,6 +31,11 @@
 		 * @type {HTMLElement | null}
 		 */
 		let tabRightElement = node.querySelector('.tab-right');
+		/**
+		 * @type {ResizeObserver | null}
+		 */
+		let resizeObserver = null;
+		
 		setActiveTab(activeTab);
 
 		/**
@@ -41,6 +47,24 @@
 				item.classList.remove('active');
 			});
 			items[index].classList.add('active');
+			
+			// Disconnect previous observer if exists
+			if (resizeObserver) {
+				resizeObserver.disconnect();
+			}
+			
+			// Set up observer for the active tab content
+			/**
+			 * @type {HTMLElement | null}
+			 */
+			let activeContent = node.querySelector('.tab-item.active .tab-item-content');
+			if (activeContent) {
+				resizeObserver = new ResizeObserver(() => {
+					updateNodeHeight();
+				});
+				resizeObserver.observe(activeContent);
+			}
+			
 			updateNodeHeight();
 		}
 
@@ -67,7 +91,22 @@
 
 		// Initial height adjustment
 		updateNodeHeight();
+		
+		// Clean up function to disconnect observer
+		return {
+			destroy() {
+				if (resizeObserver) {
+					resizeObserver.disconnect();
+					resizeObserver = null;
+				}
+			}
+		};
 	}
+	
+	// Ensure cleanup on component destruction
+	onDestroy(() => {
+		// Cleanup is handled by the action's return function
+	});
 </script>
 
 <div class="tab" {...rest} {id} use:handleTab>

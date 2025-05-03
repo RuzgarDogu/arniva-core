@@ -48,5 +48,21 @@ search
 onInput={(e) => {
     console.log("searching for: ", e);
 }}
+onSelect={(e) => {
+    console.log("e", e);
+}}
 data={data}
 />
+<Select
+size="medium"
+placeholder="Start typing..."
+
+onchange={(e) => {
+    console.log("e", e);
+}}
+data={data}
+>
+{#each data as item}
+    <option value={item.id}>{item.adi}</option>
+{/each}
+</Select>
