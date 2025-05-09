@@ -6,6 +6,7 @@ export { default as FormGroupColumn } from './FormGroupColumn.svelte';
 export { default as Switch } from './Switch.svelte';
 export { default as Select } from './select/Select.svelte';
 export { default as DatePicker } from './DatePicker.svelte';
+export { default as TimePicker } from './TimePicker.svelte';
 export { default as AdvancedFilter } from './filter/AdvancedFilter.svelte';
 export { default as Radio } from './Radio.svelte';
 export { default as Checkbox } from './Checkbox.svelte';

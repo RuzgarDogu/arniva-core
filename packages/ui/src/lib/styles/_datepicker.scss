@@ -27,11 +27,13 @@ $height: 35px;
 		}
 	}
 	&--picker-container {
-		position: absolute;
+		// Position will be set to fixed via JavaScript
 		display: flex;
 		background: white;
 		@include shadow;
-		z-index: 10;
+		z-index: 2147483647; // Use a high z-index to ensure it appears above other elements
+		border-radius: 6px;
+		overflow: hidden; // Ensure contents don't spill outside when rounded corners are applied
 	}
 	&--quick-select {
 		border-right: 1px solid #eee;

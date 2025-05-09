@@ -1,0 +1,103 @@
+$height: 35px;
+
+.timepicker {
+	position: relative;
+	&--focused {
+		border: 1px solid var(--ar-accent-color);
+	}
+	@include formElement;
+	display: inline-block;
+	
+	&--input {
+		height: $height;
+		display: flex;
+		align-items: center;
+		padding: 0 1em;
+		
+		input {
+			color: var(--ar-text-color-subtle);
+			flex: 1;
+			padding: 0 0.5em;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			height: $height;
+			&:focus,
+			&:active,
+			&:focus-visible {
+				outline: none;
+			}
+		}
+	}
+	
+	&--picker-container {
+		// Position will be set to fixed via JavaScript
+		display: flex;
+		background: white;
+		@include shadow;
+		z-index: 2147483647; // Use a high z-index to ensure it appears above other elements
+		border-radius: 6px;
+		overflow: hidden; // Ensure contents don't spill outside when rounded corners are applied
+		padding: 1em;
+	}
+	
+	&--time-controls {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	&--time-unit {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		position: relative;
+		
+		input {
+			width: 40px;
+			text-align: center;
+			border: none;
+			font-size: 1.2rem;
+			padding: 0.3em 0;
+			color: var(--ar-text-color);
+			
+			&:focus {
+				outline: none;
+				background-color: var(--ar-accent-color-subtle);
+				border-radius: 4px;
+			}
+		}
+		
+		.timepicker--label {
+			position: absolute;
+			bottom: -18px;
+			font-size: 0.7rem;
+			color: var(--ar-text-color-subtle);
+			text-transform: uppercase;
+		}
+	}
+	
+	&--separator {
+		font-size: 1.2rem;
+		margin: 0 0.5em;
+		color: var(--ar-text-color-subtle);
+		align-self: center;
+		padding-bottom: 8px; // Offset to align with inputs
+	}
+	
+	&--stepper {
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0.2em;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		
+		&:hover {
+			color: var(--ar-accent-color);
+			background-color: var(--ar-accent-color-subtle);
+			border-radius: 50%;
+		}
+	}
+}

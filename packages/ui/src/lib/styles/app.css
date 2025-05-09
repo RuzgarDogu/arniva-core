@@ -1572,11 +1572,12 @@
   outline: none;
 }
 .datepicker--picker-container {
-  position: absolute;
   display: flex;
   background: white;
   filter: drop-shadow(rgba(0, 0, 0, 0.05) 0px 5px 5px) drop-shadow(rgba(0, 0, 0, 0.1) 0px 1px 3px);
-  z-index: 10;
+  z-index: 2147483647;
+  border-radius: 6px;
+  overflow: hidden;
 }
 .datepicker--quick-select {
   border-right: 1px solid #eee;
@@ -1716,6 +1717,100 @@
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
   z-index: -1;
+}
+
+.timepicker {
+  position: relative;
+  font-family: inherit;
+  width: 100%;
+  border: solid 1px var(--ar-border-color);
+  border-radius: var(--ar-border-radius-sm);
+  box-sizing: border-box;
+  background-color: transparent;
+  min-height: 35px;
+  display: inline-block;
+}
+.timepicker--focused {
+  border: 1px solid var(--ar-accent-color);
+}
+.timepicker--input {
+  height: 35px;
+  display: flex;
+  align-items: center;
+  padding: 0 1em;
+}
+.timepicker--input input {
+  color: var(--ar-text-color-subtle);
+  flex: 1;
+  padding: 0 0.5em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  height: 35px;
+}
+.timepicker--input input:focus, .timepicker--input input:active, .timepicker--input input:focus-visible {
+  outline: none;
+}
+.timepicker--picker-container {
+  display: flex;
+  background: white;
+  filter: drop-shadow(rgba(0, 0, 0, 0.05) 0px 5px 5px) drop-shadow(rgba(0, 0, 0, 0.1) 0px 1px 3px);
+  z-index: 2147483647;
+  border-radius: 6px;
+  overflow: hidden;
+  padding: 1em;
+}
+.timepicker--time-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.timepicker--time-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.timepicker--time-unit input {
+  width: 40px;
+  text-align: center;
+  border: none;
+  font-size: 1.2rem;
+  padding: 0.3em 0;
+  color: var(--ar-text-color);
+}
+.timepicker--time-unit input:focus {
+  outline: none;
+  background-color: var(--ar-accent-color-subtle);
+  border-radius: 4px;
+}
+.timepicker--time-unit .timepicker--label {
+  position: absolute;
+  bottom: -18px;
+  font-size: 0.7rem;
+  color: var(--ar-text-color-subtle);
+  text-transform: uppercase;
+}
+.timepicker--separator {
+  font-size: 1.2rem;
+  margin: 0 0.5em;
+  color: var(--ar-text-color-subtle);
+  align-self: center;
+  padding-bottom: 8px;
+}
+.timepicker--stepper {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.timepicker--stepper:hover {
+  color: var(--ar-accent-color);
+  background-color: var(--ar-accent-color-subtle);
+  border-radius: 50%;
 }
 
 .side-nav {
