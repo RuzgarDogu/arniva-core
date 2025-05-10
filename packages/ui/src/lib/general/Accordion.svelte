@@ -45,11 +45,9 @@
 	// $inspect("openAccordionId", openid);
 
 	$effect(() => {
-		console.log('openAccordionId', openid);
 		if (openid && accordionContainer) {
 			let items = accordionContainer.querySelectorAll('.accordion-item');
 			items.forEach((item) => {
-				console.log('item.id', item.id);
 				if (item.id == openid) {
 					item.classList.add('active');
 				} else {
