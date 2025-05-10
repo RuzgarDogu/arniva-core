@@ -85,6 +85,7 @@
 		width: 100%;
 		filter: none;
 		height: auto;
+		transform: none !important; /* Add this line to ensure transform is properly overridden */
 		button[data-ar-enlarge='modal'] {
 			transform: rotate(180deg);
 		}

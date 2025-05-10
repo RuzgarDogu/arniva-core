@@ -51,18 +51,20 @@ class Modal {
 		this.element.classList.toggle('enlarged');
 
 		if (this.isEnlarged && mainContentSection && modalContent) {
+			// Force transform:none with !important to ensure it overrides any other styling
+			modalContent.style.setProperty('transform', 'none', 'important');
 			modalContent.style.top = `${mainContentSectionTop}px`;
 			modalContent.style.left = `${mainContentSectionLeft}px`;
-			// modalContent.style.left = `1px`;
 			modalContent.style.right = '0';
 			modalContent.style.bottom = '0';
-			modalContent.style.transform = 'none';
 			modalContent.style.width = `calc(100% - ${mainContentSectionLeft}px)`;
-			// modalContent.style.width = `calc(100% - 1px)`;
-			// modalContent.style.height = `calc(100% - 1px)`;
-			modalContent.style.boxShadow = 'none';
 		} else {
-			if (modalContent) modalContent.removeAttribute('style');
+			if (modalContent) {
+				// When returning to normal size, properly reset all styles
+				modalContent.removeAttribute('style');
+				// Ensure we don't leave an inline important transform property
+				modalContent.style.removeProperty('transform');
+			}
 		}
 	}
 }
@@ -205,7 +207,8 @@ class ModalController {
 				/** @type {HTMLElement | null} */
 				const modalContent = modal.element.querySelector('.modal--content');
 				if (modalContent) {
-					modalContent.style.transform = 'none';
+					// Use setProperty with !important to ensure it takes precedence
+					modalContent.style.setProperty('transform', 'none', 'important');
 				}
 			});
 		}
