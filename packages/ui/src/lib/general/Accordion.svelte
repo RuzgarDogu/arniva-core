@@ -3,6 +3,7 @@
 	 * @typedef {Object<string, any>} Props
 	 * @property {string} class
 	 * @property {boolean} multiple
+	 * @property {number|string|null} openid
 	 * @property {any} rest
 	 * @property {any} children
 	 * @property {boolean} flush
@@ -12,6 +13,7 @@
 
 	/** @type {Props} */
 	let {
+		openid = $bindable(),
 		children,
 		class: cls = '',
 		flush = false,
@@ -37,8 +39,28 @@
 			}
 		});
 	}
+
+	/** @type {HTMLDivElement|null} */
+	let accordionContainer;
+	// $inspect("openAccordionId", openid);
+
+	$effect(() => {
+		console.log('openAccordionId', openid);
+		if (openid && accordionContainer) {
+			let items = accordionContainer.querySelectorAll('.accordion-item');
+			items.forEach((item) => {
+				console.log('item.id', item.id);
+				if (item.id == openid) {
+					item.classList.add('active');
+				} else {
+					item.classList.remove('active');
+				}
+			});
+		}
+	})
+
 </script>
 
-<div class="accordion {cls}" {...rest} {id} use:handleAccordion class:flush>
+<div class="accordion {cls}" {...rest} {id} use:handleAccordion class:flush bind:this={accordionContainer}>
 	{@render children()}
 </div>

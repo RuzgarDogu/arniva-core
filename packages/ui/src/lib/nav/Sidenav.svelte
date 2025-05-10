@@ -16,7 +16,9 @@
 	 * @property {any} rest
 	 */
 
-	import { Input, InputGroup, Accordion, AccordionItem } from '$lib';
+	import { Input, InputGroup, Accordion, AccordionItem, Icon } from '$lib';
+	import menuitems from './menuItems';
+	import { afterNavigate } from '$app/navigation';
 
 	/** @type {Props} */
 	let {
@@ -36,6 +38,27 @@
 			items = items.filter((item) => item.name.includes(target.value));
 		}
 	}
+
+	let openAccordionId = $state('')
+	afterNavigate(({ from, to}) => {
+		// console.log('from', from);
+		// console.log('to', to);
+		let path = to?.url?.pathname
+		if (path) {
+			// look for the link inside each submenu inside each menuitem
+			menuitems.forEach((item) => {
+				if (item.submenu) {
+					item.submenu.forEach((subitem) => {
+						if (subitem.link === path) {
+							openAccordionId = String(item.id)
+						}
+					})
+				}
+			})
+			
+		}
+	});
+
 </script>
 
 <div class="side-nav {cls}">
@@ -72,7 +95,26 @@
 			</InputGroup>
 		</div>
 	{/if}
-	<Accordion flush>
+
+	<Accordion flush bind:openid={openAccordionId}>
+		{#each menuitems as item (item.id)}
+			<AccordionItem title={item.title} id={item.id} list>
+				{#if item.submenu && item.submenu.length > 0}
+					{#each item.submenu as subitem (subitem.id)}
+						{@const icon = subitem.icon ? subitem.icon : 'mdi:dots-vertical'}
+						<li class:active={subitem.active}>
+							<a href={subitem.link}>
+								<Icon {icon} width="20" height="20" color="var(--ar-accent-color)" />
+								<small>{subitem.title}</small>
+							</a>
+						</li>
+					{/each}
+				{/if}
+			</AccordionItem>
+		{/each}
+	</Accordion>
+
+	<!-- <Accordion flush>
 		<AccordionItem title="Accordion Item 1" list>
 			<li>
 				<a href="/">
@@ -218,7 +260,7 @@
 				</a>
 			</li>
 		</AccordionItem>
-	</Accordion>
+	</Accordion> -->
 </div>
 
 <style>

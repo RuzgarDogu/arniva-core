@@ -46,11 +46,9 @@ export async function load({ fetch, url }) {
     const limit = url.searchParams.get('limit') || 10;
 
     const RES = await fetch(`https://jsonplaceholder.typicode.com/comments?_start=${start}&_limit=${limit}`);
-	console.log("RES", RES);
 	let comments = [];
 	if (RES.ok) {
 		comments = await RES.json();
-		console.log("comments", comments);
 	}
 
     let currentPagination = {

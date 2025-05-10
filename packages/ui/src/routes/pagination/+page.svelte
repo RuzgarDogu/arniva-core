@@ -13,8 +13,6 @@
 		// tableData = applyFilters(data.comments, fields, data.filterConfig);
 	}
 
-	console.log("currentPagination", data.currentPagination);
-
 	function changeUrlParams(e) {
 		console.log("e", e);
 		const { itemsPerPage, currentPage } = e;
