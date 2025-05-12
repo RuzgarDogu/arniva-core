@@ -112,8 +112,10 @@
 			border: none;
 		}
 		.datepicker--picker-container {
-			border-top: solid 1px var(--ar-border-color);
-			position: relative;
+			border-top: solid 1px var(--ar-border-color) !important;
+			left: unset !important;
+			top: unset !important;
+			position: relative !important;
 			filter: none;
 		}
 	}

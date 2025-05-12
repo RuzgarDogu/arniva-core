@@ -24,7 +24,7 @@
 
 	/**
 	 * Handles changes from the DatePicker component
-	 * @param {{ start: Date|null; end: Date|null; }} e - Date event containing start and end dates
+	 * @param {{ start: Date|string|number|null; end: Date|string|number|null; }} e - Date event containing start and end dates
 	 */
 	function handleChange(e) {
 		// Create a deep copy of the field to avoid modifying the original
@@ -35,8 +35,8 @@
 			if (e && e.start && e.end) {
 				// Set both start and end dates for range
 				_field.value = {
-					start: e.start.toISOString(),
-					end: e.end.toISOString()
+					start: convertToISOString(e.start),
+					end: convertToISOString(e.end)
 				};
 				
 				// Always pass the type property to ensure proper handling in parent component
@@ -51,8 +51,8 @@
 		// For single date selection
 		else if (e && e.start) {
 			_field.value = {
-				start: e.start.toISOString(),
-				end: e.end ? e.end.toISOString() : null
+				start: convertToISOString(e.start),
+				end: e.end ? convertToISOString(e.end) : null
 			};
 			
 			// Always pass the type property to ensure proper handling in parent component
@@ -63,6 +63,22 @@
 				isOpen: true
 			});
 		}
+	}
+
+	/**
+	 * Helper function to convert various date formats to ISO string
+	 * @param {Date|string|number} value - The date value to convert
+	 * @returns {string} - ISO string representation of the date
+	 */
+	function convertToISOString(value) {
+		if (typeof value === 'string') {
+			return value;
+		} else if (typeof value === 'number') {
+			return new Date(value).toISOString();
+		} else if (value instanceof Date) {
+			return value.toISOString();
+		}
+		return '';
 	}
 
 	/**

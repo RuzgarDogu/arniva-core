@@ -20,6 +20,8 @@
 				lastmonth: "Geçen Ay",
 				thisyear: "Bu Yıl",
 				lastyear: "Geçen Yıl",
+				apply: "Uygula",
+				cancel: "İptal",
 			}
 		},
 		search: {

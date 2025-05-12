@@ -2,6 +2,19 @@
 	import { clickOutside } from '../functions';
 	import { Icon } from '../icons';
 
+
+	/**
+	 * FIXME: This is just a flag for working version. Just ignore this.
+	*/
+	/**
+	 * FIXME: This is just a flag for working version. Just ignore this.
+	*/
+	/**
+	 * FIXME: This is just a flag for working version. Just ignore this.
+	*/
+
+
+
 	/**
 	 * @typedef {import('./filter/types').DateTranslation} DateTranslation
 	 */
@@ -109,6 +122,8 @@
 			lastmonth: "Geçen Ay",
 			thisyear: "Bu Yıl",
 			lastyear: "Geçen Yıl",
+			apply: "Uygula",
+			cancel: "İptal",
 		}
 	} = $props();
 
@@ -141,6 +156,7 @@
 	let currentMonth = $state(new Date());
 	let startInputValue = $state('');
 	let endInputValue = $state('');
+	let isManuallyEditing = $state(false);
 
 	// References to the input elements
 	/** @type {HTMLInputElement|null} */
@@ -154,17 +170,204 @@
 	/** @type {HTMLDivElement|null} */
 	let inputsContainerRef = $state(null);
 
+	let isUpdating = $state(false);
+
+	// Override the updateDateValues function to not override manual input
 	function updateDateValues() {
+		// Only proceed if not already updating
+		if (isUpdating || isManuallyEditing) return;
+		
+		isUpdating = true;
 		startInputValue = formatDateDisplay(ensureDate(startDate));
 		if (isRange) {
 			endInputValue = formatDateDisplay(ensureDate(endDate));
 		}
+		
+		// Reset the flag after a small delay to ensure all updates have completed
+		setTimeout(() => {
+			isUpdating = false;
+		}, 0);
+	}
+
+	/**
+	 * Parse user input date string to Date object
+	 * @param {string} dateStr - The date string to parse
+	 * @returns {Date|null} - Parsed date or null if invalid
+	 */
+	function parseInputDate(dateStr) {
+		if (!dateStr) return null;
+
+		// Try to parse the input date based on the expected format
+		let parts;
+		let day, month, year;
+
+		if (isEuropean) {
+			// DD/MM/YYYY format
+			parts = dateStr.split(/[.\-/]/);
+			if (parts.length !== 3) return null;
+
+			day = parseInt(parts[0], 10);
+			month = parseInt(parts[1], 10) - 1; // months are 0-based
+			year = parseInt(parts[2], 10);
+		} else {
+			// MM/DD/YYYY format
+			parts = dateStr.split(/[.\-/]/);
+			if (parts.length !== 3) return null;
+
+			month = parseInt(parts[0], 10) - 1; // months are 0-based
+			day = parseInt(parts[1], 10);
+			year = parseInt(parts[2], 10);
+		}
+
+		// Basic validation
+		if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
+		if (year < 1900 || year > 2100) return null;
+		if (month < 0 || month > 11) return null;
+		if (day < 1 || day > 31) return null;
+
+		const date = new Date(year, month, day);
+		if (isNaN(date.getTime())) return null;
+
+		return date;
+	}
+
+	/**
+	 * Handle input change for start date
+	 * @param {Event} e - The input event
+	 */
+	function handleStartInputChange(e) {
+		const target = /** @type {HTMLInputElement} */ (e.target);
+		if (target) {
+			// Allow free editing without updating the actual startDate yet
+			isManuallyEditing = true;
+			startInputValue = target.value;
+			
+			// Try to preview the date if it's valid
+			const parsedDate = parseInputDate(startInputValue);
+			if (parsedDate) {
+				// Only update visual representation, don't trigger onChange
+				startDate = formatDateForOutput(parsedDate, startDateFormat);
+				// Update current month to match the entered date for calendar view
+				currentMonth = new Date(parsedDate.getFullYear(), parsedDate.getMonth(), 1);
+			}
+		}
+	}
+
+	/**
+	 * Handle input change for end date
+	 * @param {Event} e - The input event
+	 */
+	function handleEndInputChange(e) {
+		const target = /** @type {HTMLInputElement} */ (e.target);
+		if (target) {
+			// Allow free editing without updating the actual endDate yet
+			isManuallyEditing = true;
+			endInputValue = target.value;
+			
+			// Try to preview the date if it's valid
+			const parsedDate = parseInputDate(endInputValue);
+			if (parsedDate) {
+				// Only update visual representation, don't trigger onChange
+				const startDateObj = ensureDate(startDate);
+				if (startDateObj && parsedDate < startDateObj) {
+					// If end date is before start date, don't swap automatically during preview
+					endDate = formatDateForOutput(parsedDate, endDateFormat);
+				} else {
+					endDate = formatDateForOutput(parsedDate, endDateFormat);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Apply the manually entered dates
+	 */
+	function applyManualInputs() {
+		// Try to parse the start date
+		const startParsedDate = parseInputDate(startInputValue);
+		if (startParsedDate) {
+			startDate = formatDateForOutput(startParsedDate, startDateFormat);
+			// Update current month to match the entered date
+			currentMonth = new Date(startParsedDate.getFullYear(), startParsedDate.getMonth(), 1);
+		} else if (startInputValue === '') {
+			// If input is empty, clear the date
+			startDate = null;
+		}
+		
+		// Try to parse the end date if in range mode
+		if (isRange && endInputValue) {
+			const endParsedDate = parseInputDate(endInputValue);
+			if (endParsedDate) {
+				const startDateObj = ensureDate(startDate);
+				if (startDateObj && endParsedDate < startDateObj) {
+					// If end date is before start date, swap them
+					endDate = formatDateForOutput(startDateObj, endDateFormat);
+					startDate = formatDateForOutput(endParsedDate, startDateFormat);
+				} else {
+					endDate = formatDateForOutput(endParsedDate, endDateFormat);
+				}
+			} else if (endInputValue === '') {
+				// If input is empty, clear the date
+				endDate = null;
+			}
+		}
+		
+		// Update the display values and reset manual editing flag
+		isManuallyEditing = false;
+		updateDateValues();
+		
+		// Trigger onChange if provided
 		if (onChange) {
 			onChange({ 
 				start: startDate, 
 				end: endDate 
 			});
 		}
+	}
+
+	// Handle input blur to format the date correctly
+	/**
+	 * Handle input blur to format the date correctly without applying
+	 * @param {'start'|'end'} inputType - Which input was blurred
+	 */
+	function handleInputBlur(inputType) {
+		// Only apply values if they've been manually edited
+		if (isManuallyEditing) {
+			applyManualInputs();
+		}
+	}
+
+	/**
+	 * Handle keyboard events for the input fields
+	 * @param {KeyboardEvent} e - The keyboard event
+	 * @param {'start'|'end'} inputType - Which input field triggered the event
+	 */
+	function handleKeyDown(e, inputType) {
+		// Enter key (13)
+		if (e.key === 'Enter') {
+			// If the user presses enter, try to apply the manual inputs
+			applyManualInputs();
+			
+			// Handle focus change for range mode
+			if (isRange && inputType === 'start') {
+				if (endInputRef) {
+					endInputRef.focus();
+				}
+			} else {
+				// In single mode or when entering end date, close the calendar
+				showStartPicker = false;
+				showEndPicker = false;
+			}
+			e.preventDefault();
+		}
+	}
+
+	export function reset() {
+		startDate = null;
+		endDate = null;
+		startInputValue = '';
+		endInputValue = '';
+		isManuallyEditing = false;
 	}
 
 	/**
@@ -243,155 +446,6 @@
 		}
 	});
 
-	/**
-	 * Handle keyboard events for the input fields
-	 * @param {KeyboardEvent} e - The keyboard event
-	 * @param {'start'|'end'} inputType - Which input field triggered the event
-	 */
-	function handleKeyDown(e, inputType) {
-		// Enter key (13) or Tab key (9)
-		if (e.key === 'Enter' || e.key === 'Tab') {
-			if (inputType === 'start') {
-				const parsedDate = parseInputDate(startInputValue);
-
-				if (parsedDate) {
-					startDate = formatDateForOutput(parsedDate, startDateFormat);
-					updateDateValues();
-
-					if (isRange) {
-						// In range mode, focus the end input
-						e.preventDefault(); // Prevent default for Tab to handle focus manually
-						if (endInputRef) {
-							endInputRef.focus();
-						}
-					} else {
-						// In single mode, close the calendar
-						showStartPicker = false;
-					}
-				}
-			} else if (inputType === 'end') {
-				const parsedDate = parseInputDate(endInputValue);
-
-				if (parsedDate) {
-					const startDateObj = ensureDate(startDate);
-					// If end date is before start date, swap them
-					if (startDateObj && parsedDate < startDateObj) {
-						endDate = formatDateForOutput(startDateObj, endDateFormat);
-						startDate = formatDateForOutput(parsedDate, startDateFormat);
-						updateDateValues();
-					} else {
-						endDate = formatDateForOutput(parsedDate, endDateFormat);
-						updateDateValues();
-					}
-
-					// Close the calendar after successful end date input
-					showStartPicker = false;
-					showEndPicker = false;
-				}
-			}
-		}
-	}
-
-	// Parse user input date string to Date object
-	/**
-	 * Parse user input date string to Date object
-	 * @param {string} dateStr - The date string to parse
-	 * @returns {Date|null} - Parsed date or null if invalid
-	 */
-	function parseInputDate(dateStr) {
-		if (!dateStr) return null;
-
-		// Try to parse the input date based on the expected format
-		let parts;
-		let day, month, year;
-
-		if (isEuropean) {
-			// DD/MM/YYYY format
-			parts = dateStr.split(/[.\-/]/);
-			if (parts.length !== 3) return null;
-
-			day = parseInt(parts[0], 10);
-			month = parseInt(parts[1], 10) - 1; // months are 0-based
-			year = parseInt(parts[2], 10);
-		} else {
-			// MM/DD/YYYY format
-			parts = dateStr.split(/[.\-/]/);
-			if (parts.length !== 3) return null;
-
-			month = parseInt(parts[0], 10) - 1; // months are 0-based
-			day = parseInt(parts[1], 10);
-			year = parseInt(parts[2], 10);
-		}
-
-		// Basic validation
-		if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
-		if (year < 1900 || year > 2100) return null;
-		if (month < 0 || month > 11) return null;
-		if (day < 1 || day > 31) return null;
-
-		const date = new Date(year, month, day);
-		if (isNaN(date.getTime())) return null;
-
-		return date;
-	}
-
-	/**
-	 * Handle input change for start date
-	 * @param {Event} e - The input event
-	 */
-	function handleStartInputChange(e) {
-		const target = /** @type {HTMLInputElement} */ (e.target);
-		if (target) {
-			startInputValue = target.value;
-		}
-		const parsedDate = parseInputDate(startInputValue);
-
-		if (parsedDate) {
-			startDate = formatDateForOutput(parsedDate, startDateFormat);
-			updateDateValues();
-			// Update current month to match the entered date
-			currentMonth = new Date(parsedDate.getFullYear(), parsedDate.getMonth(), 1);
-		}
-	}
-
-	// Handle input change for end date
-	/**
-	 * Handle input change for end date
-	 * @param {Event} e - The input event
-	 */
-	function handleEndInputChange(e) {
-		const target = /** @type {HTMLInputElement} */ (e.target);
-		if (target) {
-			endInputValue = target.value;
-		}
-		const parsedDate = parseInputDate(endInputValue);
-
-		if (parsedDate) {
-			const startDateObj = ensureDate(startDate);
-			if (startDateObj && parsedDate < startDateObj) {
-				endDate = formatDateForOutput(startDateObj, endDateFormat);
-				startDate = formatDateForOutput(parsedDate, startDateFormat);
-				updateDateValues();
-			} else {
-				endDate = formatDateForOutput(parsedDate, endDateFormat);
-				updateDateValues();
-			}
-		}
-	}
-
-	// Handle input blur to format the date correctly
-	/**
-	 * Handle input blur to format the date correctly
-	 * @param {'start'|'end'} inputType - Which input was blurred
-	 */
-	function handleInputBlur(inputType) {
-		if (inputType === 'start') {
-			startInputValue = formatDateDisplay(ensureDate(startDate));
-		} else if (inputType === 'end') {
-			endInputValue = formatDateDisplay(ensureDate(endDate));
-		}
-	}
-
 	// Calendar generation
 	function generateCalendar(date = currentMonth) {
 		const year = date.getFullYear();
@@ -442,6 +496,15 @@
 			month: 'short',
 			year: 'numeric'
 		});
+	}
+
+	function handleClickOutside() {
+		// Always close the pickers when clicking outside
+		showStartPicker = false;
+		showEndPicker = false;
+		// Clean up position listeners
+		window.removeEventListener('scroll', adjustPickerPosition, true);
+		window.removeEventListener('resize', adjustPickerPosition);
 	}
 
 	/**
@@ -550,7 +613,10 @@
 			// Convert to the appropriate format before assigning
 			startDate = formatDateForOutput(date, startDateFormat);
 			updateDateValues();
-			showStartPicker = false;
+			
+			// Don't trigger onChange here - wait for Apply button
+			
+			// Don't automatically close the picker
 			return;
 		}
 
@@ -562,6 +628,9 @@
 			startDate = formatDateForOutput(date, startDateFormat);
 			endDate = null;
 			updateDateValues();
+			
+			// Don't trigger onChange here - wait for Apply button
+			
 			// Don't close the picker yet, waiting for second selection
 		} else {
 			// Second selection to complete the range
@@ -573,9 +642,8 @@
 				endDate = formatDateForOutput(date, endDateFormat);
 			}
 			updateDateValues();
-			// Close the picker now that range is complete
-			showStartPicker = false;
-			showEndPicker = false;
+			
+			// Don't trigger onChange here - wait for Apply button
 		}
 	}
 
@@ -590,25 +658,6 @@
 
 	// Weekday names
 	const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-	function handleClickOutside() {
-		// If in range mode and only one date is selected (incomplete range),
-		// reset all the selections
-		if (isRange && ((startDate && !endDate) || (!startDate && endDate))) {
-			startDate = null;
-			endDate = null;
-			updateDateValues();
-		}
-
-		// Always close the pickers when clicking outside
-		showStartPicker = false;
-		showEndPicker = false;
-		// Clean up position listeners
-		window.removeEventListener('scroll', adjustPickerPosition, true);
-		window.removeEventListener('resize', adjustPickerPosition);
-	}
-
-	// Quick select options
 
 	// Helper functions for quick selection
 	function getToday() {
@@ -698,35 +747,65 @@
 			label: 'Today',
 			action: () => {
 				startDate = formatDateForOutput(getToday(), startDateFormat);
-				showStartPicker = false;
+				updateDateValues();
+				if (onChange) {
+					onChange({ 
+						start: startDate, 
+						end: endDate 
+					});
+				}
 			}
 		},
 		{
 			label: 'Yesterday',
 			action: () => {
 				startDate = formatDateForOutput(addDays(getToday(), -1), startDateFormat);
-				showStartPicker = false;
+				updateDateValues();
+				if (onChange) {
+					onChange({ 
+						start: startDate, 
+						end: endDate 
+					});
+				}
 			}
 		},
 		{
 			label: 'Tomorrow',
 			action: () => {
 				startDate = formatDateForOutput(addDays(getToday(), 1), startDateFormat);
-				showStartPicker = false;
+				updateDateValues();
+				if (onChange) {
+					onChange({ 
+						start: startDate, 
+						end: endDate 
+					});
+				}
 			}
 		},
 		{
 			label: 'Next week',
 			action: () => {
 				startDate = formatDateForOutput(addDays(getToday(), 7), startDateFormat);
-				showStartPicker = false;
+				updateDateValues();
+				if (onChange) {
+					onChange({ 
+						start: startDate, 
+						end: endDate 
+					});
+				}
 			}
 		},
 		{
 			label: 'Next Monday',
 			action: () => {
 				startDate = formatDateForOutput(getNextMonday(), startDateFormat);
-				showStartPicker = false;
+				updateDateValues();
+				if (onChange) {
+					onChange({ 
+						start: startDate, 
+						end: endDate 
+					});
+				}
 			}
 		},
 		{
@@ -734,7 +813,13 @@
 			action: () => {
 				const today = getToday();
 				startDate = formatDateForOutput(new Date(today.getFullYear(), today.getMonth() + 1, today.getDate()), startDateFormat);
-				showStartPicker = false;
+				updateDateValues();
+				if (onChange) {
+					onChange({ 
+						start: startDate, 
+						end: endDate 
+					});
+				}
 			}
 		},
 		{
@@ -742,7 +827,13 @@
 			action: () => {
 				const today = getToday();
 				startDate = formatDateForOutput(new Date(today.getFullYear() + 1, today.getMonth(), today.getDate()), startDateFormat);
-				showStartPicker = false;
+				updateDateValues();
+				if (onChange) {
+					onChange({ 
+						start: startDate, 
+						end: endDate 
+					});
+				}
 			}
 		}
 	];
@@ -756,8 +847,12 @@
 				startDate = formatDateForOutput(getWeekStartDate(today), startDateFormat);
 				endDate = formatDateForOutput(getWeekEndDate(today), endDateFormat);
 				updateDateValues();
-				showStartPicker = false;
-				showEndPicker = false;
+				if (onChange) {
+					onChange({ 
+						start: startDate, 
+						end: endDate 
+					});
+				}
 			}
 		},
 		{
@@ -767,8 +862,12 @@
 				startDate = formatDateForOutput(getWeekStartDate(lastWeek), startDateFormat);
 				endDate = formatDateForOutput(getWeekEndDate(lastWeek), endDateFormat);
 				updateDateValues();
-				showStartPicker = false;
-				showEndPicker = false;
+				if (onChange) {
+					onChange({ 
+						start: startDate, 
+						end: endDate 
+					});
+				}
 			}
 		},
 		{
@@ -778,8 +877,12 @@
 				startDate = formatDateForOutput(getFirstDayOfMonth(today), startDateFormat);
 				endDate = formatDateForOutput(getLastDayOfMonth(today), endDateFormat);
 				updateDateValues();
-				showStartPicker = false;
-				showEndPicker = false;
+				if (onChange) {
+					onChange({ 
+						start: startDate, 
+						end: endDate 
+					});
+				}
 			}
 		},
 		{
@@ -790,8 +893,12 @@
 				startDate = formatDateForOutput(getFirstDayOfMonth(lastMonth), startDateFormat);
 				endDate = formatDateForOutput(getLastDayOfMonth(lastMonth), endDateFormat);
 				updateDateValues();
-				showStartPicker = false;
-				showEndPicker = false;
+				if (onChange) {
+					onChange({ 
+						start: startDate, 
+						end: endDate 
+					});
+				}
 			}
 		},
 		{
@@ -801,8 +908,12 @@
 				startDate = formatDateForOutput(getFirstDayOfYear(today.getFullYear()), startDateFormat);
 				endDate = formatDateForOutput(getLastDayOfYear(today.getFullYear()), endDateFormat);
 				updateDateValues();
-				showStartPicker = false;
-				showEndPicker = false;
+				if (onChange) {
+					onChange({ 
+						start: startDate, 
+						end: endDate 
+					});
+				}
 			}
 		},
 		{
@@ -812,18 +923,15 @@
 				startDate = formatDateForOutput(getFirstDayOfYear(today.getFullYear() - 1), startDateFormat);
 				endDate = formatDateForOutput(getLastDayOfYear(today.getFullYear() - 1), endDateFormat);
 				updateDateValues();
-				showStartPicker = false;
-				showEndPicker = false;
+				if (onChange) {
+					onChange({ 
+						start: startDate, 
+						end: endDate 
+					});
+				}
 			}
 		}
 	];
-
-	export function reset() {
-		startDate = null;
-		endDate = null;
-		startInputValue = '';
-		endInputValue = '';
-	}
 </script>
 
 <div
@@ -859,7 +967,24 @@
 				readonly={!manualInput}
 			/>
 		{/if}
-		<Icon icon="ic:outline-calendar-today" width="18" height="18" />
+		<button
+			class="datepicker--calendar-button"
+			onclick={() => (showStartPicker = true)}
+			title="Open calendar"
+		>
+			<Icon icon="ic:outline-calendar-today" width="18" height="18" />
+		</button>
+		<!-- <button 
+			class="datepicker--apply-button" 
+			onclick={() => {
+				applyManualInputs();
+				showStartPicker = false;
+				showEndPicker = false;
+			}}
+			title="Apply date"
+		>
+			<Icon icon="mdi:check" width="18" height="18" />
+		</button> -->
 	</div>
 
 	<!-- Calendar Display -->
@@ -936,6 +1061,31 @@
 						{day.getDate()}
 					</button>
 				{/each}
+				
+				<!-- Footer with actions -->
+				<div class="datepicker--footer">
+					<button 
+						class="datepicker--footer-button datepicker--cancel-button"
+						onclick={() => {
+							// Reset input values to match actual dates
+							updateDateValues();
+							showStartPicker = false;
+							showEndPicker = false;
+						}}
+					>
+						{translation?.cancel || "Cancel"}
+					</button>
+					<button 
+						class="datepicker--footer-button datepicker--apply-button-footer"
+						onclick={() => {
+							applyManualInputs();
+							showStartPicker = false;
+							showEndPicker = false;
+						}}
+					>
+						{translation?.apply || "Apply"}
+					</button>
+				</div>
 			</div>
 		</div>
 	{/if}

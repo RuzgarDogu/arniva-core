@@ -19,7 +19,7 @@
 <Story name="Input Group Example" args={{ class: 'test', icon: true }}>
 	{#snippet children(args)}
 		<InputGroup {...args}>
-			<Input type="text" placeholder="Arayın" class="asdasf" />
+			<Input type="text" placeholder="Arayın" />
 			<Dropdown>
 				<Button dropdown size="small" square>
 					<svg

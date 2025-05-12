@@ -1572,6 +1572,22 @@
 .datepicker--inputs input:focus, .datepicker--inputs input:active, .datepicker--inputs input:focus-visible {
   outline: none;
 }
+.datepicker--apply-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  color: var(--ar-accent-color);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  margin-left: 4px;
+}
+.datepicker--apply-button:hover {
+  background-color: var(--ar-accent-color-subtle);
+}
 .datepicker--picker-container {
   display: flex;
   background: white;
@@ -1696,6 +1712,53 @@
   background: var(--ar-accent-color);
   border-radius: 50%;
   z-index: -1;
+}
+.datepicker--footer {
+  grid-column: 1/-1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--ar-border-color);
+}
+.datepicker--footer-button {
+  background: none;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.datepicker--footer-button.datepicker--cancel-button {
+  color: var(--ar-text-color-subtle);
+}
+.datepicker--footer-button.datepicker--cancel-button:hover {
+  background-color: #f0f0f0;
+}
+.datepicker--footer-button.datepicker--apply-button-footer {
+  background-color: var(--ar-accent-color);
+  color: white;
+}
+.datepicker--footer-button.datepicker--apply-button-footer:hover {
+  background-color: var(--ar-accent-color-darker, var(--ar-accent-color));
+  opacity: 0.9;
+}
+.datepicker--calendar-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  color: var(--ar-accent-color);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+.datepicker--calendar-button:hover {
+  background-color: var(--ar-accent-color-subtle);
 }
 
 .datepicker--range-start:before {
@@ -2288,8 +2351,10 @@
   border: none;
 }
 .advanced-filter--date-picker .datepicker--picker-container {
-  border-top: solid 1px var(--ar-border-color);
-  position: relative;
+  border-top: solid 1px var(--ar-border-color) !important;
+  left: unset !important;
+  top: unset !important;
+  position: relative !important;
   filter: none;
 }
 .advanced-filter .filter-input {

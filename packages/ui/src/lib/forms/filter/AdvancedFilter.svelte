@@ -55,9 +55,15 @@
 
 	/**
 	 * Function to toggle filter visibility
-	 * @param {Field} field - The field to toggle
+	 * @param {Field & {_id?: string}} field - The field to toggle
 	 */
 	function toggleFieldDropdown(field) {
+		// Make sure _id exists before using it as an index
+		if (!field._id) {
+			console.error('Field is missing _id property:', field);
+			return;
+		}
+		
 		// Toggle the isOpen state - use _id to uniquely identify fields with the same name
 		let _field = fields.find((f) => f._id === field._id);
 		if (!_field) return;
@@ -83,6 +89,7 @@
 		// Ensure next tick to allow rendering
 		setTimeout(() => {
 			// Get the dropdown reference using _id instead of name
+			if (!field._id) return;
 			let dd = fieldDropdown[field._id];
 
 			if (dd && _field.isOpen) {

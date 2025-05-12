@@ -28,6 +28,8 @@
  * @property {string} lastmonth - The text for the date picker last month button
  * @property {string} thisyear - The text for the date picker this year button
  * @property {string} lastyear - The text for the date picker last year button
+ * @property {string} apply - The text for the date picker apply button
+ * @property {string} cancel - The text for the date picker clear button
 */
 
 /**

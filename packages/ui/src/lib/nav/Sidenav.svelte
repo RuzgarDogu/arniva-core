@@ -71,7 +71,7 @@
 	{#if search}
 		<div class="side-search">
 			<InputGroup icon>
-				<Input type="text" placeholder="Arayın" oninput={handleInput} class="asdasf" />
+				<Input type="text" placeholder="Arayın" oninput={handleInput} />
 				<svg
 					width="18px"
 					height="18px"
