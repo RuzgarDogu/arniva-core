@@ -1,7 +1,7 @@
 <script>
     /** @type {{ data: import('./$types').PageData }} */
 
-    import { AdvancedFilter, Table, Tbody, Thead, Trow, Th, Range, applyFilters, Button, Icon, Select } from '$lib';
+    import { AdvancedFilter, Table, Tbody, Thead, Trow, Th, Td, Range, applyFilters, Button, Icon, Select } from '$lib';
     import { onMount } from 'svelte';
     import { convertQueryObjectToString } from '@ruzgardogu/utils';
     // import { convertQueryObjectToString } from './converttest';
@@ -100,7 +100,7 @@
 </div> -->
 
 
-<Table>
+<Table fixedCells>
     <!-- <Thead columns={
     [
         { key: 'adi', label: 'Name', sortable: true },
@@ -117,9 +117,9 @@
     <Tbody>
         {#each warehouses as row, index (index)}
             <Trow onClick={() => console.log("row click", row)}>
-                <td>{row.adi}</td>
-                <td>{row.id}</td>
-                <td>{row.sube.adi}</td>
+                <Td>{row.adi}</Td>
+                <Td>{row.id}</Td>
+                <Td>{row.sube.adi}</Td>
             </Trow>
         {/each}
     </Tbody>

@@ -8,6 +8,7 @@
 	 * @property {string} [height] The table height
 	 * @property {string} [class] The table class
 	 * @property {string} [id] The table id
+	 * @property {boolean} [fixedCells] Should the table cells be fixed?
 	 * @property {any} [children] The button contents
 	 * @property {string} [class] The class to add to the button
 	 * @property {boolean} [hover] Should the table have hover effect?
@@ -24,7 +25,12 @@
 		height = 'auto',
 		headerType = 'normal',
 		hover = true,
+		fixedCells = false,
 	} = $props();
+
+	// Add direct CSS for better control over the table layout
+	// This ensures fixedCells works properly regardless of content
+
 </script>
 
 {#snippet tablecontent()}
@@ -38,6 +44,7 @@
 			`table--header-type-${headerType}`
 		].join(' ')}
 		class:table--hover={hover}
+		class:table--fixed-cells={fixedCells}
 		{id}
 	>
 		{@render children?.()}

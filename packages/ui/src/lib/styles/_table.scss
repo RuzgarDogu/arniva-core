@@ -10,6 +10,15 @@ $sticky-negative-margin: -32px;
 	width: 100%;
 	border-collapse: collapse;
 
+	&--fixed-cells {
+		table-layout: fixed !important;
+		width: 100%;
+		overflow: hidden;
+		overflow-x: auto;
+		overflow-y: hidden;
+		white-space: nowrap;
+	}
+
     &--head {
         background-color: var(--ar-light-color);
         &--flush {
@@ -34,7 +43,9 @@ $sticky-negative-margin: -32px;
             &--sortable {
                 cursor: pointer;
                 padding-right: 1.5rem; // Add space for the caret
-                
+                &:hover {
+					background-color: var(--ar-accent-color-subtle);
+				}
                 // Default state - no visible caret, but maintain space
                 &:after {
                     content: "";
@@ -64,6 +75,12 @@ $sticky-negative-margin: -32px;
                     border-top: 5px solid var(--ar-primary-color, #333);
                     border-bottom: 0;
                 }
+
+				// Background color for the header
+                &[data-cell-sort-order="asc"], &[data-cell-sort-order="desc"] {
+					background-color: var(--ar-secondary-color);
+                }
+
 
                 // Hover effect
                 &:hover:after {
