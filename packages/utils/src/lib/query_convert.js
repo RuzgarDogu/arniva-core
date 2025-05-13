@@ -82,7 +82,6 @@ export function convertQueryObjectToString(pagination = {}, filter = {}, sort = 
     }
     
     // Add sort parameter if it exists
-    console.log('sort in function', sort);
     if (sort && sort.key && sort.order) {
         params.push(`sort=${sort.key} ${sort.order}`);
     }

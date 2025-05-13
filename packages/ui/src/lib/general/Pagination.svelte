@@ -46,6 +46,15 @@
         }
     });
 
+    $effect(() => {
+        if (current.start !== undefined && current.limit) {
+            const newPage = Math.floor(current.start / current.limit) + 1;
+            if (newPage !== currentPage) {
+                currentPage = newPage;
+            }
+        }
+    });
+
     // Calculated
     let totalPages = $derived(Math.ceil(current.totalItems / itemsPerPage));
     let pageNumbers = $derived(Array.from({ length: totalPages }, (_, i) => i + 1));
