@@ -22,20 +22,27 @@
  * @typedef {Object.<string, *>} FilterObject
  */
 /**
- * Converts pagination and filter objects into a query string
+ * @typedef {Object} SortConfig
+ * @property {string} key - Field to sort by
+ * @property {string} order - Sort order ('asc' or 'desc')
+ */
+/**
+ * Converts pagination, filter, and sort objects into a query string
  * @param {Pagination} [pagination={}] - Pagination parameters
  * @param {FilterObject} [filter={}] - Filter criteria
+ * @param {SortConfig} [sort=null] - Sort configuration
  * @returns {string} Query string starting with "?"
  */
-export function convertQueryObjectToString(pagination?: Pagination, filter?: FilterObject): string;
+export function convertQueryObjectToString(pagination?: Pagination, filter?: FilterObject, sort?: SortConfig | null): string;
 /**
- * Converts a query string into pagination and filter objects
+ * Converts a query string into pagination, filter, and sort objects
  * @param {string} queryString - Query string to parse
- * @returns {{pagination: Pagination, filter: FilterObject}} Object with pagination and filter properties
+ * @returns {{pagination: Pagination, filter: FilterObject, sort: SortConfig | null}} Object with pagination, filter, and sort properties
  */
 export function convertQueryStringToObject(queryString: string): {
     pagination: Pagination;
     filter: FilterObject;
+    sort: SortConfig | null;
 };
 export type Pagination = {
     /**
@@ -79,4 +86,14 @@ export type DateRangeFilter = {
 };
 export type FilterObject = {
     [x: string]: any;
+};
+export type SortConfig = {
+    /**
+     * - Field to sort by
+     */
+    key: string;
+    /**
+     * - Sort order ('asc' or 'desc')
+     */
+    order: string;
 };

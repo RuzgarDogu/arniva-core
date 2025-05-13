@@ -33,12 +33,23 @@ const SPACE_REPLACEMENT_CHAR = '%3B';
  */
 
 /**
- * Converts pagination and filter objects into a query string
+ * @typedef {Object} SortConfig
+ * @property {string} key - Field to sort by
+ * @property {string} order - Sort order ('asc' or 'desc')
+ */
+
+/**
+ * Converts pagination, filter, and sort objects into a query string
  * @param {Pagination} [pagination={}] - Pagination parameters
  * @param {FilterObject} [filter={}] - Filter criteria
+ * @param {SortConfig|null} [sort=null] - Sort configuration
  * @returns {string} Query string starting with "?"
  */
-export function convertQueryObjectToString(pagination = {}, filter = {}) {
+export function convertQueryObjectToString(pagination = {}, filter = {}, sort = null) {
+    // Ensure we have objects to work with, not null
+    pagination = pagination || {};
+    filter = filter || {};
+    
     // Start building the query string (without endpoint)
     let queryString = "?";
     /** @type {string[]} */
@@ -68,6 +79,12 @@ export function convertQueryObjectToString(pagination = {}, filter = {}) {
     // Add filter parameter if we have any filter parts
     if (filterParts.length > 0) {
         params.push(`filter=${filterParts.join(' and ')}`);
+    }
+    
+    // Add sort parameter if it exists
+    console.log('sort in function', sort);
+    if (sort && sort.key && sort.order) {
+        params.push(`sort=${sort.key} ${sort.order}`);
     }
     
     // Join all params with &
@@ -154,20 +171,22 @@ function processPropForFilter(key, value, filterParts) {
 }
 
 /**
- * Converts a query string into pagination and filter objects
+ * Converts a query string into pagination, filter, and sort objects
  * @param {string} queryString - Query string to parse
- * @returns {{pagination: Pagination, filter: FilterObject}} Object with pagination and filter properties
+ * @returns {{pagination: Pagination, filter: FilterObject, sort: SortConfig|null}} Object with pagination, filter, and sort properties
  */
 export function convertQueryStringToObject(queryString) {
     // Extract the query part
     const queryPart = queryString.includes('?') ? queryString.split('?')[1] : queryString;
-    if (!queryPart) return { pagination: {}, filter: {} };
+    if (!queryPart) return { pagination: {}, filter: {}, sort: null };
     
     // Initialize result objects
     /** @type {Pagination} */
     const pagination = {};
     /** @type {FilterObject} */
     const filter = {};
+    /** @type {SortConfig|null} */
+    let sort = null;
     
     // Parse the query parameters
     const params = new URLSearchParams(queryPart);
@@ -213,7 +232,21 @@ export function convertQueryStringToObject(queryString) {
         }
     }
     
-    return { pagination, filter };
+    // Handle sort
+    if (params.has('sort')) {
+        const sortString = params.get('sort');
+        if (sortString !== null) {
+            const sortParts = sortString.split(' ');
+            if (sortParts.length >= 2) {
+                sort = {
+                    key: sortParts[0],
+                    order: sortParts[1]
+                };
+            }
+        }
+    }
+    
+    return { pagination, filter, sort };
 }
 
 /**
