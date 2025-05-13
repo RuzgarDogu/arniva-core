@@ -33,10 +33,17 @@
 */
 
 /**
+ * @typedef {Object} SortConfig
+ * @property {string} [key] - Field to sort by
+ * @property {string|null} [order] - Sort order ('asc' or 'desc')
+ */
+
+/**
  * @typedef {Object} FilterConfig
  * @property {string} name - Name of the filter
  * @property {SearchConfig} [search] - Search configuration
  * @property {FilterField[]} fields - Filter fields configuration
+ * @property {SortConfig|null} [sort] - Sort configuration
  * @property {Object} [translation] - Translations for filter UI elements
  * @property {Object} [translation.general] - General translation terms
  * @property {string} [translation.general.filter] - Translation for "Filter" action

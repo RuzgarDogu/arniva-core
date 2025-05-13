@@ -3,12 +3,16 @@
 
     import { AdvancedFilter, Table, Tbody, Thead, Trow, Range, applyFilters, Button, Icon, Select } from '$lib';
     import { onMount } from 'svelte';
-    import { convertQueryObjectToString } from '@ruzgardogu/utils';
+    // import { convertQueryObjectToString } from '@ruzgardogu/utils';
+    import { convertQueryObjectToString } from './converttest';
+    
     let { data } = $props();
     let warehouses = $state([])
 
     let branches = $state([])
 
+    let filter = $state({}) // Changed from null to empty object
+    let sort = $state(null)
     let pagination = $state({
         offset: 0,
         limit: 10
@@ -32,7 +36,9 @@
     });
 
     function handleFilterChange(event) {
-        const queryParams = convertQueryObjectToString(pagination, event);
+        console.log("event", event);
+        filter = event || {}; // Ensure filter is always an object
+        const queryParams = convertQueryObjectToString(pagination, filter, sort);
         
         // Call getWarehouseData with the generated query params
         getWarehouseData(queryParams);
@@ -62,13 +68,24 @@
         getBranchData(queryParams);
     }
 
+    function handleSort(event) {
+        sort = event;
+        console.log("sort", sort);
+        // Ensure filter is always an object
+        const queryParams = convertQueryObjectToString(pagination, filter || {}, sort);
+        console.log("queryParams", queryParams);
+        // Call getWarehouseData with the generated query params
+        getWarehouseData(queryParams);
+        return;
+    }
+
 </script>
 
 <h1>Filter</h1>
 <div class="d-flex gap-3 mb-3">
     <AdvancedFilter filterConfig={data.filterConfig} onChange={handleFilterChange} />
 </div>
-<div class="d-flex gap-3 mb-3">
+<!-- <div class="d-flex gap-3 mb-3">
     <Select
     nameKey="adi"
     serverSide
@@ -79,16 +96,16 @@
     data={branches}
     bind:value={sube_id}
 />
-</div>
+</div> -->
 
 
 <Table>
-    <Thead>
-        <Trow>
-            <th>Name</th>
-            <th>Şube</th>
-        </Trow>
-    </Thead>
+    <Thead columns={
+    [
+        { key: 'adi', label: 'Name', sortable: true },
+        { key: 'sube.adi', label: 'Şube', sortable: false }
+    ]
+    } onSort={handleSort}/>
     <Tbody>
         {#each warehouses as row, index (index)}
             <Trow onClick={() => console.log("row click", row)}>

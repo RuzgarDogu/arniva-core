@@ -1,4 +1,4 @@
-/** @type {import('./$types').PageLoad} */
+
 const filterConfig = {
     name: 'warehouseFilter',
     translation: {
@@ -29,6 +29,7 @@ const filterConfig = {
             }
         ]
     },
+    sort: null,
     fields: [
         {
             name: 'created_at',
@@ -60,6 +61,7 @@ const filterConfig = {
         }
     ]
 }
+/** @type {import('./$types').PageLoad} */
 export async function load() {
     return {
         filterConfig
