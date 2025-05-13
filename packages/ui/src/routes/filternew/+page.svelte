@@ -1,7 +1,7 @@
 <script>
     /** @type {{ data: import('./$types').PageData }} */
 
-    import { AdvancedFilter, Table, Tbody, Thead, Trow, Range, applyFilters, Button, Icon, Select } from '$lib';
+    import { AdvancedFilter, Table, Tbody, Thead, Trow, Th, Range, applyFilters, Button, Icon, Select } from '$lib';
     import { onMount } from 'svelte';
     import { convertQueryObjectToString } from '@ruzgardogu/utils';
     // import { convertQueryObjectToString } from './converttest';
@@ -28,6 +28,7 @@
         const res = await fetch(endpoint, requestOptions);
         const result = await res.json();
         warehouses = result.data;
+        console.log("warehouses", warehouses);
     }
 
     onMount(async () => {
@@ -100,16 +101,24 @@
 
 
 <Table>
-    <Thead columns={
+    <!-- <Thead columns={
     [
         { key: 'adi', label: 'Name', sortable: true },
         { key: 'sube.adi', label: 'Şube', sortable: false }
     ]
-    } onSort={handleSort}/>
+    } onSort={handleSort}/> -->
+     <Thead onSort={handleSort}>
+        <Trow>
+            <Th key="adi">Adi</Th>
+            <Th key="id">ID</Th>
+            <Th>Sube Adi</Th>
+        </Trow>
+     </Thead>
     <Tbody>
         {#each warehouses as row, index (index)}
             <Trow onClick={() => console.log("row click", row)}>
                 <td>{row.adi}</td>
+                <td>{row.id}</td>
                 <td>{row.sube.adi}</td>
             </Trow>
         {/each}

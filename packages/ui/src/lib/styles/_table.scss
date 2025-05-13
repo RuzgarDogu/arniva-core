@@ -10,33 +10,68 @@ $sticky-negative-margin: -32px;
 	width: 100%;
 	border-collapse: collapse;
 
-	&--head {
-		background-color: var(--ar-light-color);
-		&--flush {
-			background-color: transparent;
-		}
-		th,
-		td {
-			font-weight: 700;
-			letter-spacing: 0.1em;
-			text-transform: uppercase;
-			color: var(--ar-text-color);
-			font-size: 0.7rem;
-			text-transform: uppercase;
-			padding: $table-padding;
-			text-align: left;
-		}
-		&--sortable {
-			.table--head--cell-content {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-			}
-			.table--head--cell--sortable {
-				cursor: pointer;
-			}
-		}
-	}
+    &--head {
+        background-color: var(--ar-light-color);
+        &--flush {
+            background-color: transparent;
+        }
+        th,
+        td {
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ar-text-color);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            padding: $table-padding;
+            text-align: left;
+        }
+
+        // Add sortable cell styling
+        &--cell {
+            position: relative;
+            
+            &--sortable {
+                cursor: pointer;
+                padding-right: 1.5rem; // Add space for the caret
+                
+                // Default state - no visible caret, but maintain space
+                &:after {
+                    content: "";
+                    position: absolute;
+                    right: 0.5rem;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    width: 0;
+                    height: 0;
+                    border-left: 5px solid transparent;
+                    border-right: 5px solid transparent;
+                    opacity: 0.3;
+                }
+
+                // Ascending order - up caret
+                &[data-cell-sort-order="asc"]:after {
+                    content: "";
+                    opacity: 1;
+                    border-bottom: 5px solid var(--ar-primary-color, #333);
+                    border-top: 0;
+                }
+
+                // Descending order - down caret
+                &[data-cell-sort-order="desc"]:after {
+                    content: "";
+                    opacity: 1;
+                    border-top: 5px solid var(--ar-primary-color, #333);
+                    border-bottom: 0;
+                }
+
+                // Hover effect
+                &:hover:after {
+                    opacity: 0.7;
+                }
+            }
+        }
+    }
 	&--body {
 		td {
 			padding: $table-padding;

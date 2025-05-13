@@ -1156,13 +1156,39 @@
   padding: 0.5rem;
   text-align: left;
 }
-.table--head--sortable .table--head--cell-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.table--head--cell {
+  position: relative;
 }
-.table--head--sortable .table--head--cell--sortable {
+.table--head--cell--sortable {
   cursor: pointer;
+  padding-right: 1.5rem;
+}
+.table--head--cell--sortable:after {
+  content: "";
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  opacity: 0.3;
+}
+.table--head--cell--sortable[data-cell-sort-order=asc]:after {
+  content: "";
+  opacity: 1;
+  border-bottom: 5px solid var(--ar-primary-color, #333);
+  border-top: 0;
+}
+.table--head--cell--sortable[data-cell-sort-order=desc]:after {
+  content: "";
+  opacity: 1;
+  border-top: 5px solid var(--ar-primary-color, #333);
+  border-bottom: 0;
+}
+.table--head--cell--sortable:hover:after {
+  opacity: 0.7;
 }
 .table--body td {
   padding: 0.5rem;
@@ -1277,13 +1303,39 @@
   padding: 0.5rem;
   text-align: left;
 }
-.table-container--head--sortable .table--head--cell-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.table-container--head--cell {
+  position: relative;
 }
-.table-container--head--sortable .table--head--cell--sortable {
+.table-container--head--cell--sortable {
   cursor: pointer;
+  padding-right: 1.5rem;
+}
+.table-container--head--cell--sortable:after {
+  content: "";
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  opacity: 0.3;
+}
+.table-container--head--cell--sortable[data-cell-sort-order=asc]:after {
+  content: "";
+  opacity: 1;
+  border-bottom: 5px solid var(--ar-primary-color, #333);
+  border-top: 0;
+}
+.table-container--head--cell--sortable[data-cell-sort-order=desc]:after {
+  content: "";
+  opacity: 1;
+  border-top: 5px solid var(--ar-primary-color, #333);
+  border-bottom: 0;
+}
+.table-container--head--cell--sortable:hover:after {
+  opacity: 0.7;
 }
 .table-container--body td {
   padding: 0.5rem;
