@@ -166,8 +166,8 @@ importers:
         specifier: ^4.2.0
         version: 4.2.0(svelte@5.20.0)
       '@ruzgardogu/utils':
-        specifier: ^0.0.21
-        version: 0.0.21(svelte@5.20.0)
+        specifier: ^0.0.22
+        version: 0.0.22(svelte@5.20.0)
       sortablejs:
         specifier: ^1.15.6
         version: 1.15.6
@@ -1402,8 +1402,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@ruzgardogu/utils@0.0.21':
-    resolution: {integrity: sha512-18Nn/trGK0TSoOotjRLtQZsHdXMFJWzRll1hk18QQkus2uTH3dHpKvphk4kMlDnZiYwWexDhBcbL8hPafD/THw==, tarball: https://npm.pkg.github.com/download/@ruzgardogu/utils/0.0.21/003b7e0623149a9ca9028dd4e92ceef2771d92e5}
+  '@ruzgardogu/utils@0.0.22':
+    resolution: {integrity: sha512-go52+SqInXFpGu+av7zoW9GO5z8yZWm4Sw+xhYvfUdeck4G7O0cHtVdDQgM/hitQp67aVikixVrQkbvS3FtaQA==, tarball: https://npm.pkg.github.com/download/@ruzgardogu/utils/0.0.22/3f8438055ea7112a1be35a073415d4c2f1ca9c09}
     peerDependencies:
       svelte: ^5.0.0
 
@@ -4844,7 +4844,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.34.6':
     optional: true
 
-  '@ruzgardogu/utils@0.0.21(svelte@5.20.0)':
+  '@ruzgardogu/utils@0.0.22(svelte@5.20.0)':
     dependencies:
       svelte: 5.20.0
 

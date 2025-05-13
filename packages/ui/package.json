@@ -61,7 +61,7 @@
 	},
 	"dependencies": {
 		"@iconify/svelte": "^4.2.0",
-		"@ruzgardogu/utils": "^0.0.21",
+		"@ruzgardogu/utils": "^0.0.22",
 		"sortablejs": "^1.15.6"
 	}
 }

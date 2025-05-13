@@ -26,6 +26,16 @@ $sticky-negative-margin: -32px;
 			padding: $table-padding;
 			text-align: left;
 		}
+		&--sortable {
+			.table--head--cell-content {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			}
+			.table--head--cell--sortable {
+				cursor: pointer;
+			}
+		}
 	}
 	&--body {
 		td {

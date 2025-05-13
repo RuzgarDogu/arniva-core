@@ -1156,6 +1156,14 @@
   padding: 0.5rem;
   text-align: left;
 }
+.table--head--sortable .table--head--cell-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.table--head--sortable .table--head--cell--sortable {
+  cursor: pointer;
+}
 .table--body td {
   padding: 0.5rem;
   text-align: left;
@@ -1268,6 +1276,14 @@
   text-transform: uppercase;
   padding: 0.5rem;
   text-align: left;
+}
+.table-container--head--sortable .table--head--cell-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.table-container--head--sortable .table--head--cell--sortable {
+  cursor: pointer;
 }
 .table-container--body td {
   padding: 0.5rem;
