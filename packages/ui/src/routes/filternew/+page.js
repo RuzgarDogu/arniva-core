@@ -29,7 +29,6 @@ const filterConfig = {
             }
         ]
     },
-    sort: null,
     fields: [
         {
             name: 'created_at',
