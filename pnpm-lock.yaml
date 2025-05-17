@@ -165,6 +165,9 @@ importers:
       '@iconify-json/mdi':
         specifier: ^1.2.3
         version: 1.2.3
+      '@iconify/svelte':
+        specifier: ^5.0.0
+        version: 5.0.0(svelte@5.20.0)
       '@ruzgardogu/utils':
         specifier: ^0.0.22
         version: 0.0.22(svelte@5.20.0)
@@ -756,6 +759,11 @@ packages:
 
   '@iconify-json/mdi@1.2.3':
     resolution: {integrity: sha512-O3cLwbDOK7NNDf2ihaQOH5F9JglnulNDFV7WprU2dSoZu3h3cWH//h74uQAB87brHmvFVxIOkuBX2sZSzYhScg==}
+
+  '@iconify/svelte@5.0.0':
+    resolution: {integrity: sha512-Bm5iKnNpIWHuUlWaaf16QgVL1tcbQUUSdPdkvDlpmYXg3nFJSA1SLY9V4rRTd+K4h3QT12ZS7JHFLkf8khQd8Q==}
+    peerDependencies:
+      svelte: '>4.0.0'
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -4304,6 +4312,11 @@ snapshots:
   '@iconify-json/mdi@1.2.3':
     dependencies:
       '@iconify/types': 2.0.0
+
+  '@iconify/svelte@5.0.0(svelte@5.20.0)':
+    dependencies:
+      '@iconify/types': 2.0.0
+      svelte: 5.20.0
 
   '@iconify/types@2.0.0': {}
 
