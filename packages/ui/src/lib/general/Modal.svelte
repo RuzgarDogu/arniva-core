@@ -1,68 +1,72 @@
 <script>
-	import { modalInit } from './modal.svelte.js';
-	import Button from './Button.svelte';
-	import { Icon } from '../icons';
-	import { onMount } from 'svelte';
+    import { modalInit } from './modal.svelte.js';
+    import Button from './Button.svelte';
+    import { Icon } from '../icons';
+    import { onMount } from 'svelte';
 
-	/**
-	 * @typedef {Object<string, any>} Props
-	 * @property {any} [children] Modal content
-	 * @property {string} [id] Modal id
-	 * @property {string} [name] Modal name
-	 * @property {string} [title] Modal title
-	 * @property {any} [footer] Modal footer
-	 * @property {boolean} [noPadding] Modal no padding
-	 * @property {boolean} [devMode] Modal dev mode
-	 * @property {string} [footerClass] Modal footer class
-	 * @property {string} [headerClass] Modal header class
-	 * @property {string} [bodyClass] Modal body class
-	 * @property {'auto' | 'sm' | 'md' | 'lg' | 'xl'} [size] Modal size
-	 * @property {() => void} [onclose] Modal close event
-	 */
+    /**
+     * @typedef {Object<string, any>} Props
+     * @property {any} [children] Modal content
+     * @property {string} [id] Modal id
+     * @property {string} [name] Modal name
+     * @property {string} [title] Modal title
+     * @property {any} [footer] Modal footer
+     * @property {boolean} [noPadding] Modal no padding
+     * @property {boolean} [devMode] Modal dev mode
+     * @property {string} [footerClass] Modal footer class
+     * @property {string} [headerClass] Modal header class
+     * @property {string} [bodyClass] Modal body class
+     * @property {'auto' | 'sm' | 'md' | 'lg' | 'xl'} [size] Modal size
+     * @property {() => void} [onclose] Modal close event
+     * @property {() => void} [onopen] Modal open event
+     */
 
-	/** @type {Props} */
-	let {
-		children,
-		id = 'test',
-		name = 'Arniva Cloud',
-		title = '',
-		footer,
-		footerClass='',
-		headerClass='',
-		bodyClass='',
-		noPadding = false,
-		onclose = null,
-		devMode = false,
-		size = 'auto'
-	} = $props();
+    /** @type {Props} */
+    let {
+        children,
+        id = 'test',
+        name = 'Arniva Cloud',
+        title = '',
+        footer,
+        footerClass='',
+        headerClass='',
+        bodyClass='',
+        noPadding = false,
+        onclose = null,
+        onopen = null,
+        devMode = false,
+        size = 'auto'
+    } = $props();
 
-	/**
-	 * @typedef {Object} SvelteInstance
-	 * @property {function(string): void} handleStateChange
-	 *
-	 * @typedef {HTMLElement & {__svelteInstance?: SvelteInstance}} ModalElement
-	 */
+    /**
+     * @typedef {Object} SvelteInstance
+     * @property {function(string): void} handleStateChange
+     *
+     * @typedef {HTMLElement & {__svelteInstance?: SvelteInstance}} ModalElement
+     */
 
-	/** @type {ModalElement} */
-	let modal;
-	onMount(() => {
-		// Store component instance on the DOM element
-		modal.__svelteInstance = {
-			handleStateChange: (state) => {
-				if (state === 'closing' && onclose) {
-					onclose();
-				}
-			}
-		};
-	});
+    /** @type {ModalElement} */
+    let modal;
+    onMount(() => {
+        // Store component instance on the DOM element
+        modal.__svelteInstance = {
+            handleStateChange: (state) => {
+                if (state === 'closing' && onclose) {
+                    onclose();
+                } else if (state === 'opening' && onopen) {
+                    onopen();
+                }
+            }
+        };
+    });
 
-	export function hide() {
-		modal.classList.add('closing');
-	}
+    export function hide() {
+        modal.classList.add('closing');
+    }
 
-	export function show() {
-		modal.classList.add('opening');
-	}
+    export function show() {
+        modal.classList.add('opening');
+    }
 </script>
 
 <div

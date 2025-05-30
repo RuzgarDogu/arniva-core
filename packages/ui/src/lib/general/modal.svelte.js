@@ -287,6 +287,11 @@ class ModalController {
 		this.activeModals.push(modal);
 		this.updateModalPositions();
 		this.updateBreadcrumbs();
+		
+		// Trigger onopen callback if available
+		if (modal.element.__svelteInstance?.handleStateChange) {
+			modal.element.__svelteInstance.handleStateChange('opening');
+		}
 	}
 
 	cleanupEventListeners() {

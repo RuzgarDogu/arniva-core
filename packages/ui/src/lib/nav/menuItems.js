@@ -124,6 +124,13 @@ const menuitems = [
                 id:'304',
                 active:false,
                 icon:'mdi:pencil'
+            },
+            {
+                title:'Date Test',
+                link:'/datetest',
+                id:'305',
+                active:false,
+                icon:'mdi:calendar'
             }
         ]
     }

@@ -73,6 +73,7 @@
 			position: relative;
 			.clear-button {
 				display: none;
+				background-color: #fff;
 				&.active {
 					display: flex;
 					position: absolute;

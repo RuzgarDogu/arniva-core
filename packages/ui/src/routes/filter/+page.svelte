@@ -1,7 +1,16 @@
 <script>
 	/** @type {{ data: import('./$types').PageData }} */
 	let { data } = $props();
-	import { AdvancedFilter, Table, Tbody, Thead, Trow, Range, applyFilters, Button, Icon, Checkbox } from '$lib';
+	import { AdvancedFilter, Table, Tbody, Thead, Trow, Range, applyFilters, Button, Icon, Checkbox, Select } from '$lib';
+
+
+	let ages = data.dummyData.map((row) => {
+		return {
+			name: row.age+"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.",
+			id: row.age,
+		}
+	});
+	console.log("ages", ages);
 
 	let filterConfig = {
 		name: 'filterName',
@@ -190,7 +199,9 @@
 				<td><Checkbox name="asd" inline bind:group={singleChecked} value={row.id}/></td>
 				<td>{row.id}</td>
 				<td>{row.name}</td>
-				<td>{row.age}</td>
+				<td>
+					<Select search data={ages} bind:value={row.age} onSelect={(e) => console.log('e', e)} />
+				</td>
 				<td>{row.email}</td>
 				<td>{row.phone}</td>
 				<td>{row.gender}</td>
