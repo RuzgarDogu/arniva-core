@@ -294,6 +294,8 @@ class ApiClient {
         }
     }
 
+    /** @typedef {import('./types').RequestData} RequestData */
+    
     /**
      * Create an HTTP method function (GET, POST, etc.)
      * @private
@@ -301,18 +303,21 @@ class ApiClient {
      * @returns {function(this:ApiClient, string, ...Array<any>): Promise<any>} - Method function for the specified HTTP method
      */
     static _createMethod(method) {
-        return async function(endpoint, ...args) {
-            // Using type assertion to tell TypeScript that constructor has normalizeParams
-            const constructorRef = /** @type {typeof RequestProcessor} */ (this.requestProcessor.constructor);
-            const normalized = constructorRef.normalizeParams(method, endpoint, args);
-            return this._request(
-                normalized.method,
-                normalized.endpoint,
-                normalized.params,
-                normalized.data,
-                normalized.options
-            );
-        };
+      /**
+       * @param {string} endpoint - API endpoint
+       * @param {...any} args - Variable arguments (params, data, options)
+       * @returns {Promise<any>}
+       */
+      return function(endpoint, ...args) {
+        const normalized = RequestProcessor.normalizeParams(method, endpoint, args);
+        return this._request(
+          normalized.method,
+          normalized.endpoint,
+          normalized.params,
+          normalized.data,
+          normalized.options
+        );
+      };
     }
 
     // Define all HTTP methods using the method creator

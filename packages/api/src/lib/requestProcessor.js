@@ -3,6 +3,7 @@
 /** @typedef {import('./types').AbortControllerInfo} AbortControllerInfo */
 /** @typedef {import('./types').ApiToken} ApiToken */
 /** @typedef {import('./types').RequestOptions} RequestOptions */
+/** @typedef {import('./types').RequestData} RequestData */
 
 /**
  * Handles request preparation and modification
@@ -259,22 +260,22 @@ prepareRequestBody(fetchOptions, headers, data) {
     );
   }
 
-/**
- * Helper method to normalize parameters for all request methods
- * @param {string} method - HTTP method (GET, POST, PUT, etc.)
- * @param {string} endpoint - API endpoint
- * @param {Array<any>} args - All arguments passed to the original method
- * @returns {{
- *   method: string,
- *   endpoint: string,
- *   params: Record<string, any>,
- *   data: import('./types').RequestData,
- *   options: RequestOptions
- * }} - Normalized parameters
- */
+  /**
+   * Helper method to normalize parameters for all request methods
+   * @param {string} method - HTTP method (GET, POST, PUT, etc.)
+   * @param {string} endpoint - API endpoint
+   * @param {Array<any>} args - All arguments passed to the original method
+   * @returns {{
+   *   method: string,
+   *   endpoint: string,
+   *   params: Record<string, any>,
+   *   data: RequestData,
+   *   options: RequestOptions
+   * }} - Normalized parameters
+   */
   static normalizeParams(method, endpoint, args) {
     // Default return structure
-    const result = /** @type {{ method: string, endpoint: string, params: Record<string, any>, data: import('./types').RequestData, options: RequestOptions }} */ ({
+    const result = /** @type {{ method: string, endpoint: string, params: Record<string, any>, data: RequestData, options: RequestOptions }} */ ({
       method,
       endpoint,
       params: {},
@@ -337,7 +338,7 @@ prepareRequestBody(fetchOptions, headers, data) {
     else if (method === 'POST' || method === 'PUT' || method === 'PATCH') {
       // First argument is always data for these methods
       if (args.length >= 1) {
-        result.data = args[0] || {};
+        result.data = args[0]; // Remove || {} to allow null/undefined
       }
 
       // For remaining arguments
