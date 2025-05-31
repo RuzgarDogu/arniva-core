@@ -1,4 +1,9 @@
 /**
+ * @typedef {null|undefined|string|number|boolean|Record<string, any>|any[]|FormData|Blob|ArrayBuffer} RequestData
+ * Data that can be sent in a request body - covers objects, arrays, primitives, and special types
+ */
+
+/**
  * @typedef {Object} ApiToken
  * @property {string} key - The header key for the authentication token
  * @property {string} value - The actual token value
@@ -52,7 +57,7 @@
  * @property {string} endpoint - API endpoint path (relative path)
  * @property {string} method - HTTP method
  * @property {Object} [params] - URL parameters
- * @property {Object} [data] - Request body data
+ * @property {RequestData} [data] - Request body data
  * @property {Object} [options] - Request options
  * @property {Object} [headers] - Request headers
  */

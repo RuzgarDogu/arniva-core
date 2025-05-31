@@ -268,13 +268,13 @@ prepareRequestBody(fetchOptions, headers, data) {
  *   method: string,
  *   endpoint: string,
  *   params: Record<string, any>,
- *   data: null|FormData|Record<string, any>,
+ *   data: import('./types').RequestData,
  *   options: RequestOptions
  * }} - Normalized parameters
  */
   static normalizeParams(method, endpoint, args) {
     // Default return structure
-    const result = /** @type {{ method: string, endpoint: string, params: Record<string, any>, data: null|FormData|Record<string, any>, options: RequestOptions }} */ ({
+    const result = /** @type {{ method: string, endpoint: string, params: Record<string, any>, data: import('./types').RequestData, options: RequestOptions }} */ ({
       method,
       endpoint,
       params: {},
