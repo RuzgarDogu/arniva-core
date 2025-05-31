@@ -300,12 +300,13 @@ class ApiClient {
      * Create an HTTP method function (GET, POST, etc.)
      * @private
      * @param {string} method - HTTP method to create
-     * @returns {function(this:ApiClient, string, ...Array<any>): Promise<any>} - Method function for the specified HTTP method
+     * @returns {function(this: ApiClient, string, ...any[]): Promise<any>} - Method function for the specified HTTP method
      */
     static _createMethod(method) {
       /**
+       * HTTP method function
        * @param {string} endpoint - API endpoint
-       * @param {...any} args - Variable arguments (params, data, options)
+       * @param {...any} args - Variable arguments (data, params, options)
        * @returns {Promise<any>}
        */
       return function(endpoint, ...args) {
@@ -319,12 +320,59 @@ class ApiClient {
         );
       };
     }
-
-    // Define all HTTP methods using the method creator
+    
+    // Define all HTTP methods using the method creator with proper JSDoc
+    /**
+     * Make a GET request
+     * @method
+     * @param {string} endpoint - API endpoint
+     * @param {ParamsObject} [params] - URL parameters
+     * @param {RequestOptions} [options] - Additional fetch options
+     * @returns {Promise<any>}
+     */
     get = ApiClient._createMethod('GET');
+    
+    /**
+     * Make a POST request
+     * @method
+     * @param {string} endpoint - API endpoint
+     * @param {RequestData} [data] - Request body data
+     * @param {ParamsObject} [params] - URL parameters
+     * @param {RequestOptions} [options] - Additional fetch options
+     * @returns {Promise<any>}
+     */
     post = ApiClient._createMethod('POST');
+    
+    /**
+     * Make a PUT request
+     * @method
+     * @param {string} endpoint - API endpoint
+     * @param {RequestData} [data] - Request body data
+     * @param {ParamsObject} [params] - URL parameters
+     * @param {RequestOptions} [options] - Additional fetch options
+     * @returns {Promise<any>}
+     */
     put = ApiClient._createMethod('PUT');
+    
+    /**
+     * Make a DELETE request
+     * @method
+     * @param {string} endpoint - API endpoint
+     * @param {ParamsObject} [params] - URL parameters
+     * @param {RequestOptions} [options] - Additional fetch options
+     * @returns {Promise<any>}
+     */
     delete = ApiClient._createMethod('DELETE');
+    
+    /**
+     * Make a PATCH request
+     * @method
+     * @param {string} endpoint - API endpoint
+     * @param {RequestData} [data] - Request body data
+     * @param {ParamsObject} [params] - URL parameters
+     * @param {RequestOptions} [options] - Additional fetch options
+     * @returns {Promise<any>}
+     */
     patch = ApiClient._createMethod('PATCH');
 
     /**
