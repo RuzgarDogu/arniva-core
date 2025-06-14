@@ -6,9 +6,9 @@
 	 */
 
 	/** @type {Props} */
-	let { children, class: cls = '' } = $props();
+	let { children, class: cls = '', element=$bindable() } = $props();
 </script>
 
-<tbody class={['table--body', `${cls}`].join(' ')}>
+<tbody bind:this={element} class={['table--body', `${cls}`].join(' ')}>
 	{@render children?.()}
 </tbody>
