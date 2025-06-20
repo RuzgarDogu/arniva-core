@@ -3,14 +3,14 @@
 	position: relative;
 	align-items: flex-start;
 	justify-content: space-between;
-	.tabs {
+	> .tabs {
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
 		width: 100%;
 		border-bottom: 1px solid var(--ar-border-color);
-		.tab-item {
-			.tab-item-header {
+		> .tab-item {
+			> .tab-item-header {
 				cursor: pointer;
 				padding: 10px;
 				border-bottom: none;
@@ -22,7 +22,7 @@
 					color: var(--ar-accent-color);
 				}
 			}
-			.tab-item-content {
+			> .tab-item-content {
 				padding: 1rem;
 				display: none;
 				position: absolute;
@@ -32,17 +32,17 @@
 				box-sizing: border-box;
 			}
 			&.active {
-				.tab-item-content {
+				> .tab-item-content {
 					display: block;
 				}
-				.tab-item-header {
+				> .tab-item-header {
 					border-bottom: 2px solid var(--ar-accent-color);
 					color: var(--ar-accent-color);
 				}
 			}
 		}
 	}
-	.tab-right {
+	> .tab-right {
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;

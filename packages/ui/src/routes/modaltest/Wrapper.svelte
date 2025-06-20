@@ -12,23 +12,12 @@
 
 </script>
 <div>
-	<Button modal="testModal" color="primary" style="margin-bottom: 20px;">Open Modal</Button>
-    <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam vero quibusdam delectus blanditiis error esse minima assumenda sit ratione veniam. Quae maiores dicta mollitia sunt et cumque iste, quas repellendus ratione perspiciatis amet.</p> -->
-<h1>{startDateTest}</h1>
-<h1>{endDateTest}</h1>
-<!-- Basic usage -->
-<TimePicker />
 
-<!-- With default value -->
-<TimePicker value={selectedTime} />
-
-<!-- With onChange handler -->
-<TimePicker onChange={handleTimeChange} />
-
-<!-- With two-way binding -->
-<TimePicker bind:value={selectedTime} />
 <Tab>
 	<TabItem title="Geçerlilik Bilgileri">
+		<Button modal="testModal" color="primary" style="margin-bottom: 20px;">Open Modal</Button>
+	</TabItem>
+	<TabItem title="New Modal Test">
 		<FormGroup noBorder labelPosition="left" columns={2}>
 			<FormGroupColumn>
 				<FormGroupItem label="Başlangıç Tarihi">
@@ -39,7 +28,7 @@
 	</TabItem>
 </Tab>
 </div>
-<Modal 
+<Modal
 devMode={false}
 title="Working Example"
 id="testModal"
@@ -53,5 +42,14 @@ size="lg"
 		nostrum quasi aut minima quidem dolor placeat nulla saepe consequuntur quibusdam qui
 		blanditiis labore deleniti! Blanditiis, obcaecati. Nulla!
 	</p>
-	<Button color="danger" style="margin-bottom: 20px;">Go Somewhere</Button>
+	
+	<Tab>
+	<TabItem title="Test Tab">
+		Test Tab
+	</TabItem>
+	<TabItem title="Test Tab 2">
+		Test Tab 2
+	</TabItem>
+</Tab>
+
 </Modal>

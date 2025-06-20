@@ -18,19 +18,20 @@
 	 * @param {HTMLElement} node
 	 */
 	function handleTab(node) {
-		let items = node.querySelectorAll('.tab-item');
+		// Only select direct children to avoid conflicts with nested tabs
+		let items = node.querySelectorAll(':scope > .tabs > .tab-item');
 		/**
 		 * @type {NodeListOf<HTMLElement>}
 		 */
-		let buttons = node.querySelectorAll('.tab-item-header');
+		let buttons = node.querySelectorAll(':scope > .tabs > .tab-item > .tab-item-header');
 		/**
 		 * @type {HTMLElement | null}
 		 */
-		let tabsElement = node.querySelector('.tabs');
+		let tabsElement = node.querySelector(':scope > .tabs');
 		/**
 		 * @type {HTMLElement | null}
 		 */
-		let tabRightElement = node.querySelector('.tab-right');
+		let tabRightElement = node.querySelector(':scope > .tab-right');
 		/**
 		 * @type {ResizeObserver | null}
 		 */
@@ -57,7 +58,7 @@
 			/**
 			 * @type {HTMLElement | null}
 			 */
-			let activeContent = node.querySelector('.tab-item.active .tab-item-content');
+			let activeContent = node.querySelector(':scope > .tabs > .tab-item.active > .tab-item-content');
 			if (activeContent) {
 				resizeObserver = new ResizeObserver(() => {
 					updateNodeHeight();
@@ -72,7 +73,7 @@
 			/**
 			 * @type {HTMLElement | null}
 			 */
-			let activeContent = node.querySelector('.tab-item.active .tab-item-content');
+			let activeContent = node.querySelector(':scope > .tabs > .tab-item.active > .tab-item-content');
 			let maxHeaderHeight = Math.max(...Array.from(buttons).map((button) => button.offsetHeight));
 			let contentHeight = activeContent ? activeContent.offsetHeight : 0;
 			node.style.height = `${maxHeaderHeight + contentHeight}px`;
