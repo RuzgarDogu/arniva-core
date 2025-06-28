@@ -89,7 +89,7 @@
 		function adjustDropdownPosition() {
 			if (!dropdownContent) return;
 		
-			dropdownContent.style.display = 'block';
+			dropdownContent.style.display = 'flex';
 			dropdownContent.style.visibility = 'hidden';
 		
 			const buttonRect = button.getBoundingClientRect();
