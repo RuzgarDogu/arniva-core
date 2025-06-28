@@ -10,6 +10,42 @@ $sticky-negative-margin: -32px;
 	width: 100%;
 	border-collapse: collapse;
 
+	&--scroll-x {
+		min-width: 100%;
+		white-space: nowrap;
+		width: max-content; // This ensures the table takes full width of its content
+		table-layout: auto; // Allow natural column sizing
+		
+		th, td {
+			white-space: nowrap;
+			min-width: 120px; // Force minimum width for each column
+			max-width: none;
+			padding: $table-padding;
+		}
+	}
+
+	&--sticky-columns {
+		&.table--scroll-x {
+			min-width: 100%;
+			
+			th, td {
+				white-space: nowrap;
+				min-width: max-content;
+			}
+		}
+	}
+
+	&--cell--sticky {
+		position: sticky;
+		// No default background color or border styles
+		// Only last sticky column gets border via JavaScript
+		
+		// Ensure hover effects still work on sticky cells
+		&:hover {
+			background-color: inherit; // Inherit from parent hover state
+		}
+	}
+
 	&--fixed-cells {
 		table-layout: fixed !important;
 		width: 100%;
@@ -124,17 +160,18 @@ $sticky-negative-margin: -32px;
 		thead {
 			position: sticky;
 			top: 0;
-			z-index: 1; // Ensures header stays above body content
+			z-index: 200; // Very high z-index to ensure it stays above everything
 			background-color: var(--ar-light-color);
 			&.table--head--flush {
 				background-color: #fff;
 			}
 		}
-		tbody {
-			// No need for display: block or overflow here
-		}
-		tr {
-			// Remove display: table and table-layout: fixed; let the table handle it naturally
+		
+		// Ensure sticky column headers in static tables have even higher z-index
+		&.table--sticky-columns {
+			th.table--cell--sticky {
+				z-index: 300 !important; // Highest z-index for sticky headers in static tables
+			}
 		}
 	}
 	&--header-type-sticky {
@@ -214,4 +251,26 @@ $sticky-negative-margin: -32px;
 
 .table-container {
 	@include table;
+	width: 100%;
+	
+	&--scroll-x {
+		overflow-x: auto;
+		overflow-y: auto;
+		width: 100%;
+		
+		.table {
+			width: max-content;
+			min-width: 100%;
+		}
+	}
+}
+
+.table-wrapper--scroll-x {
+	overflow-x: auto;
+	width: 100%;
+	
+	.table {
+		width: max-content;
+		min-width: 100%;
+	}
 }

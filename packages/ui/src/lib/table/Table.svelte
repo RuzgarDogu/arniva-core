@@ -12,6 +12,8 @@
 	 * @property {any} [children] The button contents
 	 * @property {string} [class] The class to add to the button
 	 * @property {boolean} [hover] Should the table have hover effect?
+	 * @property {boolean} [scroll] Should the table have horizontal scroll?
+	 * @property {number} [stickyColumns] Number of columns to keep sticky from the left (only works with scroll=true)
 	 */
 
 	/** @type {Props} */
@@ -26,6 +28,8 @@
 		headerType = 'normal',
 		hover = true,
 		fixedCells = false,
+		scroll = false,
+		stickyColumns = 0,
 	} = $props();
 
 	// Add direct CSS for better control over the table layout
@@ -45,6 +49,9 @@
 		].join(' ')}
 		class:table--hover={hover}
 		class:table--fixed-cells={fixedCells}
+		class:table--scroll-x={scroll}
+		class:table--sticky-columns={scroll && stickyColumns > 0}
+		style={scroll && stickyColumns > 0 ? `--sticky-columns: ${stickyColumns};` : ''}
 		{id}
 	>
 		{@render children?.()}
@@ -52,7 +59,15 @@
 {/snippet}
 
 {#if headerType === 'static'}
-	<div class="table-container" style="height: {height}; overflow-y: auto;">
+	<div 
+		class="table-container" 
+		class:table-container--scroll-x={scroll} 
+		style="height: {height}; overflow-y: auto; {scroll ? 'overflow-x: auto; width: 100%;' : ''}"
+	>
+		{@render tablecontent()}
+	</div>
+{:else if scroll}
+	<div class="table-wrapper--scroll-x" style="overflow-x: auto; width: 100%;">
 		{@render tablecontent()}
 	</div>
 {:else}

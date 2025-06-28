@@ -5,6 +5,7 @@
     */
 
     import { browser } from '$app/environment';
+    import { stickyColumns } from './stickyColumns.js';
     
 
     /**
@@ -150,6 +151,7 @@
     class={cls} 
     use:calculateWidth 
     use:handleOverflow
+    use:stickyColumns
     style={isFixedCells ? `
         width: ${width}%; 
         max-width: ${width}%;

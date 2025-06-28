@@ -16,6 +16,8 @@
 		display: flex;
 		flex-direction: column;
 		flex-grow: 1;
+		min-width: 0; // Allows flex item to shrink below content size
+		width: 0; // Forces the flex item to rely on flex-grow
 	}
 
 	&__nav {

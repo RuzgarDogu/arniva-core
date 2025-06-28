@@ -1,4 +1,5 @@
 <script>
+    import { stickyColumns } from './stickyColumns.js';
 
     /**
      * @typedef {Object} Props
@@ -8,13 +9,15 @@
     */
 
     /** @type {Props} */
-    let { children, class: cls = '', key='' } = $props();
+    let { children, class: cls = '', key='', element=$bindable() } = $props();
 </script>
-<th class={['table--head--cell', `${cls}`].join(' ')}
+<th bind:this={element} 
+    class={['table--head--cell', `${cls}`].join(' ')}
     data-cell-key={key}
     data-cell-sortable={key !== ''}
     data-cell-sort-order=""
     class:table--head--cell--sortable={key !== ''}
+    use:stickyColumns
 >
     {@render children?.()}
 </th>
