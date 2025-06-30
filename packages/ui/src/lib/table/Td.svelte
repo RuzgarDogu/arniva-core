@@ -11,11 +11,12 @@
     /**
      * @typedef {Object} Props
      * @property {string} [class] The class to add to the cell
+     * @property {number} [colspan] The number of columns to span
      * @property {any} [children] The cell contents
      */
 
     /** @type {Props} */    
-    let { children, class: cls = '' } = $props();
+    let { children, class: cls = '', colspan = 1 } = $props();
 
     let width = $state(0);
     /** @type {HTMLTableElement|null} */
@@ -159,6 +160,7 @@
         text-overflow: ellipsis;
         white-space: nowrap;
     ` : ''}
+    {...(colspan > 1 && { colspan })}
 >
     {@render children?.()}
 </td>
