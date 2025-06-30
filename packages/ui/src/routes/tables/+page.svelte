@@ -14,85 +14,95 @@
         
         <p><strong>Debug info:</strong> Headers count: {headers.length}, Data rows: {dummyData.length}</p>
         
-        <div style="border: 2px solid red; width: 600px; margin: 20px 0; overflow-x: auto;">
-            <p>Test Container (600px wide) - should show horizontal scroll:</p>
-            <table style="width: 2000px; border: 1px solid blue;">
-                <thead>
-                    <tr>
-                        <th style="min-width: 120px; background: yellow;">Col 1</th>
-                        <th style="min-width: 120px; background: yellow;">Col 2</th>
-                        <th style="min-width: 120px; background: yellow;">Col 3</th>
-                        <th style="min-width: 120px;">Col 4</th>
-                        <th style="min-width: 120px;">Col 5</th>
-                        <th style="min-width: 120px;">Col 6</th>
-                        <th style="min-width: 120px;">Col 7</th>
-                        <th style="min-width: 120px;">Col 8</th>
-                        <th style="min-width: 120px;">Col 9</th>
-                        <th style="min-width: 120px;">Col 10</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="min-width: 120px; background: yellow;">Data 1</td>
-                        <td style="min-width: 120px; background: yellow;">Data 2</td>
-                        <td style="min-width: 120px; background: yellow;">Data 3</td>
-                        <td style="min-width: 120px;">Data 4</td>
-                        <td style="min-width: 120px;">Data 5</td>
-                        <td style="min-width: 120px;">Data 6</td>
-                        <td style="min-width: 120px;">Data 7</td>
-                        <td style="min-width: 120px;">Data 8</td>
-                        <td style="min-width: 120px;">Data 9</td>
-                        <td style="min-width: 120px;">Data 10</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <h2>Table Examples with Different Sticky Column Configurations</h2>
         
-        <div style="border: 2px solid green; width: 600px; margin: 20px 0;">
-            <p>Arniva Table Test (flush=true):</p>
-            <Table scroll={true} stickyColumns={3}>
-                <Thead flush>
+        <h3>1. No Sticky Columns</h3>
+        <p>Regular table with horizontal scroll - no columns are sticky.</p>
+        <Table headerType="static" height="300px" scroll={true}>
+            <Thead>
+                <Trow>
+                    {#each headers as header}
+                        <Th>{header}</Th>
+                    {/each}
+                </Trow>
+            </Thead>
+            <Tbody>
+                {#each dummyData.slice(0, 5) as item}
                     <Trow>
                         {#each headers as header}
-                            <Th>{header}</Th>
+                            <Td>{item[header]}</Td>
                         {/each}
                     </Trow>
-                </Thead>
-                <Tbody>
-                    {#each dummyData.slice(0, 3) as item}
-                        <Trow>
-                            {#each headers as header}
-                                <Td>{item[header]}</Td>
-                            {/each}
-                        </Trow>
-                    {/each}
-                </Tbody>
-            </Table>
-        </div>
+                {/each}
+            </Tbody>
+        </Table>
         
-        <div style="border: 2px solid blue; width: 600px; margin: 20px 0;">
-            <p>Arniva Table Test (flush=false - default):</p>
-            <Table scroll={true} stickyColumns={3}>
-                <Thead>
+        <h3>2. Sticky Columns at Start (3 columns)</h3>
+        <p>First 3 columns (id, firstName, lastName) will stick to the left side.</p>
+        <Table headerType="static" height="300px" scroll={true} stickyColumns={3}>
+            <Thead>
+                <Trow>
+                    {#each headers as header}
+                        <Th>{header}</Th>
+                    {/each}
+                </Trow>
+            </Thead>
+            <Tbody>
+                {#each dummyData.slice(0, 5) as item}
                     <Trow>
                         {#each headers as header}
-                            <Th>{header}</Th>
+                            <Td>{item[header]}</Td>
                         {/each}
                     </Trow>
-                </Thead>
-                <Tbody>
-                    {#each dummyData.slice(0, 3) as item}
-                        <Trow>
-                            {#each headers as header}
-                                <Td>{item[header]}</Td>
-                            {/each}
-                        </Trow>
-                    {/each}
-                </Tbody>
-            </Table>
-        </div>
+                {/each}
+            </Tbody>
+        </Table>
         
-        <Table headerType="static" height="400px" scroll={true} stickyColumns={3}>
+        <h3>3. Sticky Columns at End (2 columns)</h3> 
+        <p>Last 2 columns (lastLogin, performanceRating) will stick to the right side.</p>
+        <Table headerType="static" height="300px" scroll={true} stickyColumnsEnd={2}>
+            <Thead>
+                <Trow>
+                    {#each headers as header}
+                        <Th>{header}</Th>
+                    {/each}
+                </Trow>
+            </Thead>
+            <Tbody>
+                {#each dummyData.slice(0, 5) as item}
+                    <Trow>
+                        {#each headers as header}
+                            <Td>{item[header]}</Td>
+                        {/each}
+                    </Trow>
+                {/each}
+            </Tbody>
+        </Table>
+        
+        <h3>4. Sticky Columns on Both Ends (2 start + 2 end)</h3>
+        <p>Scroll horizontally to see both start and end columns staying fixed.</p>
+        <Table headerType="static" height="300px" scroll={true} stickyColumns={2} stickyColumnsEnd={2}>
+            <Thead>
+                <Trow>
+                    {#each headers as header}
+                        <Th>{header}</Th>
+                    {/each}
+                </Trow>
+            </Thead>
+            <Tbody>
+                {#each dummyData.slice(0, 5) as item}
+                    <Trow>
+                        {#each headers as header}
+                            <Td>{item[header]}</Td>
+                        {/each}
+                    </Trow>
+                {/each}
+            </Tbody>
+        </Table>
+        
+        <h3>5. Large Example with Mixed Sticky Columns</h3>
+        <p>A larger example with first column and last two columns sticky to demonstrate real-world usage.</p>
+        <Table headerType="static" height="400px" scroll={true} stickyColumns={1} stickyColumnsEnd={2}>
             <Thead>
                 <Trow>
                     {#each headers as header}

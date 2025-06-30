@@ -44,6 +44,16 @@ $sticky-negative-margin: -32px;
 		&:hover {
 			background-color: inherit; // Inherit from parent hover state
 		}
+		
+		// Sticky columns at the start (left side)
+		&-start {
+			left: 0; // Default left position, will be overridden by JavaScript
+		}
+		
+		// Sticky columns at the end (right side)
+		&-end {
+			right: 0; // Default right position, will be overridden by JavaScript  
+		}
 	}
 
 	&--fixed-cells {

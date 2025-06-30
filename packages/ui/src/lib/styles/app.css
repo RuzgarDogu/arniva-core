@@ -1167,6 +1167,12 @@
 .table--cell--sticky:hover {
   background-color: inherit;
 }
+.table--cell--sticky-start {
+  left: 0;
+}
+.table--cell--sticky-end {
+  right: 0;
+}
 .table--fixed-cells {
   table-layout: fixed !important;
   width: 100%;
@@ -1356,6 +1362,12 @@
 }
 .table-container--cell--sticky:hover {
   background-color: inherit;
+}
+.table-container--cell--sticky-start {
+  left: 0;
+}
+.table-container--cell--sticky-end {
+  right: 0;
 }
 .table-container--fixed-cells {
   table-layout: fixed !important;

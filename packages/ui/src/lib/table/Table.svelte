@@ -14,6 +14,7 @@
 	 * @property {boolean} [hover] Should the table have hover effect?
 	 * @property {boolean} [scroll] Should the table have horizontal scroll?
 	 * @property {number} [stickyColumns] Number of columns to keep sticky from the left (only works with scroll=true)
+	 * @property {number} [stickyColumnsEnd] Number of columns to keep sticky from the right (only works with scroll=true)
 	 */
 
 	/** @type {Props} */
@@ -30,6 +31,7 @@
 		fixedCells = false,
 		scroll = false,
 		stickyColumns = 0,
+		stickyColumnsEnd = 0,
 	} = $props();
 
 	// Add direct CSS for better control over the table layout
@@ -50,8 +52,8 @@
 		class:table--hover={hover}
 		class:table--fixed-cells={fixedCells}
 		class:table--scroll-x={scroll}
-		class:table--sticky-columns={scroll && stickyColumns > 0}
-		style={scroll && stickyColumns > 0 ? `--sticky-columns: ${stickyColumns};` : ''}
+		class:table--sticky-columns={scroll && (stickyColumns > 0 || stickyColumnsEnd > 0)}
+		style={scroll && (stickyColumns > 0 || stickyColumnsEnd > 0) ? `--sticky-columns: ${stickyColumns}; --sticky-columns-end: ${stickyColumnsEnd};` : ''}
 		{id}
 	>
 		{@render children?.()}
