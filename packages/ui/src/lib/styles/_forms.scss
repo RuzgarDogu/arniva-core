@@ -71,7 +71,7 @@
 		}
 		&--container {
 			position: relative;
-			.clear-button {
+			.clear-button, .dropdown-button {
 				display: none;
 				background-color: #fff;
 				&.active {

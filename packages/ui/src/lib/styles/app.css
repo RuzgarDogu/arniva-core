@@ -683,11 +683,11 @@
 .form-select--search--container {
   position: relative;
 }
-.form-select--search--container .clear-button {
+.form-select--search--container .clear-button, .form-select--search--container .dropdown-button {
   display: none;
   background-color: #fff;
 }
-.form-select--search--container .clear-button.active {
+.form-select--search--container .clear-button.active, .form-select--search--container .dropdown-button.active {
   display: flex;
   position: absolute;
   right: 2px;

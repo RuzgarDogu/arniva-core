@@ -4,6 +4,7 @@
 	import DropdownContent from '../../general/DropdownContent.svelte';
 	import Button from '../../general/Button.svelte';
 	import Input from '../../forms/Input.svelte';
+	import { Icon } from '$lib'
 	/**
 	 * @typedef {{ id: number|string, [key: string]: any }} SelectOption
 	 */
@@ -312,6 +313,17 @@
 	>
 		<div class="form-select--search--container">
 			<Input dropdown oninput={handleInput} bind:value={searchText} {placeholder} />
+			{#if !searchText}
+			<Button
+				class="dropdown-button {searchText ? '' : 'active'}"
+				square
+				dropdown
+				color="transparent"
+				onClick={() => searchDropdown?.show()}
+			>
+				<Icon icon="mdi:chevron-down" width="24" height="24" />
+			</Button>
+			{:else}
 			<Button
 				class="clear-button {searchText ? 'active' : ''}"
 				square
@@ -339,6 +351,7 @@
 					</g></svg
 				>
 			</Button>
+			{/if}
 		</div>
 		<DropdownContent>
 			{#each filteredData as item}
