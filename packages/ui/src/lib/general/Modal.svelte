@@ -67,6 +67,14 @@
     export function show() {
         modal.classList.add('opening');
     }
+    
+    /**
+     * @param {HTMLElement} node
+     */
+    function modalInitLocal(node) {
+        modalInit(node)
+    }
+
 </script>
 
 <div
@@ -77,7 +85,7 @@
 	data-ar-title={title}
 	class:modal--no-padding={noPadding}
 	bind:this={modal}
-	use:modalInit
+	use:modalInitLocal
 >
 	<div class="modal--content">
 		<div class={['modal--header', headerClass].join(' ')}>
