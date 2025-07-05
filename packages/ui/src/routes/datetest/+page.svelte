@@ -9,9 +9,15 @@
 
 </script>
 <h1>{dt}</h1>
+<div style="margin-bottom: 20px;">
 <DatePicker
     bind:startDate={dt}
     />
 
+</div>
+<div style="margin-bottom: 20px;">
 <TimePicker bind:value={selectedTime} />
+</div>
+
+
 <h2>{selectedTime}</h2>

@@ -60,6 +60,19 @@
 	}
 
 	/**
+	 * Check if two dates represent the same day (ignoring time)
+	 * @param {Date|null} date1 - First date
+	 * @param {Date|null} date2 - Second date
+	 * @returns {boolean} - True if same day
+	 */
+	function isSameDay(date1, date2) {
+		if (!date1 || !date2) return false;
+		return date1.getFullYear() === date2.getFullYear() &&
+			   date1.getMonth() === date2.getMonth() &&
+			   date1.getDate() === date2.getDate();
+	}
+
+	/**
 	 * Detects the format of a date value
 	 * @param {Date|string|number|null} dateValue - The date to check
 	 * @returns {DateFormatType} - The detected format type
@@ -98,8 +111,13 @@
 			case 'timestamp':
 				return date.getTime();
 			case 'iso':
-			default:
-				return date.toISOString();
+			default: {
+				// Create ISO string preserving the local date without timezone conversion
+				const year = date.getFullYear();
+				const month = String(date.getMonth() + 1).padStart(2, '0');
+				const day = String(date.getDate()).padStart(2, '0');
+				return `${year}-${month}-${day}T00:00:00Z`;
+			}
 		}
 	}
 	 
@@ -131,18 +149,22 @@
 	let startDateFormat = $state(dateFormat === 'auto' ? detectDateFormat(startDate) : dateFormat);
 	let endDateFormat = $state(dateFormat === 'auto' ? detectDateFormat(endDate) : dateFormat);
 
-	// Convert bound dates to Date objects
-	// Use effect to maintain reactivity to external changes
+	// Initialize currentMonth based on startDate (only once or when external change)
+	$effect(() => {
+		if (!hasUserNavigated) {
+			const startDateObj = ensureDate(startDate);
+			if (startDateObj) {
+				currentMonth = new Date(startDateObj.getFullYear(), startDateObj.getMonth(), 1);
+			}
+		}
+	});
+
+	// Handle reactive updates for format detection and input values
 	$effect(() => {
 		// Update format detection if auto is specified and value changes
 		if (dateFormat === 'auto') {
 			startDateFormat = detectDateFormat(startDate);
 			endDateFormat = detectDateFormat(endDate);
-		}
-		
-		const startDateObj = ensureDate(startDate);
-		if (startDateObj) {
-			currentMonth = new Date(startDateObj.getFullYear(), startDateObj.getMonth(), 1);
 		}
 		
 		// Update input values when startDate or endDate change externally
@@ -171,6 +193,7 @@
 	let inputsContainerRef = $state(null);
 
 	let isUpdating = $state(false);
+	let hasUserNavigated = $state(false);
 
 	// Override the updateDateValues function to not override manual input
 	function updateDateValues() {
@@ -328,9 +351,8 @@
 	// Handle input blur to format the date correctly
 	/**
 	 * Handle input blur to format the date correctly without applying
-	 * @param {'start'|'end'} inputType - Which input was blurred
 	 */
-	function handleInputBlur(inputType) {
+	function handleInputBlur() {
 		// Only apply values if they've been manually edited
 		if (isManuallyEditing) {
 			applyManualInputs();
@@ -649,10 +671,12 @@
 
 	// Navigation functions
 	function prevMonth() {
+		hasUserNavigated = true;
 		currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
 	}
 
 	function nextMonth() {
+		hasUserNavigated = true;
 		currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
 	}
 
@@ -949,7 +973,7 @@
 			placeholder={translation?.selectdate || "Select date"}
 			onfocus={() => (showStartPicker = true)}
 			oninput={handleStartInputChange}
-			onblur={() => handleInputBlur('start')}
+			onblur={() => handleInputBlur()}
 			onkeydown={(e) => handleKeyDown(e, 'start')}
 			readonly={!manualInput}
 		/>
@@ -962,7 +986,7 @@
 				placeholder={translation.selectenddate || "Select end date"}
 				onfocus={() => (showEndPicker = true)}
 				oninput={handleEndInputChange}
-				onblur={() => handleInputBlur('end')}
+				onblur={() => handleInputBlur()}
 				onkeydown={(e) => handleKeyDown(e, 'end')}
 				readonly={!manualInput}
 			/>
@@ -1039,8 +1063,8 @@
 					<button
 						class="datepicker--day"
 						class:datepicker--other-month={day.getMonth() !== currentMonth.getMonth()}
-						class:selected={day.getTime() === ensureDate(startDate)?.getTime() ||
-							day.getTime() === ensureDate(endDate)?.getTime()}
+						class:selected={isSameDay(day, ensureDate(startDate)) ||
+							isSameDay(day, ensureDate(endDate))}
 						class:datepicker--in-range={isInRange(day)}
 						class:datepicker--range-start={isRangeStart(day)}
 						class:datepicker--range-end={isRangeEnd(day)}
