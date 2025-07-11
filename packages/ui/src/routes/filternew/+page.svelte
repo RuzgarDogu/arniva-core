@@ -3,8 +3,7 @@
 
     import { AdvancedFilter, Table, Tbody, Thead, Trow, Th, Td, Range, applyFilters, Button, Icon, Select } from '$lib';
     import { onMount } from 'svelte';
-    import { convertQueryObjectToString } from '@ruzgardogu/utils';
-    // import { convertQueryObjectToString } from './converttest';
+    import { convertQueryObjectToString } from './converttest';
     
     let { data } = $props();
     let warehouses = $state([])
@@ -23,7 +22,7 @@
             method: "GET",
             redirect: "follow"
         };
-
+        console.log("queryParams", queryParams);
         const endpoint = `https://test-api.arniva.cloud/v1/depo${queryParams}`;
         const res = await fetch(endpoint, requestOptions);
         const result = await res.json();
@@ -38,6 +37,8 @@
 
     function handleFilterChange(event) {
         console.log("event", event);
+        let testing = JSON.parse(JSON.stringify(event));
+        console.log("testing", testing);
         filter = event || {}; // Ensure filter is always an object
         const queryParams = convertQueryObjectToString(pagination, filter, sort);
         

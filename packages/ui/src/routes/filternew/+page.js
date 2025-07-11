@@ -55,8 +55,12 @@ const filterConfig = {
             type: 'multiselect',
             serverSide: true,
             nameKey: 'adi', // The property to use as the label
-            endpoint: 'https://test-api.arniva.cloud/v1/sube',
-            placeholder: 'Şube ara...'
+            // endpoint: 'https://test-api.arniva.cloud/v1/sube',
+            endpoint: {
+                url: 'https://test-api.arniva.cloud/v1/sube',
+                filter: { id: ['568e22f5-e681-439e-a81c-7608a55849d4', '43abd4d6-d09a-4718-bf53-fc63b63f5aca', '7afc6222-c71c-4399-b239-62f8e5a5182f']}
+            },
+            // placeholder: 'Şube ara...'
         }
     ]
 }

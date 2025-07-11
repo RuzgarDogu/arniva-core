@@ -160,23 +160,30 @@ let optionsCache = $state([]);
 	 */
 	async function fetchServerOptions(searchText) {
 		if (!_field.serverSide || !_field.endpoint) return;
-		
+		let endpoint = _field.endpoint;
 		isLoading = true;
 		try {
 			// Create filter object for search if searchText exists
 			/** @type {Filter} */
-			const filter = {};
+			let filter = {};
 			if (searchText) {
 				filter.search = {
 					column: _field.nameKey || 'adi',
 					value: searchText
 				};
 			}
-			
+			if (typeof _field.endpoint === 'object' && _field.endpoint.filter && _field.endpoint.url) {
+				filter = {
+					...filter,
+					..._field.endpoint.filter
+				};
+				endpoint = _field.endpoint.url;
+			}
+
 			// Use the utility function to generate the query string
 			const queryParams = convertQueryObjectToString(pagination, filter);
 			
-			const response = await fetch(`${_field.endpoint}${queryParams}`, {
+			const response = await fetch(`${endpoint}${queryParams}`, {
 				method: 'GET',
 				redirect: 'follow'
 			});
