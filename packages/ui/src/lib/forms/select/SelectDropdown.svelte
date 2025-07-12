@@ -312,7 +312,7 @@
 		onChange={checkDropdown}
 	>
 		<div class="form-select--search--container">
-			<Input dropdown oninput={handleInput} bind:value={searchText} {placeholder} />
+			<Input dropdown oninput={handleInput} bind:value={searchText} {placeholder} {...rest}/>
 			{#if !searchText}
 			<Button
 				class="dropdown-button {searchText ? '' : 'active'}"

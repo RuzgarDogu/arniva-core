@@ -34,6 +34,7 @@
 	 * @property {Date|string|number|null} [endDate] - The selected end date
 	 * @property {DateFormatType} [dateFormat] - Format to use for date binding and onChange values
 	 * @property {DateTranslation} [translation] - Translation object for date picker
+	 * @property {string} [name] - Name attribute for the input fields
 	 */
 
 	// Helper to convert various date formats to Date objects
@@ -128,6 +129,7 @@
 		isEuropean = true,
 		manualInput = true,
 		onChange,
+		name='date',
 		startDate = $bindable(null),
 		endDate = $bindable(null),
 		dateFormat = 'auto',
@@ -967,6 +969,7 @@
 	<!-- Input Fields -->
 	<div class="datepicker--inputs" bind:this={inputsContainerRef}>
 		<input
+			name={name}
 			bind:this={startInputRef}
 			type="text"
 			value={startInputValue}
@@ -980,6 +983,7 @@
 		{#if isRange}
 			<Icon icon="ic:baseline-compare-arrows" width="24" height="24" />
 			<input
+				name={name}
 				bind:this={endInputRef}
 				type="text"
 				value={endInputValue}
@@ -993,6 +997,7 @@
 		{/if}
 		<button
 			class="datepicker--calendar-button"
+			type="button"
 			onclick={() => (showStartPicker = true)}
 			title="Open calendar"
 		>
@@ -1021,7 +1026,7 @@
 						{#if !isRange}
 							{#each singleDateOptions as option}
 								<li>
-									<button onclick={option.action}
+									<button type="button" onclick={option.action}
 										>{option.label}
 										<Icon icon="mdi:chevron-right" width="13" />
 									</button>
@@ -1030,7 +1035,7 @@
 						{:else}
 							{#each rangeDateOptions as option}
 								<li>
-									<button onclick={option.action}
+									<button type="button" onclick={option.action}
 										>{option.label}
 										<Icon icon="mdi:chevron-right" width="13" />
 									</button>
@@ -1044,11 +1049,11 @@
 			<div class="datepicker--calendar">
 				<!-- Month navigation -->
 				<div class="datepicker--calendar-header">
-					<button aria-label="prev" class="datepicker--month-nav" onclick={prevMonth}>
+					<button aria-label="prev" class="datepicker--month-nav" type="button" onclick={prevMonth}>
 						<Icon icon="mdi:chevron-left" width="14" />
 					</button>
 					<div class="datepicker--month-title">{formatMonth(currentMonth)}</div>
-					<button aria-label="next" class="datepicker--month-nav" onclick={nextMonth}>
+					<button aria-label="next" class="datepicker--month-nav" type="button" onclick={nextMonth}>
 						<Icon icon="mdi:chevron-right" width="14" />
 					</button>
 				</div>
@@ -1062,6 +1067,7 @@
 				{#each generateCalendar() as day}
 					<button
 						class="datepicker--day"
+						type="button"
 						class:datepicker--other-month={day.getMonth() !== currentMonth.getMonth()}
 						class:selected={isSameDay(day, ensureDate(startDate)) ||
 							isSameDay(day, ensureDate(endDate))}
@@ -1090,6 +1096,7 @@
 				<div class="datepicker--footer">
 					<button 
 						class="datepicker--footer-button datepicker--cancel-button"
+						type="button"
 						onclick={() => {
 							// Reset input values to match actual dates
 							updateDateValues();
@@ -1101,6 +1108,7 @@
 					</button>
 					<button 
 						class="datepicker--footer-button datepicker--apply-button-footer"
+						type="button"
 						onclick={() => {
 							applyManualInputs();
 							showStartPicker = false;

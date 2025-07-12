@@ -43,7 +43,7 @@
 </script>
 
 {#if search}
-	<SelectDropdown bind:value {data} {onSelect} {placeholder} {onInput} {serverSide} {nameKey}/>
+	<SelectDropdown bind:value {data} {onSelect} {placeholder} {onInput} {serverSide} {nameKey} {...rest}/>
 {:else}
 	<select
 		class="form-select {size == 'medium' ? '' : `form-select--${size}`} {cls}"
