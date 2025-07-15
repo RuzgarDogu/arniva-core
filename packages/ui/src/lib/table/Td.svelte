@@ -16,7 +16,7 @@
      */
 
     /** @type {Props} */    
-    let { children, class: cls = '', colspan = 1 } = $props();
+    let { children, class: cls = '', colspan = 1, ...rest } = $props();
 
     let width = $state(0);
     /** @type {HTMLTableElement|null} */
@@ -161,6 +161,7 @@
         white-space: nowrap;
     ` : ''}
     {...(colspan > 1 && { colspan })}
+    {...rest}
 >
     {@render children?.()}
 </td>

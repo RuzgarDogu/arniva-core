@@ -1,7 +1,7 @@
 <script>
 	/** @type {{ data: import('./$types').PageData }} */
 	let { data } = $props();
-	import { AdvancedFilter, Table, Tbody, Thead, Trow, Range, applyFilters, Button, Icon, Checkbox, Select } from '$lib';
+	import { AdvancedFilter, Table, Tbody, Thead, Trow, Range, applyFilters, Button, Icon, Checkbox, Select, Td } from '$lib';
 
 
 	let ages = data.dummyData.map((row) => {
@@ -195,26 +195,26 @@
 	</Thead>
 	<Tbody>
 		{#each tableData as row, index (index)}
-			<Trow onClick={() => console.log("row click", row)}>
-				<td><Checkbox name="asd" inline bind:group={singleChecked} value={row.id}/></td>
-				<td>{row.id}</td>
-				<td>{row.name}</td>
-				<td>
+			<Trow data-test-id={`row-${index}`} onClick={() => console.log("row click", row)}>
+				<Td><Checkbox name="asd" inline bind:group={singleChecked} value={row.id}/></Td>
+				<Td data-cell-id={`row-${row.name}-id`}>{row.id}</Td>
+				<Td>{row.name}</Td>
+				<Td>
 					<Select search data={ages} bind:value={row.age} onSelect={(e) => console.log('e', e)} />
-				</td>
-				<td>{row.email}</td>
-				<td>{row.phone}</td>
-				<td>{row.gender}</td>
-				<td>{row.department}</td>
-				<td>{row.dob}</td>
-				<td>{row.isManager}</td>
-				<td>
+				</Td>
+				<Td>{row.email}</Td>
+				<Td>{row.phone}</Td>
+				<Td>{row.gender}</Td>
+				<Td>{row.department}</Td>
+				<Td>{row.dob}</Td>
+				<Td>{row.isManager}</Td>
+				<Td>
 					<Button color="primary" size="small" onClick={() => console.log("button click", row)}>
 						Edit
 					</Button>
 					<Button color="danger" size="small" onClick={() => console.log(row)}>Delete</Button>
 					<Button color="success" size="small" onClick={() => console.log(row)}>View</Button>
-				</td>
+				</Td>
 			</Trow>
 		{/each}
 	</Tbody>

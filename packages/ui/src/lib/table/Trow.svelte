@@ -7,7 +7,7 @@
 	 */
 
 	/** @type {Props} */
-	let { children, class: cls = '', onClick } = $props();
+	let { children, class: cls = '', onClick, ...rest } = $props();
 
 	/**
 	 * Handles the click event on the table row.
@@ -39,6 +39,6 @@
 	}
 </script>
 
-<tr class:table--row-cursor={onClick} class={['table--row', `${cls}`].join(' ')} onclick={handleRowClick}>
+<tr class:table--row-cursor={onClick} class={['table--row', `${cls}`].join(' ')} onclick={handleRowClick} {...rest}>
 	{@render children?.()}
 </tr>
