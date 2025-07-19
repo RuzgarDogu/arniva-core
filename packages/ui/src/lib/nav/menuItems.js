@@ -131,6 +131,13 @@ const menuitems = [
                 id:'305',
                 active:false,
                 icon:'mdi:calendar'
+            },
+            {
+                title:'Button Test',
+                link:'/buttontest',
+                id:'306',
+                active:false,
+                icon:'mdi:calendar'
             }
         ]
     }

@@ -761,6 +761,10 @@
   line-height: 1;
   font-family: "Nunito Sans", -apple-system, ".SFNSText-Regular", "San Francisco", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+.button:hover {
+  outline: none;
+  box-shadow: 0 0 0 1px var(--ar-accent-color);
+}
 .button--rounded {
   border-radius: var(--ar-border-radius);
 }
@@ -773,6 +777,7 @@
 .button--transparent:hover {
   background-color: var(--ar-accent-color-subtle);
   color: var(--ar-accent-color);
+  box-shadow: none;
 }
 .button--primary {
   background-color: var(--ar-primary-color);
@@ -780,6 +785,7 @@
 }
 .button--primary:hover {
   background-color: var(--ar-primary-color-emphasis);
+  box-shadow: 0 0 0 1px var(--ar-primary-color-emphasis);
 }
 .button--secondary {
   background-color: var(--ar-secondary-color);
@@ -787,6 +793,7 @@
 }
 .button--secondary:hover {
   background-color: var(--ar-secondary-color-emphasis);
+  box-shadow: 0 0 0 1px var(--ar-secondary-color-emphasis);
 }
 .button--default {
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
@@ -797,6 +804,7 @@
   background-color: var(--ar-accent-color-subtle);
   color: var(--ar-accent-color);
   border-color: var(--ar-accent-color);
+  box-shadow: 0 0 0 1px var(--ar-accent-color);
 }
 .button--success {
   background-color: var(--ar-success-color-subtle);
@@ -804,6 +812,7 @@
 }
 .button--success:hover {
   background-color: var(--ar-success-color);
+  box-shadow: 0 0 0 1px var(--ar-success-color);
 }
 .button--accent {
   background-color: var(--ar-accent-color);
@@ -811,6 +820,7 @@
 }
 .button--accent:hover {
   background-color: var(--ar-accent-color-emphasis);
+  box-shadow: 0 0 0 1px var(--ar-accent-color-emphasis);
 }
 .button--warning {
   background-color: var(--ar-warning-color-subtle);
@@ -819,6 +829,7 @@
 .button--warning:hover {
   background-color: var(--ar-warning-color);
   color: white;
+  box-shadow: 0 0 0 1px var(--ar-warning-color-subtle);
 }
 .button--danger {
   background-color: var(--ar-danger-color);
@@ -826,6 +837,15 @@
 }
 .button--danger:hover {
   background-color: var(--ar-danger-color-emphasis);
+  box-shadow: 0 0 0 1px var(--ar-danger-color-emphasis);
+}
+.button--light {
+  background-color: var(--ar-light-color);
+}
+.button--light:hover {
+  background-color: var(--ar-light-color-subtle);
+  color: var(--ar-link-color-emphasis);
+  box-shadow: 0 0 0 1px var(--ar-light-color);
 }
 .button--small {
   padding: 7px 16px;
