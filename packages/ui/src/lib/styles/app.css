@@ -1744,7 +1744,7 @@
   height: 35px;
   display: flex;
   align-items: center;
-  padding: 0 1em;
+  padding: 0 0.5em;
 }
 .datepicker--inputs input {
   color: var(--ar-text-color-subtle);
@@ -1936,7 +1936,6 @@
   border: none;
   cursor: pointer;
   padding: 5px;
-  color: var(--ar-accent-color);
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -1987,7 +1986,7 @@
   height: 35px;
   display: flex;
   align-items: center;
-  padding: 0 1em;
+  padding: 0 0.5em;
 }
 .timepicker--input input {
   color: var(--ar-text-color-subtle);
