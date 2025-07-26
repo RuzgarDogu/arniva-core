@@ -20,7 +20,7 @@
 </script>
 
 <Layout theme={data.theme}>
-	<Aside>
+	<Aside class="testing">
 		<Sidenav>
 			{#snippet dropdown()}
 				<Dropdown>

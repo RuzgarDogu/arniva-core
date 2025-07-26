@@ -2,7 +2,7 @@ const menuitems = [
 	{
 		id: 100,
 		groupid: 1,
-		title: 'Menu 1',
+		title: 'First Menu',
 		link: '#',
 		icon: 'mdi:information-outline',
 		active: false,
@@ -54,7 +54,7 @@ const menuitems = [
     {
         id: 200,
         groupid: 2,
-        title: 'Menu 2',
+        title: 'Second Menu',
         link: '#',
         icon: 'mdi:information-outline',
         active: false,
@@ -92,7 +92,7 @@ const menuitems = [
     {
         id: 300,
         groupid: 3,
-        title: 'Menu 3',
+        title: 'Third Menu',
         link: '#',
         icon: 'mdi:information-outline',
         active: false,

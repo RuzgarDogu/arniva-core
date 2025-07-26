@@ -282,6 +282,7 @@
 >
 	<div class="timepicker--input">
 		<input
+			autocomplete="off"
 			bind:this={inputRef}
 			type="text"
 			readonly
@@ -298,8 +299,9 @@
 					<button class="timepicker--stepper" onclick={() => increment('hours')}>
 						<Icon icon="mdi:chevron-up" width="14" />
 					</button>
-					<input 
-						type="text" 
+					<input
+						autocomplete="off"
+						type="text"
 						value={hours}
 						oninput={updateHours}
 						onkeydown={(e) => handleKeyDown(e, 'hours')}
@@ -316,8 +318,9 @@
 					<button class="timepicker--stepper" onclick={() => increment('minutes')}>
 						<Icon icon="mdi:chevron-up" width="14" />
 					</button>
-					<input 
-						type="text" 
+					<input
+						autocomplete="off"
+						type="text"
 						value={minutes}
 						oninput={updateMinutes}
 						onkeydown={(e) => handleKeyDown(e, 'minutes')}
@@ -334,8 +337,9 @@
 					<button class="timepicker--stepper" onclick={() => increment('seconds')}>
 						<Icon icon="mdi:chevron-up" width="14" />
 					</button>
-					<input 
-						type="text" 
+					<input
+						autocomplete="off"
+						type="text"
 						value={seconds}
 						oninput={updateSeconds}
 						onkeydown={(e) => handleKeyDown(e, 'seconds')}

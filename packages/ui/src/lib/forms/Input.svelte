@@ -28,6 +28,7 @@
 </script>
 
 <input
+	autocomplete="off"
 	bind:value
 	bind:this={element}
 	class="form-input {size == 'medium' ? '' : `form-input--${size}`} {cls}"

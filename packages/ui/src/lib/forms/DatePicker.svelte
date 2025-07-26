@@ -969,6 +969,7 @@
 	<!-- Input Fields -->
 	<div class="datepicker--inputs" bind:this={inputsContainerRef}>
 		<input
+			autocomplete="off"
 			name={name}
 			bind:this={startInputRef}
 			type="text"
