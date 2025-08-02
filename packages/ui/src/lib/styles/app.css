@@ -68,6 +68,9 @@
   border-bottom: 1px solid var(--ar-border-color);
   z-index: 10;
 }
+.layout__nav:has(.tabnav--type-tab) {
+  border-bottom: none;
+}
 .layout__content {
   flex-grow: 1;
   overflow-y: auto;
@@ -2596,28 +2599,50 @@
 }
 
 .tabnav {
-  padding: var(--ar-nav-padding);
   background-color: var(--ar-light-color);
   border-top: 1px solid var(--ar-border-color);
   display: flex;
-  gap: 0.5rem;
   overflow: hidden;
+}
+.tabnav--type-pill {
+  padding: var(--ar-nav-padding);
+  gap: 0.5rem;
+}
+.tabnav--type-pill .tabnav--tab {
+  background-color: #fff;
+  height: 32px;
+}
+.tabnav--type-pill .tabnav--tab.active {
+  background-color: var(--ar-accent-color-subtle);
+}
+.tabnav--type-pill .tabnav--tab.active * {
+  color: var(--ar-accent-color);
+}
+.tabnav--type-tab {
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.tabnav--type-tab .tabnav--tab {
+  background-color: var(--ar-light-color);
+  height: 44px;
+}
+.tabnav--type-tab .tabnav--tab.active {
+  background-color: #fff;
+}
+.tabnav--type-tab .tabnav--tab.active * {
+  color: var(--ar-accent-color);
+}
+.tabnav--type-tab .tabnav--tab.active .button--transparent:hover {
+  background-color: #fff;
 }
 .tabnav--tab {
   min-width: 120px;
   max-width: 180px;
   white-space: nowrap;
   overflow: hidden;
-  height: 32px;
   display: flex;
   align-items: center;
-  background-color: #fff;
-}
-.tabnav--tab.active {
-  background-color: var(--ar-accent-color-subtle);
-}
-.tabnav--tab.active * {
-  color: var(--ar-accent-color);
 }
 .tabnav--tab-button {
   display: flex;

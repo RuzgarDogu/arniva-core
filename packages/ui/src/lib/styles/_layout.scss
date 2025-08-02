@@ -26,6 +26,9 @@
 		background-color: #fff;
 		border-bottom: 1px solid var(--ar-border-color);
 		z-index: 10;
+		&:has(.tabnav--type-tab) {
+			border-bottom: none; // Remove border for tab type
+		}
 	}
 
 	&__content {

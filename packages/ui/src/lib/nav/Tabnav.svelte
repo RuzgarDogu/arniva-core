@@ -13,11 +13,12 @@
      * @property {string} icon - The icon to display in the tab
      * @property {boolean} [active] - Whether the page is currently active
      */
-
-
+    
+    
     /**
      * @typedef {Object} Props
      * @property {PageItem[]} pages The pages to display in the tabnav
+     * @property {'pill' | 'tab'} [type] - The style of the tab, either 'pill' or 'tab'
      */
 
 
@@ -30,7 +31,7 @@
 
     
     /** @type {Props} */
-    let { pages } = $props();
+    let { pages, type="pill" } = $props();
 
     /**
      * The container element reference
@@ -296,7 +297,7 @@
     }
 </script>
 
-<div class="tabnav" class:invisible={openPages.length === 0} use:handleVisible>
+<div class="tabnav tabnav--type-{type}" class:invisible={openPages.length === 0} use:handleVisible>
     {#if openPages.length > 0}
         <!-- Visible tabs -->
         {#each visibleTabs as page}

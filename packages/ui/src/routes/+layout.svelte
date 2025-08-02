@@ -316,7 +316,7 @@
 					</Button>
 				{/snippet}
 			</Topnav>
-			<Tabnav pages = {[
+			<Tabnav type="tab" pages = {[
 				{
 					title: 'Filter',
 					icon: 'mdi:information',

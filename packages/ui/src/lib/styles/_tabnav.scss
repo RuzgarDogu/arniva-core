@@ -1,9 +1,45 @@
 .tabnav {
-    padding: var(--ar-nav-padding);
+    &--type-pill {
+        padding: var(--ar-nav-padding);
+        gap: 0.5rem;
+        .tabnav--tab {
+            background-color: #fff;
+            height: 32px; // Fixed height for tabs to prevent growth when active
+
+            &.active {
+                background-color: var(--ar-accent-color-subtle);
+                // border-radius: 5px;
+                & * {
+                    color: var(--ar-accent-color);
+                }
+            }
+        }
+    }
+    &--type-tab {
+        padding-top: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        .tabnav--tab {
+            background-color: var(--ar-light-color);
+            height: 44px; // Fixed height for tabs to prevent growth when active
+
+            &.active {
+                background-color: #fff;
+                // border-radius: 5px;
+                & * {
+                    color: var(--ar-accent-color);
+                }
+                .button--transparent:hover {
+                    background-color: #fff;
+                }
+            }
+        }
+    }
+
+
     background-color: var(--ar-light-color);
     border-top: 1px solid var(--ar-border-color);
     display: flex;
-    gap: 0.5rem;
     overflow: hidden; // Prevent horizontal scrolling
     
     &--tab {
@@ -11,18 +47,8 @@
         max-width: 180px; // Maximum width for tabs
         white-space: nowrap;
         overflow: hidden;
-        height: 32px; // Fixed height for tabs to prevent growth when active
         display: flex; // Ensure flex layout
         align-items: center; // Vertical centering
-        background-color: #fff;
-        
-        &.active {
-            background-color: var(--ar-accent-color-subtle);
-            // border-radius: 5px;
-            & * {
-                color: var(--ar-accent-color);
-            }
-        }
     }
     
     &--tab-button {
