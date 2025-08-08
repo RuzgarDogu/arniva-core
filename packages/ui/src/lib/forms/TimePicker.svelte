@@ -14,12 +14,14 @@
 	 * @property {string} [value] - Time value in format HH:MM:SS
 	 * @property {(time: string) => void} [onChange] - Callback function triggered when time changes
 	 * @property {TimeTranslation} [translation] - Translation object for time labels
+	 * @property {string} [name] - Name attribute for the input element
 	 */
 
 	/** @type {Props} */
 	let {
-		value = $bindable("00:00:00"),
+		value = $bindable('00:00:00'),
 		onChange,
+		name = '',
 		translation = {
 			hour: 'sa',
 			minute: 'dk',
@@ -27,11 +29,11 @@
 		}
 	} = $props();
 
-	let hours = $state("00");
-	let minutes = $state("00");
-	let seconds = $state("00");
+	let hours = $state('00');
+	let minutes = $state('00');
+	let seconds = $state('00');
 	let showTimePicker = $state(false);
-	
+
 	/** @type {HTMLDivElement|null} */
 	let timePickerRef = $state(null);
 	/** @type {HTMLDivElement|null} */
@@ -65,19 +67,19 @@
 	 */
 	function validateTimeUnit(value, max) {
 		let numValue = parseInt(value, 10);
-		
+
 		// Handle non-numeric input
 		if (isNaN(numValue)) {
 			return '00';
 		}
-		
+
 		// Ensure value is within valid range
 		if (numValue < 0) {
 			numValue = 0;
 		} else if (numValue > max) {
 			numValue = max;
 		}
-		
+
 		// Return value with leading zero if needed
 		return numValue.toString().padStart(2, '0');
 	}
@@ -167,7 +169,7 @@
 	 */
 	function handleWheel(e, unit) {
 		e.preventDefault(); // Prevent the page from scrolling
-		
+
 		// The deltaY property indicates scroll direction
 		if (e.deltaY < 0) {
 			// Scrolling up - increment value
@@ -176,7 +178,7 @@
 			// Scrolling down - decrement value
 			decrement(unit);
 		}
-		
+
 		// Focus the input to maintain user's context
 		const target = /** @type {HTMLInputElement} */ (e.target);
 		if (target) {
@@ -196,16 +198,16 @@
 
 		const inputRect = inputRef.getBoundingClientRect();
 		const pickerRect = pickerContainerRef.getBoundingClientRect();
-		
+
 		// Available space calculations
 		const availableSpaceBelow = window.innerHeight - inputRect.bottom;
-		
+
 		// Check if we're inside a modal
 		const isInModal = timePickerRef?.closest('.modal') !== null;
 
 		// Set fixed positioning
 		pickerContainerRef.style.position = 'fixed';
-		
+
 		// Position calculation
 		if (!isInModal) {
 			// Position vertically
@@ -216,7 +218,7 @@
 				// Position below the input
 				pickerContainerRef.style.top = `${inputRect.bottom}px`;
 			}
-			
+
 			// Position horizontally
 			// Ensure the picker doesn't extend beyond the right edge of the screen
 			if (inputRect.left + pickerRect.width > window.innerWidth) {
@@ -226,7 +228,7 @@
 				pickerContainerRef.style.left = `${inputRect.left}px`;
 			}
 		}
-		
+
 		// Make visible again
 		pickerContainerRef.style.visibility = 'visible';
 	}
@@ -238,7 +240,7 @@
 		if (showTimePicker) {
 			// Adjust position initially
 			adjustPickerPosition();
-			
+
 			// Add event listeners
 			window.addEventListener('scroll', adjustPickerPosition, true);
 			window.addEventListener('resize', adjustPickerPosition);
@@ -268,13 +270,13 @@
 	}
 
 	export function reset() {
-		hours = "00";
-		minutes = "00";
-		seconds = "00";
+		hours = '00';
+		minutes = '00';
+		seconds = '00';
 	}
 </script>
 
-<div 
+<div
 	class="timepicker {showTimePicker ? 'timepicker--focused' : ''}"
 	use:clickOutside
 	onclick_outside={handleClickOutside}
@@ -282,6 +284,7 @@
 >
 	<div class="timepicker--input">
 		<input
+			{name}
 			autocomplete="off"
 			bind:this={inputRef}
 			type="text"
