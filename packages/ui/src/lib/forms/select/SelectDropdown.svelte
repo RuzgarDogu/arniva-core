@@ -329,7 +329,7 @@
 				>
 					<Icon icon="mdi:chevron-down" width="24" height="24" />
 				</Button>
-			{:else}
+			{:else if !disabled}
 				<Button
 					class="clear-button {searchText ? 'active' : ''}"
 					square
