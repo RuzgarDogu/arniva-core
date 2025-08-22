@@ -30,6 +30,31 @@
 	}
 }
 
+.form-textarea {
+	@include formElement;
+	padding: var(--ar-form-element-padding);
+	resize: vertical;
+	min-height: 80px;
+	&::placeholder {
+		font-family: inherit; // Inherit the font-family from the body
+	}
+	&--small {
+		padding: 0.25em;
+		min-height: 60px;
+	}
+	&--large {
+		padding: 0.85em;
+		min-height: 120px;
+	}
+	&--disabled {
+		background-color: var(--ar-light-color);
+		color: var(--ar-secondary-color);
+	}
+	&--no-resize {
+		resize: none;
+	}
+}
+
 .form-select {
 	@include formElement;
 	padding: var(--ar-form-element-padding);
@@ -132,7 +157,8 @@
 	}
 
 	.form-input,
-	.form-select {
+	.form-select,
+	.form-textarea {
 		flex: 1;
 		border: none;
 		outline: none;
@@ -143,4 +169,8 @@
 			background-color: var(--ar-accent-color-subtle);
 		}
 	}
+}
+
+.form-group.form-group--no-border .form-group-item:has(textarea) td {
+    vertical-align: top;
 }

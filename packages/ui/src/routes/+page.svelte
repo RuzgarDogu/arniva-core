@@ -30,7 +30,8 @@
 		DatePicker,
 		Checkbox,
 		Radio,
-		Range
+		Range,
+		Textarea
 	} from '$lib';
 	let switchValue = false;
 
@@ -126,82 +127,80 @@
 
 	let switchvalue = true;
 
+	let textareaContent = $state('asdasdfadsfadsf3333333');
 </script>
-
 
 <h1 style="margin-bottom: 20px;">ANA SAYFA: Introduction</h1>
 
-
 <div style="margin-bottom: 20px;">
-	<Button modal="modalAuto" color="primary" style="margin-bottom: 20px;">
-		Auto Modal
-	</Button>
-	<Button modal="modalSm" color="primary" style="margin-bottom: 20px;">
-		Small Modal
-	</Button>
-	<Button modal="modalMd" color="primary" style="margin-bottom: 20px;">
-		Medium Modal
-	</Button>
-	<Button modal="modalLg" color="primary" style="margin-bottom: 20px;">
-		Large Modal
-	</Button>
-	<Button modal="modalXl" color="primary" style="margin-bottom: 20px;">
-		X Large Modal
-	</Button>
+	<Button modal="modalAuto" color="primary" style="margin-bottom: 20px;">Auto Modal</Button>
+	<Button modal="modalSm" color="primary" style="margin-bottom: 20px;">Small Modal</Button>
+	<Button modal="modalMd" color="primary" style="margin-bottom: 20px;">Medium Modal</Button>
+	<Button modal="modalLg" color="primary" style="margin-bottom: 20px;">Large Modal</Button>
+	<Button modal="modalXl" color="primary" style="margin-bottom: 20px;">X Large Modal</Button>
 
-
-<Modal id="modalAuto" title="Auto Modal">
-	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis accusantium doloremque, non similique ipsa ut dolore quisquam optio quam alias fugit, sapiente expedita asperiores illum?</p>
-</Modal>
-<Modal id="modalSm" title="Small Modal" size="sm">
-	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis accusantium doloremque, non similique ipsa ut dolore quisquam optio quam alias fugit, sapiente expedita asperiores illum?</p>
-</Modal>
-<Modal id="modalMd" title="Medium Modal" size="md">
-	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis accusantium doloremque, non similique ipsa ut dolore quisquam optio quam alias fugit, sapiente expedita asperiores illum?</p>
-</Modal>
-<Modal id="modalLg" title="Large Modal" size="lg">
-	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis accusantium doloremque, non similique ipsa ut dolore quisquam optio quam alias fugit, sapiente expedita asperiores illum?</p>
-</Modal>
-<Modal id="modalXl" title="X Large Modal" size="xl">
-	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis accusantium doloremque, non similique ipsa ut dolore quisquam optio quam alias fugit, sapiente expedita asperiores illum?</p>
-</Modal>
-
-
+	<Modal id="modalAuto" title="Auto Modal">
+		<p>
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis accusantium doloremque, non
+			similique ipsa ut dolore quisquam optio quam alias fugit, sapiente expedita asperiores illum?
+		</p>
+	</Modal>
+	<Modal id="modalSm" title="Small Modal" size="sm">
+		<p>
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis accusantium doloremque, non
+			similique ipsa ut dolore quisquam optio quam alias fugit, sapiente expedita asperiores illum?
+		</p>
+	</Modal>
+	<Modal id="modalMd" title="Medium Modal" size="md">
+		<p>
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis accusantium doloremque, non
+			similique ipsa ut dolore quisquam optio quam alias fugit, sapiente expedita asperiores illum?
+		</p>
+	</Modal>
+	<Modal id="modalLg" title="Large Modal" size="lg">
+		<p>
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis accusantium doloremque, non
+			similique ipsa ut dolore quisquam optio quam alias fugit, sapiente expedita asperiores illum?
+		</p>
+	</Modal>
+	<Modal id="modalXl" title="X Large Modal" size="xl">
+		<p>
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis accusantium doloremque, non
+			similique ipsa ut dolore quisquam optio quam alias fugit, sapiente expedita asperiores illum?
+		</p>
+	</Modal>
 </div>
-
-
 
 <h2>{switchvalue}</h2>
 
 <div style="margin-bottom: 20px;">
-	<Switch 
-  trueText="Yes"
-  falseText="No"
-  bind:value={switchvalue}
-  disabled={false}
-  name="switch"
-  id="switch"
-  label="Switch"
-  required={false}
-  color="default"
-  reverse={false}
- />
+	<Switch
+		trueText="Yes"
+		falseText="No"
+		bind:value={switchvalue}
+		disabled={false}
+		name="switch"
+		id="switch"
+		label="Switch"
+		required={false}
+		color="default"
+		reverse={false}
+	/>
 </div>
 
 <Button onClick={() => modal3.show()} color="primary" style="margin-bottom: 20px;">
 	Open Modal 3
 </Button>
 
-<Select 
-size="medium"
-placeholder="Start typing..."
-search
-data={dummyData}
-onSelect={(e) => console.log('e', e)}
+<Select
+	size="medium"
+	placeholder="Start typing..."
+	search
+	data={dummyData}
+	onSelect={(e) => console.log('e', e)}
 />
 
 <Modal id="testModal3" title="Test Modal3" size="lg" name="Test_Modal3" bind:this={modal3}>
-
 	<FormGroup>
 		<FormGroupItem label="Adı" required>
 			<Select size="medium" placeholder="Select an option" bind:value={testid}>
@@ -209,16 +208,15 @@ onSelect={(e) => console.log('e', e)}
 					<option value={branch.id}>{branch.name}</option>
 				{/each}
 			</Select>
-			<Select 
-			size="medium"
-			placeholder="Start typing..."
-			search
-			data={dummyData}
-			bind:value={testid}
+			<Select
+				size="medium"
+				placeholder="Start typing..."
+				search
+				data={dummyData}
+				bind:value={testid}
 			/>
 		</FormGroupItem>
 	</FormGroup>
-
 </Modal>
 
 <!-- <button data-ar-toggle="modal" data-ar-target="testModal" class="input-group-text bg-lightgray border-0 border-end-0 p-1">
@@ -401,8 +399,6 @@ onSelect={(e) => console.log('e', e)}
 
 <Button modal="testModal" color="primary" style="margin-bottom: 20px;">Modal 1</Button>
 
-
-
 <Modal
 	id="testModal"
 	devMode
@@ -431,8 +427,6 @@ onSelect={(e) => console.log('e', e)}
 	<h1>ok3</h1>
 	<Button modal="testModal3" color="danger" style="margin-bottom: 20px;">Modal 3</Button>
 </Modal>
-
-
 
 <Input placeholder="Fill in your name" type="text" style="margin-bottom: 30px;" />
 
@@ -763,7 +757,7 @@ onSelect={(e) => console.log('e', e)}
 	<TabItem title="Tab Item 1">
 		<FormGroup noBorder style="margin-bottom: 30px;">
 			<FormGroupItem label="name" required>
-				<Input placeholder="Fill in your name" type="text" />
+				<Input placeholder="Fill in your name" type="text" bind:value={textareaContent} />
 			</FormGroupItem>
 			<FormGroupItem label="email" required>
 				<Input type="email" />
@@ -777,6 +771,9 @@ onSelect={(e) => console.log('e', e)}
 					<option value="2">Test 2</option>
 					<option value="3">Test 3</option>
 				</Select>
+			</FormGroupItem>
+			<FormGroupItem label="textarea">
+				<Textarea bind:value={textareaContent} />
 			</FormGroupItem>
 		</FormGroup>
 	</TabItem>
