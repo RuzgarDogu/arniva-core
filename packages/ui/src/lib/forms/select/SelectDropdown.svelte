@@ -4,7 +4,7 @@
 	import DropdownContent from '../../general/DropdownContent.svelte';
 	import Button from '../../general/Button.svelte';
 	import Input from '../../forms/Input.svelte';
-	import { Icon } from '$lib'
+	import { Icon } from '$lib';
 	/**
 	 * @typedef {{ id: number|string, [key: string]: any }} SelectOption
 	 */
@@ -25,16 +25,17 @@
 	 */
 
 	/** @type {Props} */
-	let { 
+	let {
 		class: cls = '',
 		nameKey = 'name',
-		value = $bindable(), 
-		data = [], 
-		onSelect, 
-		onInput, 
-		placeholder = '', 
-		serverSide = false, 
-		...rest 
+		value = $bindable(),
+		data = [],
+		onSelect,
+		onInput,
+		placeholder = '',
+		serverSide = false,
+		disabled = false,
+		...rest
 	} = $props();
 
 	/** @type {string} */
@@ -63,19 +64,19 @@
 		/** @type {HTMLInputElement} */
 		const target = /** @type {HTMLInputElement} */ (event.target);
 		const newSearchText = target?.value || '';
-		
+
 		// Set the flag indicating user is editing
 		isUserEditing = true;
-		
+
 		// Update searchText with user input
 		searchText = newSearchText;
-		
+
 		// When using server-side search, we need to call onInput
 		// to let the parent component fetch new results
 		if (onInput) {
 			onInput(searchText);
 		}
-		
+
 		// In server-side mode, handle text deletion specially
 		if (serverSide && searchText === '') {
 			value = null;
@@ -83,31 +84,29 @@
 			focusedItemId = null;
 			return;
 		}
-		
+
 		// Only perform client-side filtering when not in server-side mode
-        updateFilteredData();
+		updateFilteredData();
 		// if (!serverSide) {
 		// }
 	}
 
-    // Modify the effect that watches data changes
-    $effect(() => {
-        // For both client and server-side mode, apply filtering to the data
-        // when it changes - this ensures we maintain filtering on new data
-        if (searchText.trim()) {
-            updateFilteredData();
-        } else {
-            filteredData = data;
-        }
-    });
+	// Modify the effect that watches data changes
+	$effect(() => {
+		// For both client and server-side mode, apply filtering to the data
+		// when it changes - this ensures we maintain filtering on new data
+		if (searchText.trim()) {
+			updateFilteredData();
+		} else {
+			filteredData = data;
+		}
+	});
 
 	// Override the automatic text updating when value changes
 	$effect(() => {
 		if (!isUserEditing && value && data.length > 0) {
 			// Find item that matches the value (ID)
-			const foundItem = data.find(
-				/** @param {SelectOption} item */ (item) => item.id === value
-			);
+			const foundItem = data.find(/** @param {SelectOption} item */ (item) => item.id === value);
 			if (foundItem) {
 				// Set the searchText to the name of the selected item
 				searchText = foundItem[nameKey];
@@ -118,27 +117,27 @@
 		}
 	});
 
-    // Update the updateFilteredData function to work in both modes
-    function updateFilteredData() {
-        if (!searchText.trim()) {
-            filteredData = data;
-            return;
-        }
-    
-        const searchTerms = searchText
-            .toLowerCase()
-            .split(/\s+/)
-            .filter((term) => term.length > 0)
-            .map(normalizeText);
-    
-        filteredData = data.filter(
-            /** @param {SelectOption} item */ (item) => {
-                const normalizedItemName = normalizeText(item[nameKey]);
-                // Check if all search terms appear somewhere in the normalized item name
-                return searchTerms.every((term) => normalizedItemName.includes(term));
-            }
-        );
-    }
+	// Update the updateFilteredData function to work in both modes
+	function updateFilteredData() {
+		if (!searchText.trim()) {
+			filteredData = data;
+			return;
+		}
+
+		const searchTerms = searchText
+			.toLowerCase()
+			.split(/\s+/)
+			.filter((term) => term.length > 0)
+			.map(normalizeText);
+
+		filteredData = data.filter(
+			/** @param {SelectOption} item */ (item) => {
+				const normalizedItemName = normalizeText(item[nameKey]);
+				// Check if all search terms appear somewhere in the normalized item name
+				return searchTerms.every((term) => normalizedItemName.includes(term));
+			}
+		);
+	}
 
 	/**
 	 * Normalizes text for search by converting Turkish characters to their ASCII equivalents
@@ -253,7 +252,7 @@
 	function checkDropdown(isOpen) {
 		// When dropdown is closed (isOpen is false)
 		if (!isOpen) {
-			 // Reset the editing flag when dropdown closes
+			// Reset the editing flag when dropdown closes
 			isUserEditing = false;
 
 			// When using server-side search, we don't want to auto-select
@@ -288,13 +287,13 @@
 		onSelect && onSelect(null);
 		focusedItemId = null;
 		isUserEditing = false; // Reset editing flag when search is cleared
-		
+
 		// In server-side mode, also trigger the onInput callback with empty string
 		// to ensure the parent component knows the search was cleared
 		if (serverSide && onInput) {
 			onInput('');
 		}
-		
+
 		// Give focus back to the input
 		/** @type {HTMLInputElement|null} */
 		const inputElement = document.querySelector('.form-select--search input');
@@ -312,45 +311,53 @@
 		onChange={checkDropdown}
 	>
 		<div class="form-select--search--container">
-			<Input dropdown oninput={handleInput} bind:value={searchText} {placeholder} {...rest}/>
-			{#if !searchText}
-			<Button
-				class="dropdown-button {searchText ? '' : 'active'}"
-				square
+			<Input
+				{disabled}
 				dropdown
-				color="transparent"
-				onClick={() => searchDropdown?.show()}
-			>
-				<Icon icon="mdi:chevron-down" width="24" height="24" />
-			</Button>
-			{:else}
-			<Button
-				class="clear-button {searchText ? 'active' : ''}"
-				square
-				color="transparent"
-				onClick={clearSearch}
-			>
-				<svg
-					width="14px"
-					height="14px"
-					viewBox="0 0 24 24"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-					><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
-						id="SVGRepo_tracerCarrier"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					></g><g id="SVGRepo_iconCarrier">
-						<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"></circle>
-						<path
-							d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5"
-							stroke="currentColor"
-							stroke-width="1.5"
-							stroke-linecap="round"
-						></path>
-					</g></svg
+				oninput={handleInput}
+				bind:value={searchText}
+				{placeholder}
+				{...rest}
+			/>
+			{#if !searchText}
+				<Button
+					class="dropdown-button {searchText ? '' : 'active'}"
+					square
+					dropdown
+					color="transparent"
+					onClick={() => searchDropdown?.show()}
 				>
-			</Button>
+					<Icon icon="mdi:chevron-down" width="24" height="24" />
+				</Button>
+			{:else}
+				<Button
+					class="clear-button {searchText ? 'active' : ''}"
+					square
+					color="transparent"
+					onClick={clearSearch}
+					{disabled}
+				>
+					<svg
+						width="14px"
+						height="14px"
+						viewBox="0 0 24 24"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+						><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
+							id="SVGRepo_tracerCarrier"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						></g><g id="SVGRepo_iconCarrier">
+							<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"></circle>
+							<path
+								d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5"
+								stroke="currentColor"
+								stroke-width="1.5"
+								stroke-linecap="round"
+							></path>
+						</g></svg
+					>
+				</Button>
 			{/if}
 		</div>
 		<DropdownContent>

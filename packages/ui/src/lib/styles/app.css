@@ -634,7 +634,7 @@
 }
 .form-input--disabled {
   background-color: var(--ar-light-color);
-  color: var(--ar-secondary-color);
+  color: inherit;
 }
 
 .form-textarea {
@@ -721,6 +721,9 @@
 .form-select--search--container .clear-button, .form-select--search--container .dropdown-button {
   display: none;
   background-color: #fff;
+}
+.form-select--search--container .clear-button.disabled, .form-select--search--container .dropdown-button.disabled {
+  background-color: transparent;
 }
 .form-select--search--container .clear-button.active, .form-select--search--container .dropdown-button.active {
   display: flex;
