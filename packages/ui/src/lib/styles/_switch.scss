@@ -40,7 +40,7 @@
 		min-height: -webkit-fill-available;
 	}
 
-	input:not(:checked) ~ label span:first-of-type {
+	input:checked ~ label span:last-of-type {
 		background: rgb(255, 255, 255);
 		box-shadow: rgba(38, 85, 115, 0.25) 0px 0px 2px;
 		color: rgb(46, 52, 56);
@@ -79,56 +79,69 @@
 	}
 
 	&--primary {
-		input:checked ~ label {
+		input:checked ~ label span:last-of-type {
 			background: var(--ar-primary-color);
-			span:first-of-type {
-				color: var(--ar-primary-color-subtle);
-			}
+			color: white;
+		}
+		input:not(:checked) ~ label span:first-of-type {
+			// background: var(--ar-primary-color-subtle);
+			background: var(--ar-light-purple);
+			color: var(--ar-primary-color-emphasis);
 		}
 	}
 
 	&--secondary {
-		input:checked ~ label {
+		input:checked ~ label span:last-of-type {
 			background: var(--ar-secondary-color);
-			span:first-of-type {
-				color: var(--ar-secondary-color-subtle);
-			}
+			color: var(--ar-text-color);
+		}
+		input:not(:checked) ~ label span:first-of-type {
+			background: var(--ar-secondary-color-subtle);
+			color: var(--ar-secondary-color-emphasis);
 		}
 	}
 
 	&--success {
-		input:checked ~ label {
+		input:checked ~ label span:last-of-type {
 			background: var(--ar-success-color);
-			span:first-of-type {
-				color: var(--ar-success-color-emphasis);
-			}
+			color: white;
+		}
+		input:not(:checked) ~ label span:first-of-type {
+			background: var(--ar-success-color-subtle);
+			color: var(--ar-success-color-emphasis);
 		}
 	}
 
 	&--danger {
-		input:checked ~ label {
+		input:checked ~ label span:last-of-type {
 			background: var(--ar-danger-color);
-			span:first-of-type {
-				color: var(--ar-danger-color-subtle);
-			}
+			color: white;
+		}
+		input:not(:checked) ~ label span:first-of-type {
+			background: var(--ar-danger-color-subtle);
+			color: var(--ar-danger-color-emphasis);
 		}
 	}
 
 	&--warning {
-		input:checked ~ label {
+		input:checked ~ label span:last-of-type {
 			background: var(--ar-warning-color);
-			span:first-of-type {
-				color: var(--ar-warning-color-subtle);
-			}
+			color: white;
+		}
+		input:not(:checked) ~ label span:first-of-type {
+			background: var(--ar-warning-color-subtle);
+			color: var(--ar-warning-color-emphasis);
 		}
 	}
 
 	&--accent {
-		input:checked ~ label {
+		input:checked ~ label span:last-of-type {
 			background: var(--ar-accent-color);
-			span:first-of-type {
-				color: var(--ar-accent-color-subtle);
-			}
+			color: white;
+		}
+		input:not(:checked) ~ label span:first-of-type {
+			background: var(--ar-accent-color-subtle);
+			color: var(--ar-accent-color-emphasis);
 		}
 	}
 }

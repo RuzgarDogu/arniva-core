@@ -126,13 +126,15 @@
 	let testid = 8;
 
 	let switchvalue = true;
+	let switchvalue2 = true;
+	let switchvalue3 = false;
 
 	let textareaContent = $state('asdasdfadsfadsf3333333');
 </script>
 
 <h1 style="margin-bottom: 20px;">ANA SAYFA: Introduction</h1>
 
-<div style="margin-bottom: 20px;">
+<div style="margin-bottom: 20px; background:var(--ar-light-purple)">
 	<Button modal="modalAuto" color="primary" style="margin-bottom: 20px;">Auto Modal</Button>
 	<Button modal="modalSm" color="primary" style="margin-bottom: 20px;">Small Modal</Button>
 	<Button modal="modalMd" color="primary" style="margin-bottom: 20px;">Medium Modal</Button>
@@ -179,13 +181,41 @@
 		falseText="No"
 		bind:value={switchvalue}
 		disabled={false}
-		name="switch"
-		id="switch"
+		name="switch1"
+		id="switch1"
 		label="Switch"
 		required={false}
 		color="default"
 		reverse={false}
 	/>
+	<Switch
+		trueText="Yes"
+		falseText="No"
+		bind:value={switchvalue2}
+		disabled={false}
+		name="switch2"
+		id="switch2"
+		label="Switch"
+		required={false}
+		color="success"
+		reverse={false}
+	/>
+	<Switch
+		trueText="Yes"
+		falseText="No"
+		bind:value={switchvalue3}
+		disabled={false}
+		name="switch3"
+		id="switch3"
+		label="Switch"
+		required={false}
+		color="primary"
+		reverse={false}
+	/>
+	<Switch trueText="Yes" falseText="No" color="danger" />
+	<Switch trueText="Yes" falseText="No" color="warning" />
+	<Switch trueText="Yes" falseText="No" color="accent" />
+	<Switch trueText="Yes" falseText="No" color="secondary" />
 </div>
 
 <Button onClick={() => modal3.show()} color="primary" style="margin-bottom: 20px;">

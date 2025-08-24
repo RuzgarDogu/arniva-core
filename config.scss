@@ -53,7 +53,7 @@
   --ar-form-element-active-color: var(--ar-accent-color);
   --ar-form-element-label-padding: 30px;
   --ar-form-element-inner-padding: 2px;
-  --ar-primary-color-subtle: #f0f1f7;
+  --ar-primary-color-subtle: #e5e8f8;
   --ar-primary-color-emphasis: #3a3f9b;
   --ar-accent-color-subtle: #e0f7ff;
   --ar-accent-color-emphasis: #0077b6;
@@ -68,6 +68,7 @@
   --ar-secondary-color-subtle: #f7f7f7;
   --ar-secondary-color-emphasis: #d8d8d8;
   --ar-nav-padding: 0.5rem;
+  --ar-light-purple: #e5e8f8;
 }
 
 @mixin label-styles {

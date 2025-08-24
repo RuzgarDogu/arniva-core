@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --ar-border-radius: 3em;
   --ar-primary-color: #555ab9;
   --ar-accent-color: #009cfd;
@@ -36,7 +36,7 @@
   --ar-secondary-color-subtle: #f7f7f7;
   --ar-secondary-color-emphasis: #d8d8d8;
   --ar-nav-padding: 0.5rem;
-}
+} */
 
 .toast-container {
   position: fixed;
