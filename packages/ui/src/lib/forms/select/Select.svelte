@@ -16,11 +16,12 @@
 	 * @property {any} rest
 	 * @property {boolean} search
 	 * @property {boolean} serverSide - Whether searching is handled by the server
+	 * @property {boolean} insertable - Whether new items can be added by typing
 	 * @property {string} placeholder
 	 * @property {() => void} onSelect - Callback function when an option is selected
 	 * @property {() => void} [onInput] - Callback function when the search input changes
 	 * @property {string} value - Selected value
-	 * @property {SelectOption[]} data - Array of options for the dropdown/select
+	 * @property {SelectOption[]|string[]} data - Array of options for the dropdown/select
 	 * @property {any} children
 	 */
 
@@ -34,8 +35,9 @@
 		size = 'medium',
 		disabled = false,
 		search = false,
-		data = [],
+		data = $bindable([]),
 		serverSide = false,
+		insertable = false,
 		onSelect,
 		onInput,
 		...rest
@@ -44,13 +46,15 @@
 
 {#if search}
 	<SelectDropdown
+		class={cls}
 		{disabled}
 		bind:value
-		{data}
+		bind:data
 		{onSelect}
 		{placeholder}
 		{onInput}
 		{serverSide}
+		{insertable}
 		{nameKey}
 		{...rest}
 	/>

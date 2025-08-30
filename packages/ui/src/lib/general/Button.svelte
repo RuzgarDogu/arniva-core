@@ -1,5 +1,4 @@
 <script>
-	
 	/**
 	 * @typedef {Object} Props
 	 * @property {boolean} [disabled] Is the button disabled?
@@ -24,6 +23,7 @@
 	 * @property {boolean} [modalDismiss] Should the modal be dismissed?
 	 * @property {boolean} [autoWidth] Should the button have auto width?
 	 * @property {boolean} [rounded] Should the button have auto width?
+	 * @property {number} [tabindex] The tabindex of the button
 	 * @property {() => void} [onClick] The onclick event handler
 	 */
 
@@ -52,12 +52,14 @@
 		autoWidth = false,
 		rounded = false,
 		disabled = false,
+		tabindex = 0
 	} = $props();
 </script>
 
 {#if link}
 	<a
-		id={id}
+		{id}
+		{tabindex}
 		href={url}
 		class:button--auto-width={autoWidth}
 		class:button--link={link}
@@ -79,7 +81,8 @@
 	</a>
 {:else}
 	<button
-		id={id}
+		{tabindex}
+		{id}
 		{type}
 		class:button--auto-width={autoWidth}
 		class={['button', `${cls}`, `button--${size}`, `button--${color}`].join(' ')}
@@ -91,7 +94,7 @@
 		class:button--disabled={disabled}
 		style:background-color={backgroundColor}
 		{style}
-		disabled={disabled}
+		{disabled}
 		onclick={onClick}
 		data-ar-toggle={modal ? 'modal' : null}
 		data-ar-target={modal ? modal : null}

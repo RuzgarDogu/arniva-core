@@ -24,7 +24,6 @@
 		errorMessage = '',
 		...rest
 	} = $props();
-
 </script>
 
 <input
