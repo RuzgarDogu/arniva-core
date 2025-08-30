@@ -76,10 +76,17 @@
 
 		if (isStringArray) {
 			normalizedData = data.map(
-				/** @param {string} item */ (item) => ({
-					id: item,
-					[nameKey]: item
-				})
+				/** @param {string} item */ (item) => {
+					// Add defensive check for null/undefined items
+					if (item == null) {
+						console.warn('Found null/undefined item in string array:', item);
+						return { id: '', [nameKey]: '' };
+					}
+					return {
+						id: item,
+						[nameKey]: item
+					};
+				}
 			);
 		} else {
 			normalizedData = [...data];
@@ -141,7 +148,10 @@
 		// In server-side mode, handle text deletion specially
 		if (serverSide && searchText === '') {
 			value = null;
-			onSelect && onSelect(null);
+			// For insertable components, don't call onSelect with null to avoid adding empty values
+			if (onSelect && (!insertable || !isStringArray)) {
+				onSelect(null);
+			}
 			focusedItemId = null;
 			return;
 		}
@@ -229,6 +239,12 @@
 
 		filteredData = normalizedData.filter(
 			/** @param {SelectOption} item */ (item) => {
+				// Add defensive check for item and item[nameKey]
+				if (!item || item[nameKey] == null) {
+					console.warn('Item or item[nameKey] is null/undefined:', item);
+					return false;
+				}
+
 				const normalizedItemName = normalizeText(item[nameKey]);
 				// Check if all search terms appear somewhere in the normalized item name
 				return searchTerms.every((term) => normalizedItemName.includes(term));
@@ -243,8 +259,17 @@
 	 * @return {string} Normalized text
 	 */
 	function normalizeText(text) {
+		// Add defensive check for null/undefined values
+		if (text == null) {
+			console.warn('normalizeText received null/undefined text:', text);
+			return '';
+		}
+
+		// Ensure text is a string
+		const textStr = String(text);
+
 		// Handle specific Turkish characters
-		return text
+		return textStr
 			.toLowerCase()
 			.normalize('NFD')
 			.replace(/[\u0130]/g, 'i') // İ -> i
@@ -272,10 +297,15 @@
 
 		if (isStringArray) {
 			value = item[nameKey]; // For string arrays, value should be the string itself
-			onSelect && onSelect(item[nameKey]);
+			// Only call onSelect if the value is not empty/null
+			if (onSelect && item[nameKey] && item[nameKey].trim()) {
+				onSelect(item[nameKey]);
+			}
 		} else {
 			value = item.id;
-			onSelect && onSelect(item);
+			if (onSelect) {
+				onSelect(item);
+			}
 		}
 		searchText = item[nameKey];
 		isUserEditing = false; // User has selected an item, so they're no longer editing
@@ -334,7 +364,10 @@
 						event.preventDefault();
 						console.log('Accepting typed text via Tab:', searchText);
 						value = searchText;
-						onSelect && onSelect(searchText);
+						// Only call onSelect if the text is not empty
+						if (onSelect && searchText.trim()) {
+							onSelect(searchText);
+						}
 						isUserEditing = false;
 						if (searchDropdown) searchDropdown.hide();
 						return;
@@ -388,7 +421,10 @@
 				if (insertable && isStringArray && searchText.trim()) {
 					console.log('Accepting typed text via Enter:', searchText);
 					value = searchText;
-					onSelect && onSelect(searchText);
+					// Only call onSelect if the text is not empty
+					if (onSelect && searchText.trim()) {
+						onSelect(searchText);
+					}
 					isUserEditing = false;
 					if (searchDropdown) searchDropdown.hide();
 				}
@@ -457,16 +493,42 @@
 			console.log('isItemSelected:', isItemSelected);
 			console.log('normalizedData:', normalizedData);
 
-			// For insertable functionality, we should allow the typed text to be selected
-			// even if it doesn't exist in the original data
-			if (insertable && isStringArray && searchText.trim() && !isItemSelected) {
-				console.log('Setting value to typed text for insertable');
-				value = searchText;
-				onSelect && onSelect(searchText);
-				return;
+			// For insertable functionality, handle typed text when dropdown closes
+			if (insertable && isStringArray && searchText.trim()) {
+				if (!isItemSelected) {
+					// User typed something new - accept it as the selection
+					console.log('Setting value to typed text for insertable (dropdown close)');
+					value = searchText;
+					// Only call onSelect if the text is not empty
+					if (onSelect && searchText.trim()) {
+						onSelect(searchText);
+					}
+
+					// Ensure the typed text is in the data array (only if not empty)
+					if (searchText.trim()) {
+						const existsInData = data.some(
+							/** @param {string} item */ (item) => item === searchText
+						);
+						if (!existsInData) {
+							data = [...data, searchText];
+						}
+					}
+					lastAddedItem = null; // Reset since we've accepted the item
+					return;
+				} else {
+					// Item exists in data - make sure it's properly selected
+					const matchingItem = normalizedData.find(
+						/** @param {SelectOption} item */ (item) => item[nameKey] === searchText
+					);
+					if (matchingItem) {
+						value = matchingItem.id;
+						onSelect && onSelect(isStringArray ? matchingItem[nameKey] : matchingItem);
+					}
+					return;
+				}
 			}
 
-			// If no item is selected, reset the search text and clean up insertable items
+			// If no item is selected and not insertable, reset everything
 			if (!isItemSelected) {
 				console.log('No item selected, cleaning up');
 				// Remove the last added item if it exists and wasn't selected
@@ -482,17 +544,27 @@
 	}
 
 	function clearSearch() {
+		console.log('clearSearch called - data before:', data, 'lastAddedItem:', lastAddedItem);
+
 		// Remove the last added item if it exists
 		if (insertable && isStringArray && lastAddedItem !== null) {
+			console.log('Removing lastAddedItem:', lastAddedItem);
 			data = data.filter(/** @param {string} item */ (item) => item !== lastAddedItem);
 			lastAddedItem = null;
 		}
 
 		searchText = '';
 		value = null;
-		onSelect && onSelect(null);
 		focusedItemId = null;
 		isUserEditing = false; // Reset editing flag when search is cleared
+
+		// Only call onSelect if it's not an insertable component or if we want to notify about clearing
+		// For insertable components, we don't want to add empty values to the data
+		if (onSelect && (!insertable || !isStringArray)) {
+			onSelect(null);
+		}
+
+		console.log('clearSearch completed - data after:', data);
 
 		// In server-side mode, also trigger the onInput callback with empty string
 		// to ensure the parent component knows the search was cleared

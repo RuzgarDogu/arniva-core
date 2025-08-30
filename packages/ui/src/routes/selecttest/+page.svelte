@@ -21,6 +21,7 @@
 	let insertableData = $state(['John Doe', 'Jane Smith', 'Alice Johnson', 'Bob Brown']);
 
 	let selectvalue = $state('Testing Name');
+	let selectvalue2 = $state('');
 </script>
 
 <h1>{details}</h1>
@@ -72,22 +73,46 @@ bind:value={details}
 <hr />
 <h2>Insertable</h2>
 
-<Select
-	name="insertable"
-	class="mb-3"
-	size="medium"
-	placeholder="Start typing..."
-	search
-	insertable
-	onInput={(e) => {
-		console.log('searching for: ', e);
-	}}
-	onSelect={(e) => {
-		console.log('e', e);
-	}}
-	bind:data={insertableData}
-	bind:value={selectvalue}
-/>
+<div class="d-flex align-items-center justify-content-between gap-2">
+	<Select
+		name="insertable"
+		class="mb-3"
+		size="medium"
+		placeholder="Start typing..."
+		search
+		insertable
+		onInput={(e) => {
+			console.log('searching for: ', e);
+		}}
+		onSelect={(e) => {
+			// Check if the selected value is in the data, otherwise add to it
+			if (!insertableData.includes(e)) {
+				insertableData = [...insertableData, e];
+			}
+		}}
+		data={insertableData}
+		bind:value={selectvalue}
+	/>
+	<Select
+		name="insertable2"
+		class="mb-3"
+		size="medium"
+		placeholder="Start typing..."
+		search
+		insertable
+		onInput={(e) => {
+			console.log('searching for: ', e);
+		}}
+		onSelect={(e) => {
+			// Check if the selected value is in the data, otherwise add to it
+			if (!insertableData.includes(e)) {
+				insertableData = [...insertableData, e];
+			}
+		}}
+		data={insertableData}
+		bind:value={selectvalue2}
+	/>
+</div>
 
 <div class="mt-3">
 	<h3>Current Data:</h3>
@@ -95,3 +120,18 @@ bind:value={details}
 	<h3>Selected Value:</h3>
 	<pre>{selectvalue}</pre>
 </div>
+
+<style>
+	.d-flex {
+		display: flex;
+	}
+	.align-items-center {
+		align-items: center;
+	}
+	.justify-content-between {
+		justify-content: space-between;
+	}
+	.gap-2 {
+		gap: 0.5rem;
+	}
+</style>
