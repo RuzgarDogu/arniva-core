@@ -98,7 +98,6 @@
 		if (insertable && isStringArray && value && typeof value === 'string') {
 			const valueExists = data.some(/** @param {string} item */ (item) => item === value);
 			if (!valueExists) {
-				console.log('Adding initial value to data:', value);
 				data = [...data, value];
 			}
 		}
@@ -116,10 +115,6 @@
 		const target = /** @type {HTMLInputElement} */ (event.target);
 		const newSearchText = target?.value || '';
 
-		console.log('handleInput called with:', newSearchText);
-		console.log('insertable:', insertable);
-		console.log('isStringArray:', isStringArray);
-
 		// Set the flag indicating user is editing
 		isUserEditing = true;
 
@@ -128,12 +123,11 @@
 
 		// Handle insertable functionality
 		if (insertable && isStringArray) {
-			console.log('Calling insertable logic');
 			if (searchText.trim()) {
 				handleInsertableInput();
 			} else if (lastAddedItem !== null) {
 				// Remove the last added item if search text is empty
-				console.log('Removing last added item due to empty search');
+
 				data = data.filter(/** @param {string} item */ (item) => item !== lastAddedItem);
 				lastAddedItem = null;
 			}
@@ -166,13 +160,8 @@
 	function handleInsertableInput() {
 		if (!searchText.trim()) return;
 
-		console.log('handleInsertableInput called with:', searchText);
-		console.log('Current data:', data);
-		console.log('lastAddedItem:', lastAddedItem);
-
 		// Remove the last added item if it exists
 		if (lastAddedItem !== null) {
-			console.log('Removing last added item:', lastAddedItem);
 			data = data.filter(/** @param {string} item */ (item) => item !== lastAddedItem);
 		}
 
@@ -182,18 +171,13 @@
 				typeof item === 'string' ? item.toLowerCase() === searchText.toLowerCase() : false
 		);
 
-		console.log('existsInOriginal:', existsInOriginal);
-
 		// Only add if it doesn't exist in the original data
 		if (!existsInOriginal) {
-			console.log('Adding new item:', searchText);
 			data = [...data, searchText];
 			lastAddedItem = searchText;
 		} else {
 			lastAddedItem = null;
 		}
-
-		console.log('Updated data:', data);
 	}
 
 	// Modify the effect that watches data changes
@@ -292,9 +276,6 @@
 	 * @param {SelectOption} item - The selected item
 	 */
 	function select(item) {
-		console.log('select called with:', item);
-		console.log('isStringArray:', isStringArray);
-
 		if (isStringArray) {
 			value = item[nameKey]; // For string arrays, value should be the string itself
 			// Only call onSelect if the value is not empty/null
@@ -310,9 +291,6 @@
 		searchText = item[nameKey];
 		isUserEditing = false; // User has selected an item, so they're no longer editing
 		lastAddedItem = null; // Reset the last added item since user selected something
-
-		console.log('Selected value:', value);
-		console.log('Selected searchText:', searchText);
 
 		if (searchDropdown) searchDropdown.hide();
 	}
@@ -356,13 +334,10 @@
 					// Check if the current search text is different from the selected value
 					const isDifferentFromSelected = searchText !== value;
 
-					console.log('Tab on insertable - searchText:', searchText, 'value:', value);
-					console.log('isDifferentFromSelected:', isDifferentFromSelected);
-
 					// Accept typed text if it's different from the current selection
 					if (isDifferentFromSelected) {
 						event.preventDefault();
-						console.log('Accepting typed text via Tab:', searchText);
+
 						value = searchText;
 						// Only call onSelect if the text is not empty
 						if (onSelect && searchText.trim()) {
@@ -371,8 +346,6 @@
 						isUserEditing = false;
 						if (searchDropdown) searchDropdown.hide();
 						return;
-					} else {
-						console.log('NOT accepting - searchText same as value');
 					}
 				}
 
@@ -419,7 +392,6 @@
 				// For insertable functionality, if there's text and no focused item,
 				// accept the typed text as the selection
 				if (insertable && isStringArray && searchText.trim()) {
-					console.log('Accepting typed text via Enter:', searchText);
 					value = searchText;
 					// Only call onSelect if the text is not empty
 					if (onSelect && searchText.trim()) {
@@ -464,10 +436,6 @@
 	 * @param {boolean} isOpen - Whether the dropdown is open
 	 */
 	function checkDropdown(isOpen) {
-		console.log('checkDropdown called with isOpen:', isOpen);
-		console.log('Current searchText:', searchText);
-		console.log('Current value:', value);
-
 		// When dropdown is closed (isOpen is false)
 		if (!isOpen) {
 			// Reset the editing flag when dropdown closes
@@ -490,14 +458,11 @@
 				/** @param {SelectOption} item */ (item) => item[nameKey] === searchText
 			);
 
-			console.log('isItemSelected:', isItemSelected);
-			console.log('normalizedData:', normalizedData);
-
 			// For insertable functionality, handle typed text when dropdown closes
 			if (insertable && isStringArray && searchText.trim()) {
 				if (!isItemSelected) {
 					// User typed something new - accept it as the selection
-					console.log('Setting value to typed text for insertable (dropdown close)');
+
 					value = searchText;
 					// Only call onSelect if the text is not empty
 					if (onSelect && searchText.trim()) {
@@ -530,7 +495,6 @@
 
 			// If no item is selected and not insertable, reset everything
 			if (!isItemSelected) {
-				console.log('No item selected, cleaning up');
 				// Remove the last added item if it exists and wasn't selected
 				if (insertable && isStringArray && lastAddedItem !== null) {
 					data = data.filter(/** @param {string} item */ (item) => item !== lastAddedItem);
@@ -544,11 +508,8 @@
 	}
 
 	function clearSearch() {
-		console.log('clearSearch called - data before:', data, 'lastAddedItem:', lastAddedItem);
-
 		// Remove the last added item if it exists
 		if (insertable && isStringArray && lastAddedItem !== null) {
-			console.log('Removing lastAddedItem:', lastAddedItem);
 			data = data.filter(/** @param {string} item */ (item) => item !== lastAddedItem);
 			lastAddedItem = null;
 		}
@@ -563,8 +524,6 @@
 		if (onSelect && (!insertable || !isStringArray)) {
 			onSelect(null);
 		}
-
-		console.log('clearSearch completed - data after:', data);
 
 		// In server-side mode, also trigger the onInput callback with empty string
 		// to ensure the parent component knows the search was cleared
