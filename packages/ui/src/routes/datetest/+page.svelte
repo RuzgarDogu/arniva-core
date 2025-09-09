@@ -15,5 +15,8 @@
 <div style="margin-bottom: 20px;">
 	<TimePicker name="test" bind:value={selectedTime} />
 </div>
+<div style="margin-bottom: 20px;">
+	<TimePicker showSeconds={false} name="test2" bind:value={selectedTime} />
+</div>
 
 <h2>{selectedTime}</h2>
