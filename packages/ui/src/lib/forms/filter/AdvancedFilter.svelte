@@ -22,7 +22,7 @@
 	 */
 
 	/** @type {Props} */
-	let { filterConfig, onChange, class:cls='', filterButtonColor="light" } = $props();
+	let { filterConfig, onChange, class: cls = '', filterButtonColor = 'light' } = $props();
 
 	// Keep track of the current highest order
 	let currentOrder = $state(0);
@@ -63,7 +63,7 @@
 			console.error('Field is missing _id property:', field);
 			return;
 		}
-		
+
 		// Toggle the isOpen state - use _id to uniquely identify fields with the same name
 		let _field = fields.find((f) => f._id === field._id);
 		if (!_field) return;
@@ -127,7 +127,7 @@
 
 		_field.value = e.value;
 		_field.isOpen = e.isOpen;
-		
+
 		// Store in filter object, distinguishing by type if needed
 		if (_field.type === 'multiselect') {
 			// For multiselect, ensure we don't overwrite single select values
@@ -139,7 +139,7 @@
 		} else {
 			filter[e.name] = e.value;
 		}
-		
+
 		onChange && fields && onChange(filter);
 	}
 
@@ -182,17 +182,23 @@
 	 */
 	function checkIfFiltersExist() {
 		// Check if there are any non-empty values in the filter object
-		return Object.keys(filter).length > 0 && 
-			Object.values(filter).some(value => {
+		return (
+			Object.keys(filter).length > 0 &&
+			Object.values(filter).some((value) => {
 				// Check if it's truly a value that would trigger filtering
 				if (value === null || value === undefined || value === '') return false;
 				// Check for empty arrays
 				if (Array.isArray(value) && value.length === 0) return false;
 				// Check for empty objects (for range filters or dates with no selection)
-				if (typeof value === 'object' && value !== null && 
-					Object.values(value).every(v => v === null || v === undefined || v === '')) return false;
+				if (
+					typeof value === 'object' &&
+					value !== null &&
+					Object.values(value).every((v) => v === null || v === undefined || v === '')
+				)
+					return false;
 				return true;
-			});
+			})
+		);
 	}
 
 	/**
@@ -269,11 +275,14 @@
 			const rangeValue = getRangeValue(field.value);
 			return `(${rangeValue.start} - ${rangeValue.end})`;
 		} else if (field.type === 'date') {
-			
 			const dateText = getDateText(field);
 
 			return dateText ? `(${dateText})` : '';
-		} else if (field.type === 'multiselect' && Array.isArray(field.value) && field.value.length > 0) {
+		} else if (
+			field.type === 'multiselect' &&
+			Array.isArray(field.value) &&
+			field.value.length > 0
+		) {
 			// Just show the count for multiselect fields
 			let selectedText = filterConfig?.translation?.general?.selected || 'selected';
 			return `(${field.value.length} ${selectedText})`;
@@ -284,17 +293,17 @@
 		return '';
 	}
 
-		/**
+	/**
 	 * @typedef {Object} ColumnSearch
 	 * @property {string} column - The column to search in
 	 * @property {string} value - The search term/value
 	 */
-	
+
 	/**
 	 * Handles input from the AdvancedFilterInput component
 	 * @param {ColumnSearch|null} e - Object containing column and value, or null when cleared
 	 */
-	 function handleInput(e) {
+	function handleInput(e) {
 		if (!e || e.value === '') {
 			delete filter.search;
 			onChange && filter && onChange(filter);
@@ -306,23 +315,29 @@
 	}
 
 	/**
- * Normalizes search columns into the expected Column format
- * @param {Array<{value: string, label: string}|string>} columns - Raw column data from config
- * @returns {Array<{value: string, label: string}>} - Normalized column objects
- */
-function normalizeColumns(columns) {
-  return columns.map(column => {
-    if (typeof column === 'string') {
-      return { value: column, label: column };
-    }
-    return column;
-  });
-}
+	 * Normalizes search columns into the expected Column format
+	 * @param {Array<{value: string, label: string}|string>} columns - Raw column data from config
+	 * @returns {Array<{value: string, label: string}>} - Normalized column objects
+	 */
+	function normalizeColumns(columns) {
+		return columns.map((column) => {
+			if (typeof column === 'string') {
+				return { value: column, label: column };
+			}
+			return column;
+		});
+	}
 </script>
 
 <InputGroup class={['advanced-filter', cls].join(' ')}>
 	<Dropdown bind:this={filterDropdown}>
-		<Button dropdown size="small" square color={filterButtonColor} class="advanced-filter--main-button">
+		<Button
+			dropdown
+			size="small"
+			square
+			color={filterButtonColor}
+			class="advanced-filter--main-button"
+		>
 			<Icon icon="mdi:filter-outline" width="14" height="14" />
 			{filterConfig?.translation?.general?.filter || 'Filter'}
 		</Button>
@@ -369,10 +384,10 @@ function normalizeColumns(columns) {
 					</Button>
 				</div>
 				<DropdownContent>
-					<AdvancedFilterContent 
-						{filterConfig} 
-						field={{...field, _id: field._id}} 
-						onChange={handleChange} 
+					<AdvancedFilterContent
+						{filterConfig}
+						field={{ ...field, _id: field._id }}
+						onChange={handleChange}
 					/>
 				</DropdownContent>
 			</Dropdown>
@@ -380,12 +395,12 @@ function normalizeColumns(columns) {
 	{/each}
 
 	<!-- <AdvancedFilterInput {resetTrigger} columns={filterConfig?.search?.columns || []} onSelect={handleInput}/> -->
-	
-	<AdvancedFilterInput 
-	{resetTrigger} 
-	columns={normalizeColumns(filterConfig?.search?.columns || [])}
-	onSelect={handleInput}
-  />
+
+	<AdvancedFilterInput
+		{resetTrigger}
+		columns={normalizeColumns(filterConfig?.search?.columns || [])}
+		onSelect={handleInput}
+	/>
 
 	{#if checkIfFiltersExist()}
 		<Button class="advanced-filter--reset" size="small" color="success" onClick={resetFilter}>

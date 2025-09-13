@@ -62,18 +62,28 @@ const filterConfig = {
             },
             // placeholder: 'Şube ara...'
         },
+        // {
+        //     name: 'islemtip_id',
+        //     label: 'Kasa İşlem Tipi (Sil)',
+        //     text: 'İşlem Tipi Seçin',
+        //     type: 'multiselect',
+        //     serverSide: true,
+        //     nameKey: 'adi', // The property to use as the label
+        //     // endpoint: 'https://test-api.arniva.cloud/v1/sube',
+        //     endpoint: {
+        //         url: 'https://test-api.arniva.cloud/v1/islemtip',
+        //         filter: { modul: [6]}
+        //     },
+        //     // placeholder: 'Şube ara...'
+        // },
         {
             name: 'islemtip_id',
-            label: 'Kasa İşlem Tipi (Sil)',
+            label: 'Kasa İşlem Tipi (Yeni)',
             text: 'İşlem Tipi Seçin',
             type: 'multiselect',
             serverSide: true,
             nameKey: 'adi', // The property to use as the label
-            // endpoint: 'https://test-api.arniva.cloud/v1/sube',
-            endpoint: {
-                url: 'https://test-api.arniva.cloud/v1/islemtip',
-                filter: { modul: [6]}
-            },
+            endpoint: 'https://test-api.arniva.cloud/v1/islemtip?filter=modul eq 7 or modul eq 8&limit=9999',
             // placeholder: 'Şube ara...'
         }
     ]

@@ -5,8 +5,6 @@
 	import Input from '../Input.svelte';
 	import { convertQueryObjectToString } from '@ruzgardogu/utils';
 
-	
-	
 	/**
 	 * @typedef {import('./types').FilterConfig} FilterConfig
 	 * @typedef {import('./types').Field} Field
@@ -33,7 +31,7 @@
 	// /** @type {string|string[]|boolean|import('./types').RangeValue|null} */
 	// let selectedValues = $state(
 	// 	isMultiSelect
-	// 		? (field.value && Array.isArray(field.value) ? field.value : []) 
+	// 		? (field.value && Array.isArray(field.value) ? field.value : [])
 	// 		: field.value
 	// );
 
@@ -41,38 +39,33 @@
 	let searchTerm = $state('');
 	let isLoading = $state(false);
 
-    // State for server-side filtering
+	// State for server-side filtering
 
-    /**
-     * Local copy of options for server-side filtering
-     * @type {Option[]}
-     */
-	 let localOptions = $state([]);
+	/**
+	 * Local copy of options for server-side filtering
+	 * @type {Option[]}
+	 */
+	let localOptions = $state([]);
 
-/**
- * Cache to store all items ever fetched
- * @type {Option[]}
- */
-let optionsCache = $state([]);
+	/**
+	 * Cache to store all items ever fetched
+	 * @type {Option[]}
+	 */
+	let optionsCache = $state([]);
 	let pagination = $state({
 		offset: 0,
 		limit: 10,
 		total: 0
 	});
 
-    /**
-     * @typedef {string|string[]|boolean|import('./types').RangeValue|null|undefined} SelectedValuesType
-     */
+	/**
+	 * @typedef {string|string[]|boolean|import('./types').RangeValue|null|undefined} SelectedValuesType
+	 */
 
-    // Initialize `selectedValues` outside of its own scope
-    /** @type {SelectedValuesType} */
-    let selectedValues;
-
-    $effect(() => {
-        selectedValues = isMultiSelect
-            ? (field.value && Array.isArray(field.value) ? field.value : [])
-            : field.value;
-    });
+	// Use $derived for selectedValues to avoid self-reference reactivity issues
+	let selectedValues = $derived(
+		isMultiSelect ? (field.value && Array.isArray(field.value) ? field.value : []) : field.value
+	);
 
 	/**
 	 * Function to handle selection change
@@ -87,20 +80,20 @@ let optionsCache = $state([]);
 
 			if (index === -1) {
 				// Add value if not already selected
-				selectedValues = [...currentValues, /** @type {string} */ (value)];
+				_field.value = [...currentValues, /** @type {string} */ (value)];
 			} else {
 				// Remove value if already selected
-				selectedValues = currentValues.filter(
+				_field.value = currentValues.filter(
 					/** @param {string} option */ (option) => option !== value
 				);
 			}
 		} else {
 			// Single-select mode
-			selectedValues = value;
+			_field.value = value;
 		}
 
 		// Update the field value in parent component
-		_field.value = selectedValues;
+		// _field.value is already set above, no need to set again
 		_field && onChange && onChange(_field);
 
 		// Clear search term after selection but keep showing cached items
@@ -143,16 +136,16 @@ let optionsCache = $state([]);
 	// Get appropriate component based on field type
 	const SelectionComponent = $derived(isMultiSelect ? Checkbox : Radio);
 
-    /**
-     * @typedef {Object} SearchFilter
-     * @property {string} column - The column to search in
-     * @property {string} value - The search value
-     */
+	/**
+	 * @typedef {Object} SearchFilter
+	 * @property {string} column - The column to search in
+	 * @property {string} value - The search value
+	 */
 
-    /**
-     * @typedef {Object} Filter
-     * @property {SearchFilter} [search] - The search filter object
-     */
+	/**
+	 * @typedef {Object} Filter
+	 * @property {SearchFilter} [search] - The search filter object
+	 */
 
 	/**
 	 * Fetch options from the server
@@ -180,25 +173,47 @@ let optionsCache = $state([]);
 				endpoint = _field.endpoint.url;
 			}
 
-			// Use the utility function to generate the query string
-			const queryParams = convertQueryObjectToString(pagination, filter);
-			
-			const response = await fetch(`${endpoint}${queryParams}`, {
+			let finalUrl = endpoint;
+			if (typeof endpoint === 'string') {
+				const url = new URL(endpoint);
+				const existingParams = url.searchParams;
+
+				// Use existing limit if present, otherwise use pagination.limit
+				const limit = existingParams.get('limit') || pagination.limit.toString();
+				const offset = pagination.offset.toString();
+
+				// Set or update pagination params
+				url.searchParams.set('offset', offset);
+				url.searchParams.set('limit', limit);
+
+				// Add search filter if present
+				if (filter.search) {
+					url.searchParams.set('filter', `search eq ${filter.search.value}`);
+				}
+
+				finalUrl = url.toString();
+			} else {
+				// For object endpoints, use the existing logic
+				const queryParams = convertQueryObjectToString(pagination, filter);
+				finalUrl = `${endpoint}${queryParams}`;
+			}
+
+			const response = await fetch(finalUrl, {
 				method: 'GET',
 				redirect: 'follow'
 			});
-			
+
 			if (!response.ok) throw new Error('Failed to fetch options');
-			
+
 			const result = await response.json();
-			
+
 			if (result && result.data) {
 				// Update local options with the current search results
 				localOptions = result.data;
-				
+
 				// Add new items to cache if they don't already exist
 				updateCache(result.data);
-				
+
 				// Update pagination if metadata is available
 				if (result.metadata) {
 					pagination.total = result.metadata.total || 0;
@@ -217,13 +232,13 @@ let optionsCache = $state([]);
 	 */
 	function updateCache(newItems) {
 		if (!Array.isArray(newItems) || newItems.length === 0) return;
-		
+
 		// Use a Set to track IDs we've already added to the cache
-		const existingIds = new Set(optionsCache.map(item => item.id));
-		
+		const existingIds = new Set(optionsCache.map((item) => item.id));
+
 		// Filter out items that are already in the cache
-		const itemsToAdd = newItems.filter(item => !existingIds.has(item.id));
-		
+		const itemsToAdd = newItems.filter((item) => !existingIds.has(item.id));
+
 		// Only update the cache if there are new items
 		if (itemsToAdd.length > 0) {
 			optionsCache = [...optionsCache, ...itemsToAdd];
@@ -237,20 +252,20 @@ let optionsCache = $state([]);
 	 */
 	function getUniqueOptions(options) {
 		if (!Array.isArray(options)) return [];
-		
+
 		// Use a Map to track unique items by ID
 		const uniqueMap = new Map();
-		options.forEach(item => {
+		options.forEach((item) => {
 			if (!uniqueMap.has(item.id)) {
 				uniqueMap.set(item.id, item);
 			}
 		});
-		
+
 		return Array.from(uniqueMap.values());
 	}
 
 	// Declare searchTimeout with an explicit type
-    /** @type {number | NodeJS.Timeout | undefined} */
+	/** @type {number | NodeJS.Timeout | undefined} */
 	let searchTimeout;
 
 	/**
@@ -260,14 +275,14 @@ let optionsCache = $state([]);
 	function handleSearchInput(event) {
 		// @ts-ignore
 		searchTerm = event.target.value;
-		
+
 		// If search is cleared, show cached results
 		if (!searchTerm) {
 			// Ensure we're showing the cached results when search is cleared
 			localOptions = [...optionsCache];
 			return;
 		}
-		
+
 		// Debounce search requests
 		clearTimeout(searchTimeout);
 		searchTimeout = setTimeout(() => {
@@ -276,9 +291,8 @@ let optionsCache = $state([]);
 		}, 300);
 	}
 
-
-	
 	onMount(() => {
+		pagination.limit = _field?.limit || 10;
 		if (_field.serverSide) {
 			// Initialize with empty search to load first page
 			fetchServerOptions('');
@@ -304,7 +318,6 @@ let optionsCache = $state([]);
 			localOptions = _field.options || [];
 		}
 	});
-
 </script>
 
 <div
@@ -314,13 +327,15 @@ let optionsCache = $state([]);
 >
 	{#if _field.serverSide}
 		<div class="advanced-filter--search">
-			<Input 
-				placeholder={_field.placeholder || "Search..."} 
+			<Input
+				placeholder={_field.placeholder || 'Search...'}
 				value={searchTerm}
 				oninput={handleSearchInput}
 			/>
 			{#if isLoading}
-				<div class="advanced-filter--loading">{filterConfig?.translation?.general?.loading|| 'Loading...'}</div>
+				<div class="advanced-filter--loading">
+					{filterConfig?.translation?.general?.loading || 'Loading...'}
+				</div>
 			{/if}
 		</div>
 	{/if}
@@ -341,7 +356,9 @@ let optionsCache = $state([]);
 				{/each}
 			{:else}
 				<div class="advanced-filter--no-results">
-					{isLoading ? (filterConfig?.translation?.general?.loadingOptions || 'Loading options...') : (filterConfig?.translation?.general?.noOptions || 'No options found')}
+					{isLoading
+						? filterConfig?.translation?.general?.loadingOptions || 'Loading options...'
+						: filterConfig?.translation?.general?.noOptions || 'No options found'}
 				</div>
 			{/if}
 		{:else if isSimpleOptions(_field.options)}
@@ -374,8 +391,8 @@ let optionsCache = $state([]);
 
 		{#if _field.serverSide && pagination.total > (searchTerm ? localOptions.length : optionsCache.length)}
 			<div class="advanced-filter--load-more">
-				<button 
-					class="btn btn-sm btn-light" 
+				<button
+					class="btn btn-sm btn-light"
 					onclick={() => {
 						pagination.offset += pagination.limit;
 						fetchServerOptions(searchTerm);
