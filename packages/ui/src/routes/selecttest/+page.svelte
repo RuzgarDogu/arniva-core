@@ -42,6 +42,7 @@ bind:value={details}
 /> -->
 <h1 class="mb-3">Select</h1>
 <Select
+	disabled
 	name="denemeselect"
 	class="mb-3"
 	nameKey="adi"
@@ -57,6 +58,7 @@ bind:value={details}
 	{data}
 />
 <Select
+	disabled
 	size="medium"
 	class="mb-3"
 	placeholder="Start typing..."

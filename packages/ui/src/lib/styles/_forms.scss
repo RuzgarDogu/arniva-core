@@ -27,6 +27,11 @@
 	&--disabled {
 		background-color: var(--ar-light-color);
 		color: inherit;
+		&+button {
+			background-color: transparent !important;
+			color: inherit;
+			cursor: not-allowed;
+		}
 	}
 }
 
@@ -48,7 +53,7 @@
 	}
 	&--disabled {
 		background-color: var(--ar-light-color);
-		color: var(--ar-secondary-color);
+		color: inherit;
 	}
 	&--no-resize {
 		resize: none;
@@ -68,7 +73,7 @@
 	}
 	&--disabled {
 		background-color: var(--ar-light-color);
-		color: var(--ar-secondary-color);
+		color: inherit;
 	}
 	&--search {
 		position: relative;

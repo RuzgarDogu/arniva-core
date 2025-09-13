@@ -60,6 +60,7 @@
 	/>
 {:else}
 	<select
+		class:form-select--disabled={disabled}
 		class="form-select {size == 'medium' ? '' : `form-select--${size}`} {cls}"
 		{...rest}
 		{disabled}

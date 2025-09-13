@@ -649,6 +649,11 @@
   background-color: var(--ar-light-color);
   color: inherit;
 }
+.form-input--disabled + button {
+  background-color: transparent !important;
+  color: inherit;
+  cursor: not-allowed;
+}
 
 .form-textarea {
   font-family: inherit;
@@ -675,7 +680,7 @@
 }
 .form-textarea--disabled {
   background-color: var(--ar-light-color);
-  color: var(--ar-secondary-color);
+  color: inherit;
 }
 .form-textarea--no-resize {
   resize: none;
@@ -701,7 +706,7 @@
 }
 .form-select--disabled {
   background-color: var(--ar-light-color);
-  color: var(--ar-secondary-color);
+  color: inherit;
 }
 .form-select--search {
   position: relative;
