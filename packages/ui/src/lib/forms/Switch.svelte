@@ -13,6 +13,7 @@
 	 * @property {function} onChange
 	 * @property {'default' | 'primary' | 'secondary' | 'accent' | 'warning' | 'danger' | 'succes'} color
 	 * @property {boolean} reverse
+	 * @property {boolean} monocolor
 	 */
 
 	let random_id = Date.now().toString(36) + Math.random().toString(36).substring(2);
@@ -30,6 +31,7 @@
 		onChange,
 		color = 'default',
 		reverse = false,
+		monocolor = true,
 		...rest
 	} = $props();
 
@@ -45,7 +47,12 @@
 	}
 </script>
 
-<div class="switch switch--{color}" class:switch--reverse={reverse} {...rest}>
+<div
+	class="switch switch--{color}"
+	class:switch--reverse={reverse}
+	{...rest}
+	class:switch--monocolor={monocolor}
+>
 	{#if label}
 		<label for={id} class="switch--label">{label}</label>
 	{/if}

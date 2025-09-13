@@ -1,3 +1,48 @@
+// Mono color mode: both true and false options use the main color (not subtle)
+.switch--monocolor {
+	&.switch--primary {
+		input:checked ~ label span:last-of-type,
+		input:not(:checked) ~ label span:first-of-type {
+			background: var(--ar-primary-color);
+			color: white;
+		}
+	}
+	&.switch--secondary {
+		input:checked ~ label span:last-of-type,
+		input:not(:checked) ~ label span:first-of-type {
+			background: var(--ar-secondary-color);
+			color: var(--ar-text-color);
+		}
+	}
+	&.switch--success {
+		input:checked ~ label span:last-of-type,
+		input:not(:checked) ~ label span:first-of-type {
+			background: var(--ar-success-color);
+			color: white;
+		}
+	}
+	&.switch--danger {
+		input:checked ~ label span:last-of-type,
+		input:not(:checked) ~ label span:first-of-type {
+			background: var(--ar-danger-color);
+			color: white;
+		}
+	}
+	&.switch--warning {
+		input:checked ~ label span:last-of-type,
+		input:not(:checked) ~ label span:first-of-type {
+			background: var(--ar-warning-color);
+			color: white;
+		}
+	}
+	&.switch--accent {
+		input:checked ~ label span:last-of-type,
+		input:not(:checked) ~ label span:first-of-type {
+			background: var(--ar-accent-color);
+			color: white;
+		}
+	}
+}
 .switch {
 	display: inline-flex;
 	flex-direction: row;
