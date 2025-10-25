@@ -160,6 +160,81 @@ console.log("comments", comments);  // comments data
 console.log("forecast", forecast);  // forecast data
 ```
 
+## Token Management
+
+The ApiClient provides built-in support for managing authentication tokens. This is particularly useful for OAuth 2.0 flows where you need to handle both access tokens and refresh tokens.
+
+### Setting Tokens
+
+```ts
+const api = new ApiClient({ baseUrl: 'https://api.example.com' });
+
+// Set individual tokens
+api.setAccessToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...');
+api.setRefreshToken('dGVzdC1yZWZyZXNoLXRva2Vu');
+
+// Or set both tokens at once
+api.setTokens(
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',  // access_token
+  'dGVzdC1yZWZyZXNoLXRva2Vu'                    // refresh_token
+);
+```
+
+### Getting Tokens
+
+```ts
+// Get individual tokens
+const accessToken = api.getAccessToken();
+const refreshToken = api.getRefreshToken();
+
+// Check if tokens exist
+if (accessToken) {
+  console.log('User is authenticated');
+}
+```
+
+### Clearing Tokens
+
+```ts
+// Clear all tokens (useful for logout)
+api.clearTokens();
+```
+
+### Using Tokens with Interceptors
+
+Combine token management with interceptors for automatic authentication:
+
+```ts
+// Automatically add access token to all requests
+api.interceptors.request.use(async ({ config, options }) => {
+  const token = api.getAccessToken();
+  
+  if (token) {
+    options.headers = {
+      ...options.headers,
+      'Authorization': `Bearer ${token}`
+    };
+  }
+  
+  return { config, options };
+});
+
+// Handle token refresh on 401 responses
+api.interceptors.response.use(
+  ({ data, response }) => ({ data, response }),
+  async (error) => {
+    if (error.status === 401 && api.getRefreshToken()) {
+      // Refresh token logic here
+      const newTokens = await refreshTokens(api.getRefreshToken());
+      api.setTokens(newTokens.access_token, newTokens.refresh_token);
+      
+      // Retry original request...
+    }
+    return Promise.reject(error);
+  }
+);
+```
+
 ## File Uploads
 
 You can upload files by providing a `FormData` object as the request data.

@@ -190,12 +190,35 @@ When you make an API request, interceptors are executed in this order:
 
 ### Authentication
 
+The ApiClient provides built-in token management for access and refresh tokens. You can set tokens directly on the client instance and use them in interceptors.
+
+#### Setting Tokens
+
+```ts
+// Set tokens individually
+api.setAccessToken('your-access-token');
+api.setRefreshToken('your-refresh-token');
+
+// Set both tokens at once
+api.setTokens('your-access-token', 'your-refresh-token');
+
+// Clear all tokens
+api.clearTokens();
+```
+
+#### Using Tokens in Request Interceptors
+
 Automatically attach authentication tokens to all requests:
 
 ```ts
 api.interceptors.request.use(async ({ config, options }) => {
-  // Get fresh token from your auth service
-  const token = await authService.getAccessToken();
+  // Use stored access token or get a fresh one
+  const token = api.getAccessToken() || await authService.getAccessToken();
+  
+  // If we got a new token, store it for future requests
+  if (!api.getAccessToken() && token) {
+    api.setAccessToken(token);
+  }
   
   // Create a new headers object with the token
   const headers = {
@@ -213,7 +236,7 @@ api.interceptors.request.use(async ({ config, options }) => {
 
 ### Token Refresh
 
-Automatically refresh expired tokens and retry requests:
+Automatically refresh expired tokens and retry requests using the built-in token management:
 
 ```ts
 api.interceptors.response.use(
@@ -225,11 +248,20 @@ api.interceptors.response.use(
     // Check if error is due to expired token
     if (error.status === 401 && error.code === 'TOKEN_EXPIRED') {
       try {
-        // Try to refresh the token
-        await authService.refreshToken();
+        // Use stored refresh token to get new tokens
+        const refreshToken = api.getRefreshToken();
+        if (!refreshToken) {
+          throw new Error('No refresh token available');
+        }
         
-        // Retry the original request with a fresh token
-        const freshToken = authService.getAccessToken();
+        // Try to refresh the token using your auth service
+        const newTokens = await authService.refreshTokens(refreshToken);
+        
+        // Update stored tokens
+        api.setTokens(newTokens.access_token, newTokens.refresh_token);
+        
+        // Retry the original request with the fresh access token
+        const freshToken = api.getAccessToken();
         
         // Recreate the original request with the new token
         const originalRequest = error.request;
@@ -244,7 +276,8 @@ api.interceptors.response.use(
           { headers: originalRequest.headers }
         );
       } catch (refreshError) {
-        // If token refresh fails, redirect to login
+        // If token refresh fails, clear tokens and redirect to login
+        api.clearTokens();
         authService.logout();
         window.location = '/login';
         return Promise.reject(refreshError);
@@ -255,6 +288,24 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+```
+
+#### Token Management Methods
+
+The ApiClient provides several methods to manage authentication tokens:
+
+```ts
+// Access Token Methods
+api.setAccessToken(token);        // Set access token
+api.getAccessToken();             // Get current access token
+
+// Refresh Token Methods  
+api.setRefreshToken(token);       // Set refresh token
+api.getRefreshToken();            // Get current refresh token
+
+// Convenience Methods
+api.setTokens(access, refresh);   // Set both tokens at once
+api.clearTokens();                // Clear all tokens
 ```
 
 ### Logging

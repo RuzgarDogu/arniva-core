@@ -33,6 +33,21 @@ Api.interceptors.request.use(
 );
 ```
 
+#### 🔐 Built-in Token Management
+Seamlessly manage authentication tokens with dedicated methods for access and refresh tokens.
+```ts
+// Set tokens
+api.setAccessToken('your-access-token');
+api.setRefreshToken('your-refresh-token');
+
+// Use tokens in requests automatically
+const token = api.getAccessToken();
+const data = await api.get('/protected-resource');
+
+// Clear tokens on logout
+api.clearTokens();
+```
+
 #### ⚠️ Robust Error Handling
 Provides detailed error objects, including HTTP status codes, messages, and response data, allowing precise debugging and handling.
 ```ts

@@ -92,7 +92,30 @@ Api.interceptors.request.use(
 			'Accept': '*',
 		};
 
-		return { config, options };
+		console.log("=========================");
+		console.log("Api Access Token before request interceptor:", Api.getAccessToken());
+		const testing = await getAuthToken();
+		console.log("Fetched token in request interceptor...", testing);
+		// Use the access token from the ApiClient instance, or get a new one if not available
+		const token = Api.getAccessToken() || await getAuthToken();
+		
+		// If we got a new token, set it in the ApiClient for future requests
+		if (!Api.getAccessToken() && token) {
+			Api.setAccessToken(token);
+		}
+		
+		console.log("Using access token in request interceptor:", token);
+		console.log("=========================");
+
+		const modifiedOptions = {
+			...options,
+			headers: {
+				...options.headers,
+				'Authorization': `Bearer ${token}`
+			}
+		};
+
+		return { config, options: modifiedOptions };
 	},
 	(error) => {
 		console.error('Request interceptor error:', error);
@@ -121,3 +144,22 @@ Api.interceptors.response.use(
 		return Promise.reject(error);
 	}
 );
+
+async function getAuthToken() {
+	// Simulate an async token retrieval (e.g., from localStorage or an API)
+	return 'your-auth-token';
+}
+
+// Example: Set tokens directly on the ApiClient instance
+// Api.setAccessToken('your-access-token');
+// Api.setRefreshToken('your-refresh-token');
+
+// Example: Set both tokens at once
+// Api.setTokens('your-access-token', 'your-refresh-token');
+
+// Example: Get the current tokens
+// const accessToken = Api.getAccessToken();
+// const refreshToken = Api.getRefreshToken();
+
+// Example: Clear all tokens
+// Api.clearTokens();

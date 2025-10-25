@@ -21,6 +21,12 @@ class ApiClient {
         this.config = { ...defaultConfig, ...config };
         this.abortControllers = new Map();
         
+        /** @type {string|null} */
+        this.access_token = null;
+        
+        /** @type {string|null} */
+        this.refresh_token = null;
+        
         // Initialize helper classes
         this.requestProcessor = new RequestProcessor(this.config);
         this.responseProcessor = new ResponseProcessor(this.config);
@@ -93,6 +99,56 @@ class ApiClient {
                 }
             }
         };
+    }
+
+    /**
+     * Set the access token for API requests
+     * @param {string|null} access_token - The access token
+     */
+    setAccessToken(access_token) {
+        this.access_token = access_token;
+    }
+
+    /**
+     * Get the current access token
+     * @returns {string|null} - The current access token
+     */
+    getAccessToken() {
+        return this.access_token;
+    }
+
+    /**
+     * Set the refresh token for API requests
+     * @param {string|null} refresh_token - The refresh token
+     */
+    setRefreshToken(refresh_token) {
+        this.refresh_token = refresh_token;
+    }
+
+    /**
+     * Get the current refresh token
+     * @returns {string|null} - The current refresh token
+     */
+    getRefreshToken() {
+        return this.refresh_token;
+    }
+
+    /**
+     * Set both access and refresh tokens
+     * @param {string|null} access_token - The access token
+     * @param {string|null} refresh_token - The refresh token
+     */
+    setTokens(access_token, refresh_token) {
+        this.access_token = access_token;
+        this.refresh_token = refresh_token;
+    }
+
+    /**
+     * Clear all tokens
+     */
+    clearTokens() {
+        this.access_token = null;
+        this.refresh_token = null;
     }
 
     /**
