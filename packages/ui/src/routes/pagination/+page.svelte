@@ -1,28 +1,26 @@
 <script>
-    import { AdvancedFilter, Table, Tbody, Thead, Trow, Range, applyFilters, Button, Pagination } from '$lib';
-    // import Pagination from './Pagination.svelte';
-	import { goto, invalidateAll } from '$app/navigation';
-    /** @type {{ data: import('./$types').PageData }} */
-    let { data } = $props();
-    let tableData = $derived.by(() => {
+	import { AdvancedFilter, Table, Tbody, Thead, Trow, applyFilters, Pagination } from '$lib';
+	// import Pagination from './Pagination.svelte';
+	import { goto } from '$app/navigation';
+	/** @type {{ data: import('./$types').PageData }} */
+	let { data } = $props();
+	let tableData = $derived.by(() => {
 		return applyFilters(data.comments, {}, data.filterConfig);
 	});
 
 	function handleChange(fields) {
-		console.log("fields", fields);
+		console.log('fields', fields);
 		// tableData = applyFilters(data.comments, fields, data.filterConfig);
 	}
 
 	function changeUrlParams(e) {
-		console.log("e", e);
-		const { itemsPerPage, currentPage } = e;
+		console.log('e', e);
+		const { start, limit } = e;
 		const params = new URLSearchParams(window.location.search);
-		
-		// Calculate the start index based on current page and items per page
-		const startIndex = (currentPage - 1) * itemsPerPage;
-		
-		params.set('limit', itemsPerPage);
-		params.set('start', startIndex);
+
+		// Use the calculated start from the pagination component
+		params.set('limit', limit);
+		params.set('start', start);
 		goto(`?${params.toString()}`);
 	}
 
@@ -33,13 +31,11 @@
 	//     console.log("fields", fields);
 	//     tableData = applyFilters(data.comments, fields, data.filterConfig);
 	// }
-
-
 </script>
 
 <div class="d-flex mb-3">
-    <h1>Filter</h1>
-    <Pagination current={data.currentPagination} onChange={changeUrlParams}/>
+	<h1>Filter</h1>
+	<Pagination current={data.currentPagination} onChange={changeUrlParams} />
 </div>
 <div class="d-flex gap-3 mb-3">
 	<AdvancedFilter filterConfig={data.filterConfig} onChange={handleChange} />
@@ -49,7 +45,7 @@
 	<Thead>
 		<Trow>
 			<th>ID</th>
-            <th>Post ID</th>
+			<th>Post ID</th>
 			<th>Name</th>
 			<th>Email</th>
 			<th>PhoneBody</th>
@@ -71,14 +67,13 @@
 <style>
 	.d-flex {
 		display: flex;
-        align-items: center;
-        justify-content: space-between;
+		align-items: center;
+		justify-content: space-between;
 	}
 	.gap-3 {
 		gap: 1rem;
 	}
-    .mb-3 {
-        margin-bottom: 1rem;
-    }
-
+	.mb-3 {
+		margin-bottom: 1rem;
+	}
 </style>
